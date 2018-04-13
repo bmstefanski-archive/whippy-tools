@@ -32,23 +32,25 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public interface Parser {
+public final class ParsingUtil {
 
-    Messages message = Tools.getInstance().getMessages();
+    private static final Messages messages = Tools.getInstance().getMessages();
 
-    default String parseBoolean(boolean bool) {
-        return bool ? message.getBooleanOn() : message.getBooleanOff();
+    public static String parseBoolean(boolean bool) {
+        return bool ? messages.getBooleanOn() : messages.getBooleanOff();
     }
 
-    default String parseLong(long time) {
+    public static String parseLong(long time) {
         LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         return date.format(formatter);
     }
 
-    default int parseInt(String integer) {
+    public static int parseInt(String integer) {
         return Integer.parseInt(String.valueOf(integer));
     }
+
+    private ParsingUtil() {}
 
 }
