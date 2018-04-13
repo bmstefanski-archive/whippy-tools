@@ -28,7 +28,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.manager.TeleportManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
