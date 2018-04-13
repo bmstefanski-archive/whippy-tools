@@ -1,0 +1,23 @@
+language: java
+sudo: required
+
+install: cd tools && mvn clean install && cd ../spawn && mvn clean install
+
+matrix:
+  fast_finish: true
+
+  include:
+    - jdk: oraclejdk8
+      addons:
+        apt:
+          packages:
+            - oracle-java8-installer
+    - jdk: oraclejdk9
+      addons:
+        apt:
+          packages:
+            - oracle-java9-installer
+
+notifications:
+  email: false
+  
