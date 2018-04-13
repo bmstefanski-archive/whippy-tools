@@ -65,4 +65,5 @@ public interface User {
     boolean isMark();
 
     void setMark(boolean mark);
+
 }

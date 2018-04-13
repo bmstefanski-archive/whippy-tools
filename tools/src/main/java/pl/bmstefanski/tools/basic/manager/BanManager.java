@@ -45,4 +45,5 @@ public class BanManager {
     public static List<Ban> getBans() {
         return BANS;
     }
+
 }
