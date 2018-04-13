@@ -16,9 +16,9 @@ import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.Parser;
+import pl.bmstefanski.tools.util.ParsingUtil;
 
-public class MarkCommand implements CommandExecutor, Messageable, Parser {
+public class MarkCommand implements CommandExecutor, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
@@ -47,7 +47,7 @@ public class MarkCommand implements CommandExecutor, Messageable, Parser {
             boolean markState = !user.isMark();
             user.setMark(markState);
 
-            sendMessage(player, StringUtils.replace(messages.getMarked(), "%state%", parseBoolean(markState)));
+            sendMessage(player, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtil.parseBoolean(markState)));
 
             if (markState) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
@@ -73,9 +73,9 @@ public class MarkCommand implements CommandExecutor, Messageable, Parser {
 
             sendMessage(commandSender, StringUtils.replaceEach(messages.getMarkedOther(),
                     new String[] {"%state%", "%player%"},
-                    new String[] {parseBoolean(markState), target.getName()}));
+                    new String[] {ParsingUtil.parseBoolean(markState), target.getName()}));
 
-            sendMessage(target, StringUtils.replace(messages.getMarked(), "%state%", parseBoolean(markState)));
+            sendMessage(target, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtil.parseBoolean(markState)));
 
             if (markState) {
                 target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
