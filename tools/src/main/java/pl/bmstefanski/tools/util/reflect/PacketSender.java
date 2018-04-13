@@ -38,7 +38,7 @@ import java.util.List;
     Source: https://github.com/FunnyGuilds/FunnyGuilds/blob/master/src/main/java/net/dzikoysk/funnyguilds/util/reflect/PacketSender.java
  */
 
-public class PacketSender {
+public final class PacketSender {
 
     private static Method getHandle;
     private static Field playerConnection;

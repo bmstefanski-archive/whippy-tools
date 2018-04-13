@@ -27,7 +27,7 @@ package pl.bmstefanski.tools.util;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.GameMode;
 
-public class GamemodeUtils {
+public final class GamemodeUtils {
 
     private static GameMode getGameMode(String string) {
         for (GameMode mode : GameMode.values()) {

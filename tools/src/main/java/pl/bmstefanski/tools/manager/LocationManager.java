@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocationManager {
+public final class LocationManager {
 
     private static final Map<Player, Location> LOCATION_MAP = new HashMap<>();
 
