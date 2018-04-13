@@ -1,7 +1,8 @@
 ## <img src="https://avatars1.githubusercontent.com/u/35628511?s=200&v=4" width="48">  Whippy Tools
 [![Build Status](https://travis-ci.org/whippytools/whippy-tools.svg?branch=master)](https://travis-ci.org/whippytools/whippy-tools)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bcd214f2cad34373a46fd6ec7c6f93fa)](https://www.codacy.com/app/bmstefanski/whippy-tools?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whippytools/whippy-tools&amp;utm_campaign=Badge_Grade)
-![Github All Releases](https://img.shields.io/github/downloads/whippytools/whippy-tools/total.svg)  
+[![Maintainability](https://api.codeclimate.com/v1/badges/e4904369acb27f1cb69d/maintainability)](https://codeclimate.com/github/whippytools/whippy-tools/maintainability)
+![Github All Releases](https://img.shields.io/github/downloads/whippytools/whippy-tools/total.svg)
+[![Discord](https://img.shields.io/badge/discord-whippytools-738bd7.svg?style=flat)](https://discord.gg/CYvyq3u)  
 
 Whippy tools is a minecraft plugin which adds a lot of commands and other cool functionalities.  
 We are seeking to make this plugin as customizable as possible.
