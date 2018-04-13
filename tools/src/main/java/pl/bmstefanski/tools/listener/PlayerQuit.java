@@ -30,16 +30,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.runnable.SaveDataTask;
 
 public class PlayerQuit implements Listener, Messageable {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
 
-    public PlayerQuit(Tools plugin) {
+    public PlayerQuit(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 

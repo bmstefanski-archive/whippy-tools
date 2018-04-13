@@ -31,15 +31,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 public class ToolsCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final PluginConfig config;
 
-    public ToolsCommand(Tools plugin) {
+    public ToolsCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfiguration();
     }

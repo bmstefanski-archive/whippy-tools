@@ -29,7 +29,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.runnable.TeleportRequestTask;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
@@ -38,12 +38,12 @@ import java.util.Map;
 
 public class TeleportManager implements Messageable {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
     public static final Map<Player, BukkitTask> TASK_MAP = new HashMap<>();
 
-    public TeleportManager(Tools plugin) {
+    public TeleportManager(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
