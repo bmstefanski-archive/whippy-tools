@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.manager.TeleportManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
@@ -36,14 +37,14 @@ import java.util.Map;
 
 public class TeleportRequestTask implements Runnable, Messageable {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Player player;
     private final Location location;
     private final Messages messages;
     private final Location startLocation;
     private int delay;
 
-    public TeleportRequestTask(Tools plugin, Player player, Location location, int delay) {
+    public TeleportRequestTask(ToolsAPI plugin, Player player, Location location, int delay) {
         this.plugin = plugin;
         this.player = player;
         this.location = location;

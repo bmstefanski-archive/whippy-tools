@@ -84,7 +84,6 @@ public class MarkCommand implements CommandExecutor, Messageable {
 
             target.removePotionEffect(PotionEffectType.GLOWING);
         }
-
     }
 
 }

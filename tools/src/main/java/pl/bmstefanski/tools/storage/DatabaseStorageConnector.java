@@ -24,7 +24,7 @@
 
 package pl.bmstefanski.tools.storage;
 
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.storage.Database;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 import pl.bmstefanski.tools.type.DatabaseType;
@@ -32,10 +32,10 @@ import pl.bmstefanski.tools.type.DatabaseType;
 public class DatabaseStorageConnector {
 
     private final DatabaseType databaseType;
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private Database database;
 
-    public DatabaseStorageConnector(Tools plugin, DatabaseType databaseType) {
+    public DatabaseStorageConnector(ToolsAPI plugin, DatabaseType databaseType) {
         this.plugin = plugin;
         this.databaseType = databaseType;
 

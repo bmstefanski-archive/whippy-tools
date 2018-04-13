@@ -35,14 +35,15 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class WorkbenchCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public WorkbenchCommand(Tools plugin) {
+    public WorkbenchCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -67,7 +68,6 @@ public class WorkbenchCommand implements Messageable, CommandExecutor {
 
         Player target = Bukkit.getPlayer(commandArguments.getParam(0));
         target.openWorkbench(player.getLocation(), true);
-
     }
 
 }

@@ -36,4 +36,5 @@ public interface Database {
     boolean closeConnection() throws SQLException;
 
     Connection getConnection();
+    
 }

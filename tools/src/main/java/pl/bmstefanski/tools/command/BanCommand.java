@@ -35,7 +35,7 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.Ban;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.BanImpl;
@@ -44,10 +44,10 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class BanCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public BanCommand(Tools plugin) {
+    public BanCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -102,4 +102,5 @@ public class BanCommand implements Messageable, CommandExecutor {
 
         sendMessage(commandSender, StringUtils.replace(messages.getSuccessfullyBanned(), "%player%", offlinePlayer.getName()));
     }
+
 }

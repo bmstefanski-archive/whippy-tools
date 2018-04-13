@@ -30,15 +30,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.help.HelpTopic;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerCommandPreprocess implements Listener, Messageable {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerCommandPreprocess(Tools plugin) {
+    public PlayerCommandPreprocess(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -53,4 +53,5 @@ public class PlayerCommandPreprocess implements Listener, Messageable {
             sendMessage(event.getPlayer(), messages.getUnknownCommand().replace("%command%", command));
         }
     }
+
 }

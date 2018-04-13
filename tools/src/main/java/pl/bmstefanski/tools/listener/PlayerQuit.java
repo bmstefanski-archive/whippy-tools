@@ -59,4 +59,5 @@ public class PlayerQuit implements Listener, Messageable {
 
         new SaveDataTask(user).runTask(plugin);
     }
+
 }

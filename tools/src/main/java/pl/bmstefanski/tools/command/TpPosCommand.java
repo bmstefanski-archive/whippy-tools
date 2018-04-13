@@ -11,16 +11,16 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.util.ParsingUtil;
 
 public class TpPosCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public TpPosCommand(Tools plugin) {
+    public TpPosCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

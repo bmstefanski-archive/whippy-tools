@@ -33,17 +33,17 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import java.util.Arrays;
 
 public class ListCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public ListCommand(Tools plugin) {
+    public ListCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -66,8 +66,6 @@ public class ListCommand implements Messageable, CommandExecutor {
         else if (commandArguments.getParam(0).equalsIgnoreCase("full")) {
             sendMessage(commandSender, StringUtils.replace(messages.getListFull(), "%online%", Arrays.toString(plugin.getUserManager().getOnlinePlayers().toArray())));
         }
-
-
     }
 
 }

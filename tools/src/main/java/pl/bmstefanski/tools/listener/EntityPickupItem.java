@@ -4,15 +4,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
 public class EntityPickupItem implements Listener {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
 
-    public EntityPickupItem(Tools plugin) {
+    public EntityPickupItem(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
@@ -23,15 +23,11 @@ public class EntityPickupItem implements Listener {
         User user = UserManager.getUser(player.getUniqueId());
 
         if (event.getEntity() instanceof Player) {
-
             if (plugin.getConfiguration().getDisableItemPickupWhileAfk()) {
-
                 if (user.isAfk()) {
                     event.setCancelled(true);
                 }
-
             }
-
         }
 
     }

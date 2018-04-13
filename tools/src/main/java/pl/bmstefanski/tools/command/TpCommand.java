@@ -10,15 +10,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class TpCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public TpCommand(Tools plugin) {
+    public TpCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -52,8 +52,8 @@ public class TpCommand implements Messageable, CommandExecutor {
 
         if (Bukkit.getPlayer(commandArguments.getParam(0)) == null || Bukkit.getPlayer(commandArguments.getParam(1)) == null) {
             sendMessage(commandSender, StringUtils.replaceEach(messages.getTpFailed(),
-                    new String[] {"%player%", "%target%"},
-                    new String[] {commandArguments.getParam(0), commandArguments.getParam(1)}));
+                    new String[]{"%player%", "%target%"},
+                    new String[]{commandArguments.getParam(0), commandArguments.getParam(1)}));
             return;
         }
 
@@ -62,7 +62,8 @@ public class TpCommand implements Messageable, CommandExecutor {
 
         player.teleport(target);
         sendMessage(commandSender, StringUtils.replaceEach(messages.getTpSuccess(),
-                new String[] {"%player%", "%target%"},
-                new String[] {player.getName(), target.getName()}));
+                new String[]{"%player%", "%target%"},
+                new String[]{player.getName(), target.getName()}));
     }
+
 }

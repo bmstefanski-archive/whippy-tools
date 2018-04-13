@@ -61,4 +61,5 @@ public class TeleportManager implements Messageable {
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20);
         TASK_MAP.put(player, task);
     }
+
 }

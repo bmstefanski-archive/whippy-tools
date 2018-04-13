@@ -81,4 +81,5 @@ public class BanImpl implements Ban {
     public void setTime(long time) {
         this.time = time;
     }
+
 }

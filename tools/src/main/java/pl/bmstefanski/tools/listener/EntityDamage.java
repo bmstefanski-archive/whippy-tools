@@ -28,15 +28,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
 public class EntityDamage implements Listener {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
 
-    public EntityDamage(Tools plugin) {
+    public EntityDamage(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
@@ -55,4 +55,5 @@ public class EntityDamage implements Listener {
         }
 
     }
+
 }

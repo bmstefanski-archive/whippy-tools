@@ -30,15 +30,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
 public class PlayerJoin implements Listener, Messageable {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
 
-    public PlayerJoin(Tools plugin) {
+    public PlayerJoin(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
@@ -60,6 +60,6 @@ public class PlayerJoin implements Listener, Messageable {
         if (plugin.getConfiguration().getSafeLogin()) {
             player.setFallDistance(0F);
         }
-
     }
+
 }

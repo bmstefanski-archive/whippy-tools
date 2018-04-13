@@ -11,15 +11,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class DayCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public DayCommand(Tools plugin) {
+    public DayCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -54,4 +54,5 @@ public class DayCommand implements Messageable, CommandExecutor {
 
         sendMessage(commandSender, StringUtils.replace(messages.getDay(), "%world%", world.getName()));
     }
+
 }

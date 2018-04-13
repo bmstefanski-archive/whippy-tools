@@ -11,15 +11,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class NightCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final Messages messages;
 
-    public NightCommand(Tools plugin) {
+    public NightCommand(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -54,7 +54,6 @@ public class NightCommand implements Messageable, CommandExecutor {
         world.setTime(12566);
 
         sendMessage(commandSender, StringUtils.replace(messages.getNight(), "%world%", world.getName()));
-
     }
 
 }

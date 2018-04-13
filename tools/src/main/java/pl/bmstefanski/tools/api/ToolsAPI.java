@@ -44,4 +44,5 @@ public interface ToolsAPI {
     BanResourceManager getBanResource();
 
     BukkitCommands getBukkitCommands();
+
 }

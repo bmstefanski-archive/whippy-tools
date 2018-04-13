@@ -24,7 +24,7 @@
 
 package pl.bmstefanski.tools.storage.resource;
 
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.Ban;
 import pl.bmstefanski.tools.api.storage.Resource;
 import pl.bmstefanski.tools.basic.BanImpl;
@@ -40,10 +40,10 @@ import java.util.UUID;
 
 public class BanResourceManager implements Resource {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
     private final List<Ban> banList = BanManager.getBans();
 
-    public BanResourceManager(Tools plugin) {
+    public BanResourceManager(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 

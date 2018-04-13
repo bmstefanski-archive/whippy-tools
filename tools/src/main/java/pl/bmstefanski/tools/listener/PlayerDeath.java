@@ -27,14 +27,14 @@ package pl.bmstefanski.tools.listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.manager.LocationManager;
 
 public class PlayerDeath implements Listener {
 
-    private final Tools plugin;
+    private final ToolsAPI plugin;
 
-    public PlayerDeath(Tools plugin) {
+    public PlayerDeath(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
@@ -48,6 +48,6 @@ public class PlayerDeath implements Listener {
         if (!plugin.getConfiguration().getDeathMessages()) {
             event.setDeathMessage("");
         }
-
     }
+
 }
