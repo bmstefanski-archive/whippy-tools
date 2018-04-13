@@ -24,7 +24,7 @@
 
 package pl.bmstefanski.tools.util;
 
-public class SafeUtils {
+public final class SafeUtils {
 
     private static void reportUnsafe(Throwable throwable) {
         System.out.println(throwable.toString());
