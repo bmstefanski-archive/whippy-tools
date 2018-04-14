@@ -1,0 +1,4 @@
+main: pl.bmstefanski.tools.Tools
+name: WhippyTools
+description: Minecraft plugin which adds a lot of commands and other cool functionalities.
+version: 1.0
