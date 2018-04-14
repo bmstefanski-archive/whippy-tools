@@ -12,12 +12,12 @@ import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerInteract implements Listener, Messageable {
+public class PlayerInteractListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerInteract(ToolsAPI plugin) {
+    public PlayerInteractListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

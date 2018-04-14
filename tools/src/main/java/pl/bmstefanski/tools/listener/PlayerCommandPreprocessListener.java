@@ -24,53 +24,33 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.help.HelpTopic;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerMove implements Listener, Messageable {
+public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerMove(ToolsAPI plugin) {
+    public PlayerCommandPreprocessListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String command = event.getMessage().split(" ")[0];
+        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
 
-        Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
-
-        if (!plugin.getConfiguration().getCancelAfkOnMove() && !plugin.getConfiguration().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
-
-            return;
-        }
-
-        if (user.isAfk()) {
-
-            if (plugin.getConfiguration().getFreezeAfkPlayers()) {
-                event.setTo(event.getFrom());
-                return;
-            }
-
-            if (plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
-                user.setAfk(false);
-                sendMessage(player, messages.getNoLongerAfk());
-                Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
-            }
+        if (helpTopic == null) {
+            event.setCancelled(true);
+            sendMessage(event.getPlayer(), messages.getUnknownCommand().replace("%command%", command));
         }
     }
 

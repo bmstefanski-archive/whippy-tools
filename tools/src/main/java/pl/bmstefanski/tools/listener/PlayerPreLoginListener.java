@@ -36,12 +36,12 @@ import pl.bmstefanski.tools.basic.manager.BanManager;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerPreLogin implements Listener, Messageable {
+public class PlayerPreLoginListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerPreLogin(ToolsAPI plugin) {
+    public PlayerPreLoginListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

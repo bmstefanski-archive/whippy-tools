@@ -11,12 +11,12 @@ import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.runnable.LoadDataTask;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerLogin implements Listener {
+public class PlayerLoginListener implements Listener {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerLogin(ToolsAPI plugin) {
+    public PlayerLoginListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

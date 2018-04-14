@@ -8,11 +8,11 @@ import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
-public class EntityPickupItem implements Listener {
+public class EntityPickupItemListener implements Listener {
 
     private final ToolsAPI plugin;
 
-    public EntityPickupItem(ToolsAPI plugin) {
+    public EntityPickupItemListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 

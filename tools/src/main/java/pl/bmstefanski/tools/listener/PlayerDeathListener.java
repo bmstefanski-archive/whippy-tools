@@ -24,33 +24,29 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.help.HelpTopic;
-import pl.bmstefanski.commands.Messageable;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.manager.LocationManager;
 
-public class PlayerCommandPreprocess implements Listener, Messageable {
+public class PlayerDeathListener implements Listener {
 
     private final ToolsAPI plugin;
-    private final Messages messages;
 
-    public PlayerCommandPreprocess(ToolsAPI plugin) {
+    public PlayerDeathListener(ToolsAPI plugin) {
         this.plugin = plugin;
-        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage().split(" ")[0];
-        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
+    public void onPlayerDeath(PlayerDeathEvent event) {
 
-        if (helpTopic == null) {
-            event.setCancelled(true);
-            sendMessage(event.getPlayer(), messages.getUnknownCommand().replace("%command%", command));
+        if (event.getEntity() != null) {
+            LocationManager.setLastLocation(event.getEntity());
+        }
+
+        if (!plugin.getConfiguration().getDeathMessages()) {
+            event.setDeathMessage("");
         }
     }
 

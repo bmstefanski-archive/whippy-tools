@@ -34,11 +34,11 @@ import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
-public class PlayerJoin implements Listener, Messageable {
+public class PlayerJoinListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
 
-    public PlayerJoin(ToolsAPI plugin) {
+    public PlayerJoinListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 

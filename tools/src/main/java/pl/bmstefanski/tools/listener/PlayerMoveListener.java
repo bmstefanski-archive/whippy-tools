@@ -25,39 +25,53 @@
 package pl.bmstefanski.tools.listener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
-import pl.bmstefanski.tools.runnable.SaveDataTask;
+import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerQuit implements Listener, Messageable {
+public class PlayerMoveListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
+    private final Messages messages;
 
-    public PlayerQuit(ToolsAPI plugin) {
+    public PlayerMoveListener(ToolsAPI plugin) {
         this.plugin = plugin;
+        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        user.setIp(player.getAddress().getHostName());
+        if (!plugin.getConfiguration().getCancelAfkOnMove() && !plugin.getConfiguration().getFreezeAfkPlayers()) {
+            event.getHandlers().unregister(this);
 
-        event.setQuitMessage(fixColor(StringUtils.replace(plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
-        
-        if (plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
-            user.setGod(false);
+            return;
         }
 
-        new SaveDataTask(user).runTask(plugin);
+        if (user.isAfk()) {
+
+            if (plugin.getConfiguration().getFreezeAfkPlayers()) {
+                event.setTo(event.getFrom());
+                return;
+            }
+
+            if (plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
+                user.setAfk(false);
+                sendMessage(player, messages.getNoLongerAfk());
+                Bukkit.getOnlinePlayers().forEach(p ->
+                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+            }
+        }
     }
 
 }

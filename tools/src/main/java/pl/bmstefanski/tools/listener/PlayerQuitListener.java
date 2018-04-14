@@ -24,30 +24,40 @@
 
 package pl.bmstefanski.tools.listener;
 
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.manager.LocationManager;
+import pl.bmstefanski.tools.api.basic.User;
+import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.runnable.SaveDataTask;
 
-public class PlayerDeath implements Listener {
+public class PlayerQuitListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
 
-    public PlayerDeath(ToolsAPI plugin) {
+    public PlayerQuitListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
 
-        if (event.getEntity() != null) {
-            LocationManager.setLastLocation(event.getEntity());
+        Player player = event.getPlayer();
+        User user = UserManager.getUser(player.getUniqueId());
+
+        user.setIp(player.getAddress().getHostName());
+
+        event.setQuitMessage(fixColor(StringUtils.replace(plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
+        
+        if (plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
+            user.setGod(false);
         }
 
-        if (!plugin.getConfiguration().getDeathMessages()) {
-            event.setDeathMessage("");
-        }
+        new SaveDataTask(user).runTask(plugin);
     }
 
 }

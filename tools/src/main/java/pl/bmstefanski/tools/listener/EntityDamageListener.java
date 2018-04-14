@@ -32,11 +32,11 @@ import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 
-public class EntityDamage implements Listener {
+public class EntityDamageListener implements Listener {
 
     private final ToolsAPI plugin;
 
-    public EntityDamage(ToolsAPI plugin) {
+    public EntityDamageListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
