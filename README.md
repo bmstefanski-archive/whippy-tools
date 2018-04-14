@@ -7,7 +7,7 @@
 Whippy tools is a minecraft plugin which adds a lot of commands and other cool functionalities.  
 We are seeking to make this plugin as customizable as possible.
 
-**Website:** [http://wwww.whippytools.pl/](http://wwww.whippytools.pl)
+**Website:** [http://www.whippytools.pl/](http://www.whippytools.pl)
 
 ## About project
 [Commands list with details](https://github.com/whippytools/whippy-tools/blob/master/.github/COMMANDS_LIST.md)  
