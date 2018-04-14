@@ -25,53 +25,48 @@
 package pl.bmstefanski.tools.listener;
 
 import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
+import pl.bmstefanski.tools.api.basic.Ban;
 import pl.bmstefanski.tools.api.basic.User;
+import pl.bmstefanski.tools.basic.manager.BanManager;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerMove implements Listener, Messageable {
+public class PlayerPreLoginListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerMove(ToolsAPI plugin) {
+    public PlayerPreLoginListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 
-        Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = UserManager.getUser(event.getUniqueId());
+        Ban ban = BanManager.getBan(user.getUUID());
 
-        if (!plugin.getConfiguration().getCancelAfkOnMove() && !plugin.getConfiguration().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
-
+        if (ban == null) {
             return;
         }
 
-        if (user.isAfk()) {
-
-            if (plugin.getConfiguration().getFreezeAfkPlayers()) {
-                event.setTo(event.getFrom());
-                return;
-            }
-
-            if (plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
-                user.setAfk(false);
-                sendMessage(player, messages.getNoLongerAfk());
-                Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
-            }
+        if (!user.isBanned()) {
+            plugin.getBanResource().remove(ban);
+            return;
         }
+
+        String banFormat = listToString(this.messages.getBanFormat());
+        String untilFormat = fixColor(this.messages.getPermanentBan());
+
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
+                new String[]{"%punisher%", "%until%", "%reason%"},
+                new String[]{ban.getPunisher(), ban.getTime() <= 0 ? untilFormat : ban.getTime() + "", ban.getReason()}));
     }
 
 }

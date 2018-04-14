@@ -11,12 +11,12 @@ import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.runnable.LoadDataTask;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerLogin implements Listener {
+public class PlayerLoginListener implements Listener {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerLogin(ToolsAPI plugin) {
+    public PlayerLoginListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -31,14 +31,14 @@ public class PlayerLogin implements Listener {
             user.setName(player.getName());
         }
 
-        int maxNicknameLength = plugin.getConfiguration().getMaxNicknameLength();
+        int maxNicknameLength = this.plugin.getConfiguration().getMaxNicknameLength();
 
         if (player.getName().length() > maxNicknameLength) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
             return;
         }
 
-        new LoadDataTask(user).runTask(plugin);
+        new LoadDataTask(user).runTask(this.plugin);
     }
 
 }

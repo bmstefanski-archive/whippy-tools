@@ -47,13 +47,13 @@ public class LoadDataTask extends BukkitRunnable {
         try {
             PreparedStatement preparedStatement = StatementType.LOAD_PLAYER.build();
 
-            preparedStatement.setString(1, user.getUUID().toString());
+            preparedStatement.setString(1, this.user.getUUID().toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                user.setUUID(UUIDUtils.getUUIDFromBytes(resultSet.getBytes("uuid")));
-                user.setName(resultSet.getString("name"));
+                this.user.setUUID(UUIDUtils.getUUIDFromBytes(resultSet.getBytes("uuid")));
+                this.user.setName(resultSet.getString("name"));
             }
 
             resultSet.close();

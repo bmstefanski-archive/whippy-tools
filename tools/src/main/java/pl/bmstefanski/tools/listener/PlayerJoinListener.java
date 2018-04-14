@@ -28,36 +28,38 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
-import pl.bmstefanski.tools.runnable.SaveDataTask;
 
-public class PlayerQuit implements Listener, Messageable {
+public class PlayerJoinListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
 
-    public PlayerQuit(ToolsAPI plugin) {
+    public PlayerJoinListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
 
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        user.setIp(player.getAddress().getHostName());
+        event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
 
-        event.setQuitMessage(fixColor(StringUtils.replace(plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
-        
-        if (plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
-            user.setGod(false);
+        if (this.plugin.getConfiguration().getFlyOnJoin()) {
+            if (player.isFlying()) {
+                player.setFlying(true);
+                player.setAllowFlight(true);
+            }
         }
 
-        new SaveDataTask(user).runTask(plugin);
+        if (this.plugin.getConfiguration().getSafeLogin()) {
+            player.setFallDistance(0F);
+        }
     }
 
 }

@@ -24,36 +24,30 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.manager.LocationManager;
 
-public class EntityDamage implements Listener {
+public class PlayerDeathListener implements Listener {
 
     private final ToolsAPI plugin;
 
-    public EntityDamage(ToolsAPI plugin) {
+    public PlayerDeathListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
 
-        if (!(event.getEntity() instanceof Player)) {
-            return;
+        if (event.getEntity() != null) {
+            LocationManager.setLastLocation(event.getEntity());
         }
 
-        Player player = (Player) event.getEntity();
-        User user = UserManager.getUser(player.getUniqueId());
-
-        if (user.isGod()) {
-            event.setCancelled(true);
+        if (!this.plugin.getConfiguration().getDeathMessages()) {
+            event.setDeathMessage("");
         }
-
     }
 
 }

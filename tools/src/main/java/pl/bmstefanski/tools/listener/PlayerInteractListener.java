@@ -12,12 +12,12 @@ import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerInteract implements Listener, Messageable {
+public class PlayerInteractListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerInteract(ToolsAPI plugin) {
+    public PlayerInteractListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -28,12 +28,12 @@ public class PlayerInteract implements Listener, Messageable {
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        if (plugin.getConfiguration().getCancelAfkOnInteract()) {
+        if (this.plugin.getConfiguration().getCancelAfkOnInteract()) {
             if (user.isGod()) {
                 user.setAfk(false);
-                sendMessage(player, messages.getNoLongerAfk());
+                sendMessage(player, this.messages.getNoLongerAfk());
                 Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
             }
         }
     }

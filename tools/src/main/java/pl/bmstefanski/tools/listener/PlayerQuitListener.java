@@ -24,34 +24,40 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.bukkit.Bukkit;
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.help.HelpTopic;
+import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.api.basic.User;
+import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.runnable.SaveDataTask;
 
-public class PlayerCommandPreprocess implements Listener, Messageable {
+public class PlayerQuitListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
-    private final Messages messages;
 
-    public PlayerCommandPreprocess(ToolsAPI plugin) {
+    public PlayerQuitListener(ToolsAPI plugin) {
         this.plugin = plugin;
-        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage().split(" ")[0];
-        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
+    public void onPlayerQuit(PlayerQuitEvent event) {
 
-        if (helpTopic == null) {
-            event.setCancelled(true);
-            sendMessage(event.getPlayer(), messages.getUnknownCommand().replace("%command%", command));
+        Player player = event.getPlayer();
+        User user = UserManager.getUser(player.getUniqueId());
+
+        user.setIp(player.getAddress().getHostName());
+
+        event.setQuitMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
+        
+        if (this.plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
+            user.setGod(false);
         }
+
+        new SaveDataTask(user).runTask(this.plugin);
     }
 
 }

@@ -25,40 +25,52 @@
 package pl.bmstefanski.tools.listener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerJoin implements Listener, Messageable {
+public class PlayerMoveListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
+    private final Messages messages;
 
-    public PlayerJoin(ToolsAPI plugin) {
+    public PlayerMoveListener(ToolsAPI plugin) {
         this.plugin = plugin;
+        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event) {
 
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        event.setJoinMessage(fixColor(StringUtils.replace(plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
+        if (!this.plugin.getConfiguration().getCancelAfkOnMove() && !this.plugin.getConfiguration().getFreezeAfkPlayers()) {
+            event.getHandlers().unregister(this);
 
-        if (plugin.getConfiguration().getFlyOnJoin()) {
-            if (player.isFlying()) {
-                player.setFlying(true);
-                player.setAllowFlight(true);
-            }
+            return;
         }
 
-        if (plugin.getConfiguration().getSafeLogin()) {
-            player.setFallDistance(0F);
+        if (user.isAfk()) {
+
+            if (this.plugin.getConfiguration().getFreezeAfkPlayers()) {
+                event.setTo(event.getFrom());
+                return;
+            }
+
+            if (this.plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
+                user.setAfk(false);
+                sendMessage(player, this.messages.getNoLongerAfk());
+                Bukkit.getOnlinePlayers().forEach(p ->
+                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+            }
         }
     }
 
