@@ -90,16 +90,16 @@ public class Tools extends JavaPlugin implements ToolsAPI {
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "MC|CPack", new BlazingPackMessageReceivedListener());
 
         this.registerListeners(
-                new PlayerCommandPreprocess(this),
-                new PlayerJoin(this),
-                new PlayerPreLogin(this),
-                new PlayerQuit(this),
-                new PlayerMove(this),
-                new EntityDamage(this),
-                new PlayerDeath(this),
-                new PlayerLogin(this),
-                new PlayerInteract(this),
-                new EntityPickupItem(this)
+                new PlayerCommandPreprocessListener(this),
+                new PlayerJoinListener(this),
+                new PlayerPreLoginListener(this),
+                new PlayerQuitListener(this),
+                new PlayerMoveListener(this),
+                new EntityDamageListener(this),
+                new PlayerDeathListener(this),
+                new PlayerLoginListener(this),
+                new PlayerInteractListener(this),
+                new EntityPickupItemListener(this)
         );
 
         this.registerCommands(

@@ -35,11 +35,11 @@ import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.runnable.SaveDataTask;
 
-public class PlayerQuit implements Listener, Messageable {
+public class PlayerQuitListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
 
-    public PlayerQuit(ToolsAPI plugin) {
+    public PlayerQuitListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 
