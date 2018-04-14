@@ -52,7 +52,7 @@ public class PlayerMove implements Listener, Messageable {
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        if (!plugin.getConfiguration().getCancelAfkOnMove() && !plugin.getConfiguration().getFreezeAfkPlayers()) {
+        if (!this.plugin.getConfiguration().getCancelAfkOnMove() && !this.plugin.getConfiguration().getFreezeAfkPlayers()) {
             event.getHandlers().unregister(this);
 
             return;
@@ -60,16 +60,16 @@ public class PlayerMove implements Listener, Messageable {
 
         if (user.isAfk()) {
 
-            if (plugin.getConfiguration().getFreezeAfkPlayers()) {
+            if (this.plugin.getConfiguration().getFreezeAfkPlayers()) {
                 event.setTo(event.getFrom());
                 return;
             }
 
-            if (plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
+            if (this.plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
                 user.setAfk(false);
-                sendMessage(player, messages.getNoLongerAfk());
+                sendMessage(player, this.messages.getNoLongerAfk());
                 Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
             }
         }
     }
