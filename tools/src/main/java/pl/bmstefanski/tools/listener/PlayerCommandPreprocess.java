@@ -50,7 +50,7 @@ public class PlayerCommandPreprocess implements Listener, Messageable {
 
         if (helpTopic == null) {
             event.setCancelled(true);
-            sendMessage(event.getPlayer(), messages.getUnknownCommand().replace("%command%", command));
+            sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
         }
     }
 

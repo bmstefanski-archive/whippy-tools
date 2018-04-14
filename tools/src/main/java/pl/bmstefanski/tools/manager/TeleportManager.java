@@ -51,14 +51,14 @@ public class TeleportManager implements Messageable {
     public void teleport(Player player, Location location, int delay) {
 
         if (TASK_MAP.containsKey(player)) {
-            sendMessage(player, messages.getCurrentlyTeleporting());
+            sendMessage(player, this.messages.getCurrentlyTeleporting());
             return;
         }
 
-        sendMessage(player, messages.getTeleport());
+        sendMessage(player, this.messages.getTeleport());
 
-        Runnable runnable = new TeleportRequestTask(plugin, player, location, delay);
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, 20);
+        Runnable runnable = new TeleportRequestTask(this.plugin, player, location, delay);
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(this.plugin, runnable, 0, 20);
         TASK_MAP.put(player, task);
     }
 

@@ -179,32 +179,32 @@ public class Tools extends JavaPlugin implements ToolsAPI {
 
     @Override
     public PluginConfig getConfiguration() {
-        return pluginConfig;
+        return this.pluginConfig;
     }
 
     @Override
     public Database getDatabase() {
-        return database;
+        return this.database;
     }
 
     @Override
     public UserManager getUserManager() {
-        return userManager;
+        return this.userManager;
     }
 
     @Override
     public Messages getMessages() {
-        return messages;
+        return this.messages;
     }
 
     @Override
     public BanResourceManager getBanResource() {
-        return banResource;
+        return this.banResource;
     }
 
     @Override
     public BukkitCommands getBukkitCommands() {
-        return bukkitCommands;
+        return this.bukkitCommands;
     }
 
     public static Tools getInstance() {

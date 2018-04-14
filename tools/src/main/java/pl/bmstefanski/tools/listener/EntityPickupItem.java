@@ -23,7 +23,7 @@ public class EntityPickupItem implements Listener {
         User user = UserManager.getUser(player.getUniqueId());
 
         if (event.getEntity() instanceof Player) {
-            if (plugin.getConfiguration().getDisableItemPickupWhileAfk()) {
+            if (this.plugin.getConfiguration().getDisableItemPickupWhileAfk()) {
                 if (user.isAfk()) {
                     event.setCancelled(true);
                 }

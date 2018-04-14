@@ -57,12 +57,12 @@ public class PlayerPreLogin implements Listener, Messageable {
         }
 
         if (!user.isBanned()) {
-            plugin.getBanResource().remove(ban);
+            this.plugin.getBanResource().remove(ban);
             return;
         }
 
-        String banFormat = listToString(messages.getBanFormat());
-        String untilFormat = fixColor(messages.getPermanentBan());
+        String banFormat = listToString(this.messages.getBanFormat());
+        String untilFormat = fixColor(this.messages.getPermanentBan());
 
         event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
                 new String[]{"%punisher%", "%until%", "%reason%"},

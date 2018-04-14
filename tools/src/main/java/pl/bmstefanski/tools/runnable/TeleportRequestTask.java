@@ -56,23 +56,23 @@ public class TeleportRequestTask implements Runnable, Messageable {
     public void run() {
         Map<Player, BukkitTask> taskMap = TeleportManager.TASK_MAP;
 
-        if (player.getLocation().distance(startLocation) > 0.5) {
-            taskMap.get(player).cancel();
-            taskMap.remove(player);
+        if (this.player.getLocation().distance(this.startLocation) > 0.5) {
+            taskMap.get(this.player).cancel();
+            taskMap.remove(this.player);
 
-            sendMessage(player, messages.getTeleportCancelled());
+            sendMessage(this.player, this.messages.getTeleportCancelled());
             return;
         }
 
-        if (delay == 0) {
-            player.teleport(location);
-            taskMap.get(player).cancel();
-            taskMap.remove(player);
+        if (this.delay == 0) {
+            this.player.teleport(this.location);
+            taskMap.get(this.player).cancel();
+            taskMap.remove(this.player);
 
-            sendMessage(player, messages.getTeleportSuccess());
+            sendMessage(this.player, this.messages.getTeleportSuccess());
             return;
         }
 
-        delay--;
+        this.delay--;
     }
 }
