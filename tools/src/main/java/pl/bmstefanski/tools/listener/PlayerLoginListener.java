@@ -31,14 +31,14 @@ public class PlayerLoginListener implements Listener {
             user.setName(player.getName());
         }
 
-        int maxNicknameLength = plugin.getConfiguration().getMaxNicknameLength();
+        int maxNicknameLength = this.plugin.getConfiguration().getMaxNicknameLength();
 
         if (player.getName().length() > maxNicknameLength) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
+            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
             return;
         }
 
-        new LoadDataTask(user).runTask(plugin);
+        new LoadDataTask(user).runTask(this.plugin);
     }
 
 }

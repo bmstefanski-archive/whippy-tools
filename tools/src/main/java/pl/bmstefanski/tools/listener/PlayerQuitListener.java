@@ -51,13 +51,13 @@ public class PlayerQuitListener implements Listener, Messageable {
 
         user.setIp(player.getAddress().getHostName());
 
-        event.setQuitMessage(fixColor(StringUtils.replace(plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
+        event.setQuitMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
         
-        if (plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
+        if (this.plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
             user.setGod(false);
         }
 
-        new SaveDataTask(user).runTask(plugin);
+        new SaveDataTask(user).runTask(this.plugin);
     }
 
 }

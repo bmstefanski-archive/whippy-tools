@@ -28,12 +28,12 @@ public class PlayerInteractListener implements Listener, Messageable {
         Player player = event.getPlayer();
         User user = UserManager.getUser(player.getUniqueId());
 
-        if (plugin.getConfiguration().getCancelAfkOnInteract()) {
+        if (this.plugin.getConfiguration().getCancelAfkOnInteract()) {
             if (user.isGod()) {
                 user.setAfk(false);
-                sendMessage(player, messages.getNoLongerAfk());
+                sendMessage(player, this.messages.getNoLongerAfk());
                 Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
             }
         }
     }

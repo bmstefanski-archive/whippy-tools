@@ -44,9 +44,9 @@ public class DatabaseStorageConnector {
 
     public void connect() {
 
-        PluginConfig config = plugin.getConfiguration();
+        PluginConfig config = this.plugin.getConfiguration();
 
-        switch (databaseType) {
+        switch (this.databaseType) {
             case MYSQL:
                 this.database = new MySQLDatabase(
                         config.getMySQLSection().getHostname(),
@@ -60,6 +60,6 @@ public class DatabaseStorageConnector {
     }
 
     public Database getDatabase() {
-        return database;
+        return this.database;
     }
 }
