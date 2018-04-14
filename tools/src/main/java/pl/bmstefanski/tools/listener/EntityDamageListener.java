@@ -24,54 +24,36 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import pl.bmstefanski.commands.Messageable;
+import org.bukkit.event.entity.EntityDamageEvent;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.api.basic.User;
 import pl.bmstefanski.tools.basic.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerMove implements Listener, Messageable {
+public class EntityDamageListener implements Listener {
 
     private final ToolsAPI plugin;
-    private final Messages messages;
 
-    public PlayerMove(ToolsAPI plugin) {
+    public EntityDamageListener(ToolsAPI plugin) {
         this.plugin = plugin;
-        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onEntityDamage(EntityDamageEvent event) {
 
-        Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
-
-        if (!this.plugin.getConfiguration().getCancelAfkOnMove() && !this.plugin.getConfiguration().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
-
+        if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
-        if (user.isAfk()) {
+        Player player = (Player) event.getEntity();
+        User user = UserManager.getUser(player.getUniqueId());
 
-            if (this.plugin.getConfiguration().getFreezeAfkPlayers()) {
-                event.setTo(event.getFrom());
-                return;
-            }
-
-            if (this.plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
-                user.setAfk(false);
-                sendMessage(player, this.messages.getNoLongerAfk());
-                Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
-            }
+        if (user.isGod()) {
+            event.setCancelled(true);
         }
+
     }
 
 }

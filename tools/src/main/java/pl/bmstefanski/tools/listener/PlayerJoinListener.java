@@ -25,48 +25,41 @@
 package pl.bmstefanski.tools.listener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.Ban;
 import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.BanManager;
 import pl.bmstefanski.tools.basic.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerPreLogin implements Listener, Messageable {
+public class PlayerJoinListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
-    private final Messages messages;
 
-    public PlayerPreLogin(ToolsAPI plugin) {
+    public PlayerJoinListener(ToolsAPI plugin) {
         this.plugin = plugin;
-        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
 
-        User user = UserManager.getUser(event.getUniqueId());
-        Ban ban = BanManager.getBan(user.getUUID());
+        Player player = event.getPlayer();
+        User user = UserManager.getUser(player.getUniqueId());
 
-        if (ban == null) {
-            return;
+        event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
+
+        if (this.plugin.getConfiguration().getFlyOnJoin()) {
+            if (player.isFlying()) {
+                player.setFlying(true);
+                player.setAllowFlight(true);
+            }
         }
 
-        if (!user.isBanned()) {
-            this.plugin.getBanResource().remove(ban);
-            return;
+        if (this.plugin.getConfiguration().getSafeLogin()) {
+            player.setFallDistance(0F);
         }
-
-        String banFormat = listToString(this.messages.getBanFormat());
-        String untilFormat = fixColor(this.messages.getPermanentBan());
-
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
-                new String[]{"%punisher%", "%until%", "%reason%"},
-                new String[]{ban.getPunisher(), ban.getTime() <= 0 ? untilFormat : ban.getTime() + "", ban.getReason()}));
     }
 
 }

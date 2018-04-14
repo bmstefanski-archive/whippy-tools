@@ -24,34 +24,49 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.bukkit.Bukkit;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.help.HelpTopic;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
+import pl.bmstefanski.tools.api.basic.Ban;
+import pl.bmstefanski.tools.api.basic.User;
+import pl.bmstefanski.tools.basic.manager.BanManager;
+import pl.bmstefanski.tools.basic.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerCommandPreprocess implements Listener, Messageable {
+public class PlayerPreLoginListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
     private final Messages messages;
 
-    public PlayerCommandPreprocess(ToolsAPI plugin) {
+    public PlayerPreLoginListener(ToolsAPI plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage().split(" ")[0];
-        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
+    public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 
-        if (helpTopic == null) {
-            event.setCancelled(true);
-            sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
+        User user = UserManager.getUser(event.getUniqueId());
+        Ban ban = BanManager.getBan(user.getUUID());
+
+        if (ban == null) {
+            return;
         }
+
+        if (!user.isBanned()) {
+            this.plugin.getBanResource().remove(ban);
+            return;
+        }
+
+        String banFormat = listToString(this.messages.getBanFormat());
+        String untilFormat = fixColor(this.messages.getPermanentBan());
+
+        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
+                new String[]{"%punisher%", "%until%", "%reason%"},
+                new String[]{ban.getPunisher(), ban.getTime() <= 0 ? untilFormat : ban.getTime() + "", ban.getReason()}));
     }
 
 }

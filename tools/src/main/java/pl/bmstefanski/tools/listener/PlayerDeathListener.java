@@ -30,11 +30,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.bmstefanski.tools.api.ToolsAPI;
 import pl.bmstefanski.tools.manager.LocationManager;
 
-public class PlayerDeath implements Listener {
+public class PlayerDeathListener implements Listener {
 
     private final ToolsAPI plugin;
 
-    public PlayerDeath(ToolsAPI plugin) {
+    public PlayerDeathListener(ToolsAPI plugin) {
         this.plugin = plugin;
     }
 

@@ -24,41 +24,33 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.help.HelpTopic;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.storage.configuration.Messages;
 
-public class PlayerJoin implements Listener, Messageable {
+public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
     private final ToolsAPI plugin;
+    private final Messages messages;
 
-    public PlayerJoin(ToolsAPI plugin) {
+    public PlayerCommandPreprocessListener(ToolsAPI plugin) {
         this.plugin = plugin;
+        this.messages = plugin.getMessages();
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String command = event.getMessage().split(" ")[0];
+        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
 
-        Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
-
-        event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
-
-        if (this.plugin.getConfiguration().getFlyOnJoin()) {
-            if (player.isFlying()) {
-                player.setFlying(true);
-                player.setAllowFlight(true);
-            }
-        }
-
-        if (this.plugin.getConfiguration().getSafeLogin()) {
-            player.setFallDistance(0F);
+        if (helpTopic == null) {
+            event.setCancelled(true);
+            sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
         }
     }
 
