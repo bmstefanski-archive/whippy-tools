@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,17 +33,17 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.api.ToolsAPI;
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import java.util.Arrays;
 
 public class ListCommand implements Messageable, CommandExecutor {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public ListCommand(ToolsAPI plugin) {
+    public ListCommand(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

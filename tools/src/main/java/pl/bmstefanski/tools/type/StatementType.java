@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package pl.bmstefanski.tools.type;
 
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.ToolsImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +49,7 @@ public enum StatementType {
 
     public PreparedStatement build() {
 
-        Connection connection = Tools.getInstance().getDatabase().getConnection();
+        Connection connection = ToolsImpl.getInstance().getDatabase().getConnection();
 
         PreparedStatement statement = null;
 

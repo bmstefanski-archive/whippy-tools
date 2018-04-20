@@ -10,17 +10,16 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class AfkCommand implements Messageable, CommandExecutor {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public AfkCommand(ToolsAPI plugin) {
+    public AfkCommand(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -32,7 +31,7 @@ public class AfkCommand implements Messageable, CommandExecutor {
     public void execute(CommandSender commandSender, CommandArguments commandArguments) {
         Player player = (Player) commandSender;
 
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
         if(user.isAfk()){
             user.setAfk(false);

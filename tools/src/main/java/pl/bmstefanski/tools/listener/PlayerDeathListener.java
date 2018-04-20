@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,13 @@ package pl.bmstefanski.tools.listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.manager.LocationManager;
+import pl.bmstefanski.tools.Tools;
 
 public class PlayerDeathListener implements Listener {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
 
-    public PlayerDeathListener(ToolsAPI plugin) {
+    public PlayerDeathListener(Tools plugin) {
         this.plugin = plugin;
     }
 
@@ -42,7 +41,7 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
 
         if (event.getEntity() != null) {
-            LocationManager.setLastLocation(event.getEntity());
+//            LocationManager.setLastLocation(event.getEntity());
         }
 
         if (!this.plugin.getConfiguration().getDeathMessages()) {

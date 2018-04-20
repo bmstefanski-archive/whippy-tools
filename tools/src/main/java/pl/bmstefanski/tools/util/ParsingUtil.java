@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package pl.bmstefanski.tools.util;
 
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.ToolsImpl;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import java.time.Instant;
@@ -34,7 +34,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class ParsingUtil {
 
-    private static final Messages messages = Tools.getInstance().getMessages();
+    private static final Messages messages = ToolsImpl.getInstance().getMessages();
 
     public static String parseBoolean(boolean bool) {
         return bool ? messages.getBooleanOn() : messages.getBooleanOff();

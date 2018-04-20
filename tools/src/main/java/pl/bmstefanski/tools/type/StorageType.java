@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +22,10 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.api.basic;
+package pl.bmstefanski.tools.type;
 
-import org.bukkit.entity.Player;
+public enum StorageType {
 
-import java.util.UUID;
-
-public interface User {
-
-    UUID getUUID();
-
-    String getName();
-
-    String getIp();
-
-    Player getPlayer();
-
-    void setUUID(UUID uuid);
-
-    void setName(String name);
-
-    void setIp(String ip);
-
-    void setGod(boolean god);
-
-    void setAfk(boolean afk);
-
-    boolean isGod();
-
-    boolean isOnline();
-
-    boolean isBanned();
-
-    boolean isAfk();
-
-    @Deprecated
-    boolean isSecure();
-
-    @Deprecated
-    void setSecure(boolean secure);
-
-    boolean isMark();
-
-    void setMark(boolean mark);
+    MYSQL
 
 }

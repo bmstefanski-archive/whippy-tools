@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,20 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.Ban;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.BanManager;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerPreLoginListener implements Listener, Messageable {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public PlayerPreLoginListener(ToolsAPI plugin) {
+    public PlayerPreLoginListener(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -49,24 +45,24 @@ public class PlayerPreLoginListener implements Listener, Messageable {
     @EventHandler
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 
-        User user = UserManager.getUser(event.getUniqueId());
-        Ban ban = BanManager.getBan(user.getUUID());
+        User user = this.plugin.getUserManager().getUser(event.getUniqueId());
+//        Ban ban = BanManager.getBan(user.getUUID());
 
-        if (ban == null) {
-            return;
-        }
+//        if (ban == null) {
+//            return;
+//        }
+//
+//        if (!user.isBanned()) {
+//            this.plugin.getBanResource().remove(ban);
+//            return;
+//        }
 
-        if (!user.isBanned()) {
-            this.plugin.getBanResource().remove(ban);
-            return;
-        }
+//        String banFormat = listToString(this.messages.getBanFormat());
+//        String untilFormat = fixColor(this.messages.getPermanentBan());
 
-        String banFormat = listToString(this.messages.getBanFormat());
-        String untilFormat = fixColor(this.messages.getPermanentBan());
-
-        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
-                new String[]{"%punisher%", "%until%", "%reason%"},
-                new String[]{ban.getPunisher(), ban.getTime() <= 0 ? untilFormat : ban.getTime() + "", ban.getReason()}));
+//        event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, StringUtils.replaceEach(banFormat,
+//                new String[]{"%punisher%", "%until%", "%reason%"},
+//                new String[]{ban.getPunisher(), ban.getTime() <= 0 ? untilFormat : ban.getTime() + "", ban.getReason()}));
     }
 
 }
