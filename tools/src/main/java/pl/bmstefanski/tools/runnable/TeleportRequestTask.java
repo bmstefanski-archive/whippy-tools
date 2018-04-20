@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,21 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.manager.TeleportManager;
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import java.util.Map;
 
 public class TeleportRequestTask implements Runnable, Messageable {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Player player;
     private final Location location;
     private final Messages messages;
     private final Location startLocation;
     private int delay;
 
-    public TeleportRequestTask(ToolsAPI plugin, Player player, Location location, int delay) {
+    public TeleportRequestTask(Tools plugin, Player player, Location location, int delay) {
         this.plugin = plugin;
         this.player = player;
         this.location = location;
@@ -54,25 +53,25 @@ public class TeleportRequestTask implements Runnable, Messageable {
 
     @Override
     public void run() {
-        Map<Player, BukkitTask> taskMap = TeleportManager.TASK_MAP;
+//        Map<Player, BukkitTask> taskMap = TeleportManager.TASK_MAP;
 
-        if (this.player.getLocation().distance(this.startLocation) > 0.5) {
-            taskMap.get(this.player).cancel();
-            taskMap.remove(this.player);
-
-            sendMessage(this.player, this.messages.getTeleportCancelled());
-            return;
-        }
-
-        if (this.delay == 0) {
-            this.player.teleport(this.location);
-            taskMap.get(this.player).cancel();
-            taskMap.remove(this.player);
-
-            sendMessage(this.player, this.messages.getTeleportSuccess());
-            return;
-        }
-
-        this.delay--;
+//        if (this.player.getLocation().distance(this.startLocation) > 0.5) {
+//            taskMap.get(this.player).cancel();
+//            taskMap.remove(this.player);
+//
+//            sendMessage(this.player, this.messages.getTeleportCancelled());
+//            return;
+//        }
+//
+//        if (this.delay == 0) {
+//            this.player.teleport(this.location);
+//            taskMap.get(this.player).cancel();
+//            taskMap.remove(this.player);
+//
+//            sendMessage(this.player, this.messages.getTeleportSuccess());
+//            return;
+//        }
+//
+//        this.delay--;
     }
 }

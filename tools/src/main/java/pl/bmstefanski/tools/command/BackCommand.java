@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ package pl.bmstefanski.tools.command;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
@@ -35,17 +34,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.manager.LocationManager;
-import pl.bmstefanski.tools.manager.TeleportManager;
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class BackCommand implements Messageable, CommandExecutor {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public BackCommand(ToolsAPI plugin) {
+    public BackCommand(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -55,7 +52,7 @@ public class BackCommand implements Messageable, CommandExecutor {
     @GameOnly(false)
     @Override
     public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        TeleportManager teleportManager = new TeleportManager(plugin);
+//        TeleportManager teleportManager = new TeleportManager(plugin);
 
         if (commandArguments.getSize() == 0) {
 
@@ -66,8 +63,8 @@ public class BackCommand implements Messageable, CommandExecutor {
 
             Player player = (Player) commandSender;
 
-            Location location = LocationManager.getLastLocation(player);
-            teleportManager.teleport(player, location, plugin.getConfiguration().getBackDelay());
+//            Location location = LocationManager.getLastLocation(player);
+//            teleportManager.teleport(player, location, plugin.getConfiguration().getBackDelay());
             return;
         }
 
@@ -79,8 +76,8 @@ public class BackCommand implements Messageable, CommandExecutor {
             }
 
             Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            Location location = LocationManager.getLastLocation(target);
-            target.teleport(location);
+//            Location location = LocationManager.getLastLocation(target);
+//            target.teleport(location);
         }
     }
 

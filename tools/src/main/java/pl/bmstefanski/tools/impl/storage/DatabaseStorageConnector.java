@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,22 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.storage;
+package pl.bmstefanski.tools.impl.storage;
 
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.storage.Database;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.storage.Database;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
-import pl.bmstefanski.tools.type.DatabaseType;
+import pl.bmstefanski.tools.type.StorageType;
 
 public class DatabaseStorageConnector {
 
-    private final DatabaseType databaseType;
-    private final ToolsAPI plugin;
+    private final StorageType storageType;
+    private final Tools plugin;
     private Database database;
 
-    public DatabaseStorageConnector(ToolsAPI plugin, DatabaseType databaseType) {
+    public DatabaseStorageConnector(Tools plugin, StorageType storageType) {
         this.plugin = plugin;
-        this.databaseType = databaseType;
+        this.storageType = storageType;
 
         connect();
     }
@@ -46,7 +46,7 @@ public class DatabaseStorageConnector {
 
         PluginConfig config = this.plugin.getConfiguration();
 
-        switch (this.databaseType) {
+        switch (this.storageType) {
             case MYSQL:
                 this.database = new MySQLDatabase(
                         config.getMySQLSection().getHostname(),

@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,15 +30,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.help.HelpTopic;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.api.ToolsAPI;
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public PlayerCommandPreprocessListener(ToolsAPI plugin) {
+    public PlayerCommandPreprocessListener(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

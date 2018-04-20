@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,12 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.basic;
+package pl.bmstefanski.tools.impl.basic;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import pl.bmstefanski.tools.api.basic.Ban;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.BanManager;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.ToolsImpl;
 
 import java.util.UUID;
 
@@ -47,11 +45,12 @@ public class UserImpl implements User {
         this.uuid = uuid;
         this.name = Bukkit.getOfflinePlayer(uuid).getName();
 
-        UserManager.addUser(this);
+        ToolsImpl.getInstance().getUserManager().addUser(this);
     }
 
     public UserImpl(String playerName) {
         this.name = playerName;
+        // todo uuid
     }
 
     @Override
@@ -116,13 +115,6 @@ public class UserImpl implements User {
     @Override
     public boolean isGod() {
         return god;
-    }
-
-    @Override
-    public boolean isBanned() {
-        Ban ban = BanManager.getBan(uuid);
-
-        return ban != null && ban.getTime() != 0L && ban.getTime() <= System.currentTimeMillis();
     }
 
     @Override

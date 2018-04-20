@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,43 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.api.basic;
+package pl.bmstefanski.tools.impl.storage;
 
-import org.bukkit.entity.Player;
+import pl.bmstefanski.tools.storage.Database;
+import pl.bmstefanski.tools.type.StatementType;
 
-import java.util.UUID;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public interface Ban {
+public abstract class AbstractDatabase implements Database {
 
-    UUID getPunished();
+    protected Connection connection;
 
-    Player getPunishedPlayer();
+    @Override
+    public boolean closeConnection() throws SQLException {
+        if (this.connection != null) {
+            this.connection.close();
 
-    String getPunisher();
+            return false;
+        }
 
-    Player getPunisherPlayer();
+        return true;
+    }
 
-    String getReason();
+    @Override
+    public Connection getConnection() {
+        return connection;
+    }
 
-    long getTime();
+    @Override
+    public void checkTable() throws SQLException {
+        PreparedStatement bansTableStatement = StatementType.CHECK_BAN.build();
+        PreparedStatement playersTableStatement = StatementType.CHECK_PLAYER.build();
 
-    void setReason(String reason);
+        bansTableStatement.executeUpdate();
+        playersTableStatement.executeUpdate();
+    }
 
-    void setTime(long time);
-
+    public abstract void connect();
 }

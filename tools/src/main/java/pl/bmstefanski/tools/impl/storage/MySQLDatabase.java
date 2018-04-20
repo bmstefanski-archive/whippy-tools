@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.storage;
+package pl.bmstefanski.tools.impl.storage;
 
 import com.zaxxer.hikari.HikariDataSource;
 

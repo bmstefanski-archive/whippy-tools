@@ -11,15 +11,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.api.ToolsAPI;
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class NightCommand implements Messageable, CommandExecutor {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public NightCommand(ToolsAPI plugin) {
+    public NightCommand(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }

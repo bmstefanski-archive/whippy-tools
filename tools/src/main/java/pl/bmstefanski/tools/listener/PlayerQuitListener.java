@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,16 +30,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.runnable.SaveDataTask;
 
 public class PlayerQuitListener implements Listener, Messageable {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
 
-    public PlayerQuitListener(ToolsAPI plugin) {
+    public PlayerQuitListener(Tools plugin) {
         this.plugin = plugin;
     }
 
@@ -47,7 +46,7 @@ public class PlayerQuitListener implements Listener, Messageable {
     public void onPlayerQuit(PlayerQuitEvent event) {
 
         Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
         user.setIp(player.getAddress().getHostName());
 

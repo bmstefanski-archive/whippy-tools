@@ -5,18 +5,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import pl.bmstefanski.tools.api.ToolsAPI;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.runnable.LoadDataTask;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerLoginListener implements Listener {
 
-    private final ToolsAPI plugin;
+    private final Tools plugin;
     private final Messages messages;
 
-    public PlayerLoginListener(ToolsAPI plugin) {
+    public PlayerLoginListener(Tools plugin) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
     }
@@ -25,7 +24,7 @@ public class PlayerLoginListener implements Listener {
     public void onPlayerLogin(PlayerLoginEvent event) {
 
         Player player = event.getPlayer();
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
         if (!player.hasPlayedBefore()) {
             user.setName(player.getName());

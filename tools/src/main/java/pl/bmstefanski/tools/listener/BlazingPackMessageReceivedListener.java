@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2018 Whippy Tools
+ Copyright (c) 2018 Whippy ToolsImpl
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,22 @@ package pl.bmstefanski.tools.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import pl.bmstefanski.tools.api.basic.User;
-import pl.bmstefanski.tools.basic.manager.UserManager;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 
 @Deprecated
 public class BlazingPackMessageReceivedListener implements PluginMessageListener {
 
+    private final Tools plugin;
+
+    public BlazingPackMessageReceivedListener(Tools plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public void onPluginMessageReceived(String string, Player player, byte[] bytes) {
 
-        User user = UserManager.getUser(player.getUniqueId());
+        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
         if (string.contains("CPack")) {
 
