@@ -1,6 +1,8 @@
 package pl.bmstefanski.tools.basic;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.UUID;
 
@@ -39,5 +41,13 @@ public interface User {
     boolean isMark();
 
     void setMark(boolean mark);
+
+    Location getLastLocation();
+
+    void setLastLocation(Location location);
+
+    BukkitTask getBukkitTask();
+
+    void setBukkitTask(BukkitTask bukkitTask);
 
 }

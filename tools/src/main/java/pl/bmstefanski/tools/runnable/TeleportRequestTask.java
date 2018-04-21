@@ -26,52 +26,48 @@ package pl.bmstefanski.tools.runnable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-
-import java.util.Map;
 
 public class TeleportRequestTask implements Runnable, Messageable {
 
     private final Tools plugin;
-    private final Player player;
-    private final Location location;
     private final Messages messages;
-    private final Location startLocation;
-    private int delay;
+    private final Location location;
+    private final User user;
 
-    public TeleportRequestTask(Tools plugin, Player player, Location location, int delay) {
+    public TeleportRequestTask(Tools plugin, Location location, User user) {
         this.plugin = plugin;
-        this.player = player;
-        this.location = location;
         this.messages = plugin.getMessages();
-        this.startLocation = player.getLocation();
-        this.delay = delay;
+        this.location = location;
+        this.user = user;
     }
 
     @Override
     public void run() {
-//        Map<Player, BukkitTask> taskMap = TeleportManager.TASK_MAP;
 
-//        if (this.player.getLocation().distance(this.startLocation) > 0.5) {
-//            taskMap.get(this.player).cancel();
-//            taskMap.remove(this.player);
-//
-//            sendMessage(this.player, this.messages.getTeleportCancelled());
-//            return;
-//        }
-//
-//        if (this.delay == 0) {
-//            this.player.teleport(this.location);
-//            taskMap.get(this.player).cancel();
-//            taskMap.remove(this.player);
-//
-//            sendMessage(this.player, this.messages.getTeleportSuccess());
-//            return;
-//        }
-//
-//        this.delay--;
+        Player player = this.user.getPlayer();
+        Location playerLocation = this.user.getLastLocation();
+
+        if (player.getLocation().distance(player.getLocation()) > 0.5) {
+            this.user.getBukkitTask().cancel();
+
+            sendMessage(player, this.messages.getTeleportCancelled());
+            return;
+        }
+
+        int delay = this.plugin.getConfiguration().getDelay();
+
+        if (delay == 0) {
+            player.teleport(this.location);
+            this.user.getBukkitTask().cancel();
+
+            sendMessage(player, this.messages.getTeleportSuccess());
+            return;
+        }
+
+        delay--;
     }
 }

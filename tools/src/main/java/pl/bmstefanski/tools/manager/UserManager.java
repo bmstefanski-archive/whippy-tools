@@ -1,5 +1,6 @@
 package pl.bmstefanski.tools.manager;
 
+import org.bukkit.Location;
 import pl.bmstefanski.tools.basic.User;
 
 import java.util.Set;
@@ -16,5 +17,7 @@ public interface UserManager {
     void invalidateUser(User user);
 
     Set<User> getOnlinePlayers();
+
+    void teleportToLocation(User user, Location location);
 
 }

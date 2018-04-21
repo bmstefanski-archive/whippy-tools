@@ -25,7 +25,9 @@
 package pl.bmstefanski.tools.impl.basic;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.ToolsImpl;
 
@@ -40,6 +42,8 @@ public class UserImpl implements User {
     private boolean afk;
     private boolean secure;
     private boolean mark;
+    private Location lastLocation;
+    private BukkitTask bukkitTask;
 
     public UserImpl(UUID uuid) {
         this.uuid = uuid;
@@ -119,13 +123,13 @@ public class UserImpl implements User {
 
     @Override
     public boolean isAfk() {
-        return afk;
+        return this.afk;
     }
 
     @Override
     @Deprecated
     public boolean isSecure() {
-        return secure;
+        return this.secure;
     }
 
     @Override
@@ -141,12 +145,32 @@ public class UserImpl implements User {
 
     @Override
     public boolean isMark() {
-        return mark;
+        return this.mark;
     }
 
     @Override
     public void setMark(boolean mark) {
         this.mark = mark;
+    }
+
+    @Override
+    public Location getLastLocation() {
+        return this.lastLocation;
+    }
+
+    @Override
+    public void setLastLocation(Location location) {
+        this.lastLocation = location;
+    }
+
+    @Override
+    public BukkitTask getBukkitTask() {
+        return this.bukkitTask;
+    }
+
+    @Override
+    public void setBukkitTask(BukkitTask bukkitTask) {
+        this.bukkitTask = bukkitTask;
     }
 
 }
