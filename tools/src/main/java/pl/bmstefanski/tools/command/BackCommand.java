@@ -26,6 +26,7 @@ package pl.bmstefanski.tools.command;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
@@ -35,6 +36,7 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class BackCommand implements Messageable, CommandExecutor {
@@ -52,8 +54,6 @@ public class BackCommand implements Messageable, CommandExecutor {
     @GameOnly(false)
     @Override
     public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-//        TeleportManager teleportManager = new TeleportManager(plugin);
-
         if (commandArguments.getSize() == 0) {
 
             if (!(commandSender instanceof Player)) {
@@ -63,8 +63,10 @@ public class BackCommand implements Messageable, CommandExecutor {
 
             Player player = (Player) commandSender;
 
-//            Location location = LocationManager.getLastLocation(player);
-//            teleportManager.teleport(player, location, plugin.getConfiguration().getBackDelay());
+            User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+            Location location = user.getLastLocation();
+
+            this.plugin.getUserManager().teleportToLocation(user, location);
             return;
         }
 
@@ -76,8 +78,9 @@ public class BackCommand implements Messageable, CommandExecutor {
             }
 
             Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-//            Location location = LocationManager.getLastLocation(target);
-//            target.teleport(location);
+            User user = this.plugin.getUserManager().getUser(target.getUniqueId());
+
+            target.teleport(user.getLastLocation());
         }
     }
 

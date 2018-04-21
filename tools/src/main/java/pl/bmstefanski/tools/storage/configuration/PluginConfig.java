@@ -40,11 +40,7 @@ public interface PluginConfig extends Config {
         return "&e%player% &cwyszedl z gierki!";
     }
 
-    @CustomKey("spawn-delay") default int getSpawnDelay() {
-        return 5;
-    }
-
-    @CustomKey("back-delay") default int getBackDelay() {
+    default int getDelay() {
         return 3;
     }
 
