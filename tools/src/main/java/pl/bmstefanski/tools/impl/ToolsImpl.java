@@ -93,7 +93,6 @@ public class ToolsImpl extends JavaPlugin implements Tools {
         this.registerListeners(
                 new PlayerCommandPreprocessListener(this),
                 new PlayerJoinListener(this),
-                new PlayerPreLoginListener(this),
                 new PlayerQuitListener(this),
                 new PlayerMoveListener(this),
                 new EntityDamageListener(this),
