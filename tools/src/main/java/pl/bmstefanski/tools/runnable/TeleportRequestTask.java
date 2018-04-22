@@ -38,31 +38,35 @@ public class TeleportRequestTask implements Runnable, Messageable {
     private final Location location;
     private final User user;
 
+    private int delay;
+
     public TeleportRequestTask(Tools plugin, Location location, User user) {
         this.plugin = plugin;
         this.messages = plugin.getMessages();
         this.location = location;
         this.user = user;
+
+        this.delay = this.plugin.getConfiguration().getDelay();
     }
 
     @Override
     public void run() {
 
         Player player = this.user.getPlayer();
-        Location playerLocation = this.user.getLastLocation();
+        Location lastLocation = this.user.getLastLocation();
 
-        if (player.getLocation().distance(player.getLocation()) > 0.5) {
+        if (player.getLocation().distance(this.location) > 0.5) {
             this.user.getBukkitTask().cancel();
+            this.user.setBukkitTask(null);
 
             sendMessage(player, this.messages.getTeleportCancelled());
             return;
         }
 
-        int delay = this.plugin.getConfiguration().getDelay();
-
         if (delay == 0) {
-            player.teleport(this.location);
+            player.teleport(lastLocation);
             this.user.getBukkitTask().cancel();
+            this.user.setBukkitTask(null);
 
             sendMessage(player, this.messages.getTeleportSuccess());
             return;

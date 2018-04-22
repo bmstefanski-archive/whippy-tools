@@ -49,6 +49,8 @@ public class PlayerJoinListener implements Listener, Messageable {
 
         event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
 
+        user.setLastLocation(player.getLocation());
+
         if (this.plugin.getConfiguration().getFlyOnJoin()) {
             if (player.isFlying()) {
                 player.setFlying(true);

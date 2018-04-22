@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.tools.Tools;
@@ -102,7 +103,17 @@ public class UserManagerImpl implements UserManager {
     @Override
     public void teleportToLocation(User user, Location location) {
         Validate.notNull(user);
-        Validate.notNull(location);
+
+        if (user.getBukkitTask() != null) {
+            String translatedMessage = ChatColor.translateAlternateColorCodes('&', this.plugin.getMessages().getCurrentlyTeleporting());
+            user.getPlayer().sendMessage(translatedMessage);
+            return;
+        }
+
+        if (location == null) {
+            Location lastLocation = user.getPlayer().getBedSpawnLocation();
+            user.setLastLocation(lastLocation);
+        }
 
         Runnable runnable = new TeleportRequestTask(this.plugin, location, user);
         BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(this.plugin, runnable, 0, 20);

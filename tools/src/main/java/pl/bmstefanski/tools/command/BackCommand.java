@@ -64,9 +64,8 @@ public class BackCommand implements Messageable, CommandExecutor {
             Player player = (Player) commandSender;
 
             User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-            Location location = user.getLastLocation();
+            this.plugin.getUserManager().teleportToLocation(user, player.getLocation());
 
-            this.plugin.getUserManager().teleportToLocation(user, location);
             return;
         }
 
