@@ -26,6 +26,7 @@ package pl.bmstefanski.tools.runnable;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
 import pl.bmstefanski.tools.type.StatementType;
 import pl.bmstefanski.tools.util.UUIDUtils;
 
@@ -42,17 +43,15 @@ public class SaveDataTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        try {
-            PreparedStatement preparedStatement = StatementType.SAVE_PLAYER.build();
-
+        try (PreparedStatement preparedStatement = StatementType.SAVE_PLAYER.create()) {
             preparedStatement.setBytes(1, UUIDUtils.getBytesFromUUID(this.user.getUUID()));
             preparedStatement.setString(2, this.user.getName());
             preparedStatement.setString(3, this.user.getName());
 
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
+            new DatabaseQueryImpl(preparedStatement).executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
+
 }

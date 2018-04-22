@@ -12,17 +12,19 @@ import pl.bmstefanski.tools.impl.basic.UserImpl;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.runnable.TeleportRequestTask;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class UserManagerImpl implements UserManager {
 
     private final Tools plugin;
+
+    private final Map<UUID, User> uuidUserMap = new HashMap<>();
+    private final Map<String, User> nameUserMap = new HashMap<>();
+
     private final Cache<UUID, User> uuidUserCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
     private final Cache<String, User> nameUserCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
+
 
     public UserManagerImpl(Tools plugin) {
         this.plugin = plugin;
@@ -32,32 +34,61 @@ public class UserManagerImpl implements UserManager {
     public User getUser(UUID uuid) {
         Validate.notNull(uuid);
 
-        User user = this.uuidUserCache.getIfPresent(uuid);
-        return Optional.of(user).orElseGet(() -> new UserImpl(uuid));
+        User user = uuidUserCache.getIfPresent(uuid);
+
+        if (user == null) {
+            user = uuidUserMap.get(uuid);
+
+            if (user != null) {
+                uuidUserMap.put(uuid, user);
+                return user;
+            }
+            return new UserImpl(uuid);
+        }
+
+        return user;
     }
 
     @Override
-    public User getUser(String userName) {
-        Validate.notNull(userName);
+    public User getUser(String playerName) {
+        Validate.notNull(playerName);
 
-        User user = this.nameUserCache.getIfPresent(userName);
-        return Optional.of(user).orElseGet(() -> new UserImpl(userName));
+        User user = nameUserCache.getIfPresent(playerName);
+
+        if (user == null) {
+            user = nameUserMap.get(playerName);
+
+            if (user != null) {
+                nameUserMap.put(playerName, user);
+                return user;
+            }
+            return new UserImpl(playerName);
+        }
+
+        return user;
     }
 
     @Override
     public void addUser(User user) {
         Validate.notNull(user);
 
-        this.uuidUserCache.put(user.getUUID(), user);
-        this.nameUserCache.put(user.getName(), user);
+        uuidUserCache.put(user.getUUID(), user);
+        uuidUserMap.put(user.getUUID(), user);
+
+        if (user.getName() != null) {
+            nameUserCache.put(user.getName(), user);
+            nameUserMap.put(user.getName(), user);
+        }
     }
 
     @Override
     public void invalidateUser(User user) {
         Validate.notNull(user);
 
-        this.uuidUserCache.invalidate(user);
-        this.nameUserCache.invalidate(user);
+        uuidUserCache.invalidate(user.getUUID());
+        nameUserCache.invalidate(user.getName());
+        uuidUserMap.remove(user.getUUID());
+        nameUserMap.remove(user.getName());
     }
 
     @Override

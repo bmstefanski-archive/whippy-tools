@@ -49,11 +49,12 @@ public class DatabaseStorageConnector {
         switch (this.storageType) {
             case MYSQL:
                 this.database = new MySQLDatabase(
-                        config.getMySQLSection().getHostname(),
-                        config.getMySQLSection().getPort(),
+                        this.plugin,
                         config.getMySQLSection().getDatabase(),
+                        config.getMySQLSection().getHostname(),
                         config.getMySQLSection().getUsername(),
-                        config.getMySQLSection().getPassword()
+                        config.getMySQLSection().getPassword(),
+                        config.getMySQLSection().getPort()
                 );
         }
 
@@ -62,4 +63,5 @@ public class DatabaseStorageConnector {
     public Database getDatabase() {
         return database;
     }
+
 }

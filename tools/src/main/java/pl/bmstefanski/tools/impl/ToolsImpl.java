@@ -43,6 +43,8 @@ import pl.bmstefanski.tools.type.StorageType;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ToolsImpl extends JavaPlugin implements Tools {
 
@@ -51,6 +53,7 @@ public class ToolsImpl extends JavaPlugin implements Tools {
 
     private static ToolsImpl instance;
 
+    private ExecutorService executorService;
     private BukkitCommands bukkitCommands;
     private PluginConfig pluginConfig;
     private UserManager userManager;
@@ -76,11 +79,13 @@ public class ToolsImpl extends JavaPlugin implements Tools {
         this.messages.load();
         this.messages.save();
 
+        this.executorService = Executors.newCachedThreadPool();
+
         setUpDatabase();
 
         this.checkTable();
 
-        this.userManager = new UserManagerImpl();
+        this.userManager = new UserManagerImpl(this);
         this.bukkitCommands = new BukkitCommands(this);
 
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "MC|CPack", new BlazingPackMessageReceivedListener(this));
@@ -193,6 +198,11 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     @Override
     public BukkitCommands getBukkitCommands() {
         return this.bukkitCommands;
+    }
+
+    @Override
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 
     public static ToolsImpl getInstance() {

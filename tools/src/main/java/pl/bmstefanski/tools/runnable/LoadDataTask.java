@@ -26,6 +26,8 @@ package pl.bmstefanski.tools.runnable;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
+import pl.bmstefanski.tools.storage.DatabaseConsumer;
 import pl.bmstefanski.tools.type.StatementType;
 import pl.bmstefanski.tools.util.UUIDUtils;
 
@@ -44,23 +46,29 @@ public class LoadDataTask extends BukkitRunnable {
     @Override
     public void run() {
 
+        PreparedStatement preparedStatement = StatementType.LOAD_PLAYER.create();
         try {
-            PreparedStatement preparedStatement = StatementType.LOAD_PLAYER.build();
-
             preparedStatement.setString(1, this.user.getUUID().toString());
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                this.user.setUUID(UUIDUtils.getUUIDFromBytes(resultSet.getBytes("uuid")));
-                this.user.setName(resultSet.getString("name"));
-            }
-
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        ResultSet resultSet = new DatabaseQueryImpl(preparedStatement).executeQuery();
+
+        DatabaseConsumer<ResultSet> consumer = result -> {
+            try {
+
+                while (result.next()) {
+                    this.user.setUUID(UUIDUtils.getUUIDFromBytes(result.getBytes("uuid")));
+                    this.user.setName(result.getString("name"));
+
+                    preparedStatement.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        };
+
+        consumer.accept(resultSet);
     }
 
 }

@@ -7,6 +7,8 @@ import pl.bmstefanski.tools.storage.Database;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
+import java.util.concurrent.ExecutorService;
+
 public interface Tools extends Plugin {
 
     PluginConfig getConfiguration();
@@ -18,5 +20,7 @@ public interface Tools extends Plugin {
     Messages getMessages();
 
     BukkitCommands getBukkitCommands();
+
+    ExecutorService getExecutorService();
 
 }

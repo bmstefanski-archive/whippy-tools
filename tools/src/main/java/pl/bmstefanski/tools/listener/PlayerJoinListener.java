@@ -32,6 +32,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.basic.UserImpl;
+
+import java.util.Optional;
 
 public class PlayerJoinListener implements Listener, Messageable {
 
