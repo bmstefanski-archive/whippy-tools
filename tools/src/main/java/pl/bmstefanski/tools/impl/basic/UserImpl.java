@@ -54,7 +54,7 @@ public class UserImpl implements User {
 
     public UserImpl(String playerName) {
         this.name = playerName;
-        // todo uuid
+        this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
     }
 
     @Override
