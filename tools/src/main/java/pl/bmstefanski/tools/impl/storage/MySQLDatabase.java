@@ -25,45 +25,57 @@
 package pl.bmstefanski.tools.impl.storage;
 
 import com.zaxxer.hikari.HikariDataSource;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.storage.callable.DatabaseConnectionCallable;
+import pl.bmstefanski.tools.storage.DatabaseCallable;
+import pl.bmstefanski.tools.util.thread.Executor;
+import pl.bmstefanski.tools.util.thread.ExecutorInitializer;
 
 import java.sql.SQLException;
 
 public class MySQLDatabase extends AbstractDatabase {
 
+    private final Tools plugin;
     private HikariDataSource dataSource;
 
-    private final String serverName;
-    private final int port;
     private final String databaseName;
+    private final String serverName;
     private final String user;
     private final String password;
+    private final int port;
 
-    public MySQLDatabase(String serverName, int port, String databaseName, String user, String password) {
-        this.serverName = serverName;
-        this.port = port;
+
+    public MySQLDatabase(Tools plugin, String databaseName, String serverName, String user, String password, int port) {
+        this.plugin = plugin;
         this.databaseName = databaseName;
+        this.serverName = serverName;
         this.user = user;
         this.password = password;
+        this.port = port;
         this.dataSource = new HikariDataSource();
 
-        connect();
+        this.connect();
 
         try {
             connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void connect() {
-        this.dataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        this.dataSource.addDataSourceProperty("serverName", serverName);
-        this.dataSource.addDataSourceProperty("port", port);
-        this.dataSource.addDataSourceProperty("databaseName", databaseName);
-        this.dataSource.addDataSourceProperty("user", user);
-        this.dataSource.addDataSourceProperty("password", password);
-        this.dataSource.setMaximumPoolSize(10);
+        DatabaseCallable<Void> databaseCallable = new DatabaseConnectionCallable(
+                this.dataSource,
+                this.serverName,
+                this.port,
+                this.databaseName,
+                this.user,
+                this.password
+        );
+
+        Executor<Void> executor = new ExecutorInitializer<Void>().newExecutor(databaseCallable);
+        executor.execute();
     }
 
 }

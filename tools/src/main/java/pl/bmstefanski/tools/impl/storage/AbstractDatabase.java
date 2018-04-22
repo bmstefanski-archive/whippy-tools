@@ -53,12 +53,10 @@ public abstract class AbstractDatabase implements Database {
 
     @Override
     public void checkTable() throws SQLException {
-        PreparedStatement bansTableStatement = StatementType.CHECK_BAN.build();
-        PreparedStatement playersTableStatement = StatementType.CHECK_PLAYER.build();
-
-        bansTableStatement.executeUpdate();
+        PreparedStatement playersTableStatement = StatementType.CHECK_PLAYER.create();
         playersTableStatement.executeUpdate();
     }
 
     public abstract void connect();
+
 }
