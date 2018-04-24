@@ -1,4 +1,4 @@
-language: tools
+language: java
 sudo: required
 
 install: cd tools && mvn clean install && cd ../spawn && mvn clean install
