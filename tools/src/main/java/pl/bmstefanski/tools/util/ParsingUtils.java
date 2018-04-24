@@ -24,20 +24,20 @@
 
 package pl.bmstefanski.tools.util;
 
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.ToolsImpl;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public final class ParsingUtil {
+public final class ParsingUtils {
 
-    private static final Messages messages = ToolsImpl.getInstance().getMessages();
+    private final static Tools plugin = ToolsImpl.getInstance();
 
     public static String parseBoolean(boolean bool) {
-        return bool ? messages.getBooleanOn() : messages.getBooleanOff();
+        return bool ? plugin.getMessages().getBooleanOn() : plugin.getMessages().getBooleanOff();
     }
 
     public static String parseLong(long time) {
@@ -48,9 +48,9 @@ public final class ParsingUtil {
     }
 
     public static int parseInt(String integer) {
-        return Integer.parseInt(String.valueOf(integer));
+        return Integer.parseInt(integer);
     }
 
-    private ParsingUtil() {}
+    private ParsingUtils() {}
 
 }

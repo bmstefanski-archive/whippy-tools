@@ -36,7 +36,7 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.ParsingUtil;
+import pl.bmstefanski.tools.util.ParsingUtils;
 
 public class FlyCommand implements Messageable, CommandExecutor {
 
@@ -66,7 +66,7 @@ public class FlyCommand implements Messageable, CommandExecutor {
             boolean flyState = !player.isFlying();
             player.setAllowFlight(flyState);
 
-            sendMessage(player, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtil.parseBoolean(flyState)));
+            sendMessage(player, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtils.parseBoolean(flyState)));
 
             return;
         }
@@ -85,9 +85,9 @@ public class FlyCommand implements Messageable, CommandExecutor {
 
             sendMessage(commandSender, StringUtils.replaceEach(messages.getFlySwitchedOther(),
                     new String[] {"%state%", "%player%"},
-                    new String[] {ParsingUtil.parseBoolean(flyState), target.getName()}));
+                    new String[] {ParsingUtils.parseBoolean(flyState), target.getName()}));
 
-            sendMessage(target, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtil.parseBoolean(flyState)));
+            sendMessage(target, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtils.parseBoolean(flyState)));
         }
 
     }

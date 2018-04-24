@@ -37,7 +37,7 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.ParsingUtil;
+import pl.bmstefanski.tools.util.ParsingUtils;
 
 public class GodCommand implements Messageable, CommandExecutor {
 
@@ -68,7 +68,7 @@ public class GodCommand implements Messageable, CommandExecutor {
             boolean godState = !user.isGod();
             user.setGod(godState);
 
-            sendMessage(player, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtil.parseBoolean(godState)));
+            sendMessage(player, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
 
             return;
         }
@@ -89,8 +89,8 @@ public class GodCommand implements Messageable, CommandExecutor {
 
             sendMessage(commandSender, StringUtils.replaceEach(messages.getGodSwitchedOther(),
                     new String[] {"%state%", "%player%"},
-                    new String[] {ParsingUtil.parseBoolean(godState), target.getName()}));
-            sendMessage(target, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtil.parseBoolean(godState)));
+                    new String[] {ParsingUtils.parseBoolean(godState), target.getName()}));
+            sendMessage(target, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
 
         }
     }

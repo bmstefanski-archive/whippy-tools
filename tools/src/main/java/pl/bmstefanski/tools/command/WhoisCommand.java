@@ -38,7 +38,7 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.ParsingUtil;
+import pl.bmstefanski.tools.util.ParsingUtils;
 
 public class WhoisCommand implements Messageable, CommandExecutor {
 
@@ -94,15 +94,15 @@ public class WhoisCommand implements Messageable, CommandExecutor {
                 + location.getBlockX() + ", "
                 + location.getBlockY() + ", "
                 + location.getBlockZ() + ")";
-        String playerJoin = ParsingUtil.parseLong(player.getFirstPlayed());
-        String playerLast = user.isOnline() ? "online" : ParsingUtil.parseLong(player.getLastPlayed());
+        String playerJoin = ParsingUtils.parseLong(player.getFirstPlayed());
+        String playerLast = user.isOnline() ? "online" : ParsingUtils.parseLong(player.getLastPlayed());
         String whois = listToString(messages.getWhois());
 
         return StringUtils.replaceEach(whois,
                 new String[] {"%nickname%", "%uuid%", "%ip%", "%registered%", "%last%", "%location%", "%hp%", "%hunger%", "%gamemode%", "%god%", "%fly%"},
                 new String[] {player.getName(), player.getUniqueId().toString(), player.getAddress().getAddress().toString(),
-                        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtil.parseBoolean(user.isGod()),
-                        ParsingUtil.parseBoolean(player.isFlying())
+                        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtils.parseBoolean(user.isGod()),
+                        ParsingUtils.parseBoolean(player.isFlying())
                 });
     }
 
