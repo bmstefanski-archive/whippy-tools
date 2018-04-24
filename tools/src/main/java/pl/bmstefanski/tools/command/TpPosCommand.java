@@ -13,7 +13,7 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.ParsingUtil;
+import pl.bmstefanski.tools.util.ParsingUtils;
 
 public class TpPosCommand implements Messageable, CommandExecutor {
 
@@ -31,9 +31,9 @@ public class TpPosCommand implements Messageable, CommandExecutor {
     @Override
     public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
-        int x = ParsingUtil.parseInt(commandArguments.getParam(0));
-        int y = ParsingUtil.parseInt(commandArguments.getParam(1));
-        int z = ParsingUtil.parseInt(commandArguments.getParam(2));
+        int x = ParsingUtils.parseInt(commandArguments.getParam(0));
+        int y = ParsingUtils.parseInt(commandArguments.getParam(1));
+        int z = ParsingUtils.parseInt(commandArguments.getParam(2));
 
         if (commandArguments.getSize() == 3) {
 
