@@ -1,10 +1,7 @@
 language: tools
 sudo: required
 
-install: mvn cobertura:cobertura && cd tools && mvn clean install && cd ../spawn && mvn clean install
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+install: cd tools && mvn clean install && cd ../spawn && mvn clean install
 
 matrix:
   fast_finish: true
