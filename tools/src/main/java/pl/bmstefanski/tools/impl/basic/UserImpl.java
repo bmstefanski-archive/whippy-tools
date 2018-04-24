@@ -55,6 +55,8 @@ public class UserImpl implements User {
     public UserImpl(String playerName) {
         this.name = playerName;
         this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
+
+        ToolsImpl.getInstance().getUserManager().addUser(this);
     }
 
     @Override
