@@ -4,11 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import pl.bmstefanski.tools.Tools;
-import pl.bmstefanski.tools.impl.ToolsImpl;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import static org.junit.Assert.*;
