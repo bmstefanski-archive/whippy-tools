@@ -95,6 +95,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.seeseemelk</groupId>
+            <artifactId>MockBukkit</artifactId>
+            <version>master-ca0b64de9a-1</version>
+        </dependency>
     </dependencies>
 
 </project>
