@@ -1,13 +1,16 @@
-package pl.bmstefanski.tools.util.reflect;
+package pl.bmstefanski.tools.impl.util;
 
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.Messageable;
+import pl.bmstefanski.tools.util.reflect.AbstractPacket;
 import pl.bmstefanski.tools.util.reflect.transition.PacketPlayOutTitle;
+import pl.bmstefanski.tools.util.title.TitleSender;
 
 import java.util.Collection;
 
-public class TitleSender implements Messageable {
+public class TitleSenderImpl implements Messageable, TitleSender {
 
+    @Override
     public void send(PacketPlayOutTitle.EnumTitleAction action, Player player, String message) {
         resetTitle();
 
@@ -17,6 +20,7 @@ public class TitleSender implements Messageable {
         packet.send(player);
     }
 
+    @Override
     public void send(PacketPlayOutTitle.EnumTitleAction action, Collection<? extends Player> players, String message) {
         resetTitle();
 
@@ -26,11 +30,14 @@ public class TitleSender implements Messageable {
         packet.send(players);
     }
 
+    @Override
     public void clearTitle() {
         new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, null);
     }
 
+    @Override
     public void resetTitle() {
         new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, null);
     }
+
 }

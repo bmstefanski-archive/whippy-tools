@@ -35,8 +35,9 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.reflect.TitleSender;
+import pl.bmstefanski.tools.impl.util.TitleSenderImpl;
 import pl.bmstefanski.tools.util.reflect.transition.PacketPlayOutTitle;
+import pl.bmstefanski.tools.util.title.TitleSender;
 
 public class BroadcastCommand implements Messageable, CommandExecutor {
 
@@ -61,7 +62,7 @@ public class BroadcastCommand implements Messageable, CommandExecutor {
         }
 
         String message = stringBuilder.toString();
-        TitleSender title = new TitleSender();
+        TitleSender title = new TitleSenderImpl();
 
         switch (commandArguments.getParam(0)) {
             case "action":
