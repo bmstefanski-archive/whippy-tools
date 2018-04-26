@@ -3,7 +3,7 @@ language: java
 dist: trusty
 sudo: required
 
-install: script/install
+install: script/install.sh
 
 matrix:
   fast_finish: false
@@ -14,9 +14,9 @@ matrix:
     - env: JDK='Oracle JDK 9'
       jdk: oraclejdk9
     - env: JDK='Oracle JDK 10'
-      install: script/build-script F 10
+      install: script/build-script.sh F 10
     - env: JDK='Oracle JDK 11'
-      install: script/build-script F 11 -L BCL
+      install: script/build-script.sh F 11 -L BCL
   allow_failures:
     - env: JDK='Oracle JDK 9'
     - env: JDK='Oracle JDK 11'
