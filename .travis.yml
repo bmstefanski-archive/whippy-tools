@@ -1,31 +1,25 @@
 language: java
+language: java
+dist: trusty
 sudo: required
 
-before_install: wget https://github.com/whippytools/whippy-tools/raw/travis/install-jdk.sh
-install: cd tools && mvn clean install && cd ../spawn && mvn clean install
+install: script/install
 
 matrix:
-  fast_finish: true
+  fast_finish: false
 
   include:
     - env: JDK='Oracle JDK 8'
-        jdk: oraclejdk8
-    - env: JDK='OpenJDK 8'
-        jdk: openjdk8
+      jdk: oraclejdk8
     - env: JDK='Oracle JDK 9'
-        jdk: oraclejdk9
-    - env: JDK='OpenJDK 9'
-        install: ../install-jdk.sh -F 9
+      jdk: oraclejdk9
     - env: JDK='Oracle JDK 10'
-        jdk: oraclejdk10
-    - env: JDK='OpenJDK 10'
-        install: ../install-jdk.sh -F 10 -L GPL
+      install: script/build-script F 10
     - env: JDK='Oracle JDK 11'
-        install: ../install-jdk.sh -F 11 -L BCL
-    - env: JDK='OpenJDK 11'
-        install: ../install-jdk.sh -F 11 -L GPL
+      install: script/build-script F 11 -L BCL
   allow_failures:
-    - env: JDK='Oracle JDK 10'
+    - env: JDK='Oracle JDK 9'
+    - env: JDK='Oracle JDK 11'
 
 script:
   - echo PATH = ${PATH}
