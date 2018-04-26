@@ -1,4 +1,4 @@
-package pl.bmstefanski.tools.impl.util;
+package pl.bmstefanski.tools.impl.util.title;
 
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.Messageable;

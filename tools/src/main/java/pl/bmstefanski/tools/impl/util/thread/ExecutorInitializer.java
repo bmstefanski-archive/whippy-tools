@@ -1,4 +1,4 @@
-package pl.bmstefanski.tools.util.thread;
+package pl.bmstefanski.tools.impl.util.thread;
 
 /*
  * @author bartzzdev
@@ -8,6 +8,7 @@ package pl.bmstefanski.tools.util.thread;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.ToolsImpl;
 import pl.bmstefanski.tools.storage.DatabaseCallable;
+import pl.bmstefanski.tools.util.thread.Executor;
 
 public class ExecutorInitializer<T> {
 
