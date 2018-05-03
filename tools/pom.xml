@@ -10,7 +10,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>pl.bmstefanski</groupId>
     <artifactId>tools</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
