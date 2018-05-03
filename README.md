@@ -1,7 +1,6 @@
 ## <img src="https://avatars1.githubusercontent.com/u/35628511?s=200&v=4" width="48">  Whippy Tools
 [![Build Status](https://travis-ci.org/whippytools/whippy-tools.svg?branch=master)](https://travis-ci.org/whippytools/whippy-tools)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e4904369acb27f1cb69d/maintainability)](https://codeclimate.com/github/whippytools/whippy-tools/maintainability)
-[![codecov](https://codecov.io/gh/whippytools/whippy-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/whippytools/whippy-tools)
 ![Github All Releases](https://img.shields.io/github/downloads/whippytools/whippy-tools/total.svg)
 [![Discord](https://img.shields.io/badge/discord-whippytools-738bd7.svg?style=flat)](https://discord.gg/7wtr8)  
 
