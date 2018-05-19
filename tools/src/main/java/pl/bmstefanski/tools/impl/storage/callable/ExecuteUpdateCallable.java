@@ -1,20 +1,19 @@
 package pl.bmstefanski.tools.impl.storage.callable;
 
-import pl.bmstefanski.tools.storage.DatabaseCallable;
-
 import java.sql.PreparedStatement;
+import java.util.concurrent.Callable;
 
-public class ExecuteUpdateCallable implements DatabaseCallable<Integer> {
+public class ExecuteUpdateCallable implements Callable<Integer> {
 
-    private final PreparedStatement preparedStatement;
+  private final PreparedStatement preparedStatement;
 
-    public ExecuteUpdateCallable(PreparedStatement preparedStatement) {
-        this.preparedStatement = preparedStatement;
-    }
+  public ExecuteUpdateCallable(PreparedStatement preparedStatement) {
+    this.preparedStatement = preparedStatement;
+  }
 
-    @Override
-    public Integer call() throws Exception {
-        return this.preparedStatement.executeUpdate();
-    }
+  @Override
+  public Integer call() throws Exception {
+    return this.preparedStatement.executeUpdate();
+  }
 
 }

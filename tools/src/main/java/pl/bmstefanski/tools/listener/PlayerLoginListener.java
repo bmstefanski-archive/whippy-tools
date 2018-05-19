@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.runnable.LoadDataTask;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerLoginListener implements Listener {
@@ -36,8 +35,6 @@ public class PlayerLoginListener implements Listener {
             event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
             return;
         }
-
-        new LoadDataTask(user).runTask(this.plugin);
     }
 
 }

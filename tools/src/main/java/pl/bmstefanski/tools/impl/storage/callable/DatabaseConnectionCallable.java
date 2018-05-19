@@ -1,43 +1,37 @@
 package pl.bmstefanski.tools.impl.storage.callable;
 
 import com.zaxxer.hikari.HikariDataSource;
-import pl.bmstefanski.tools.storage.DatabaseCallable;
+import pl.bmstefanski.tools.impl.storage.MysqlDatabase;
 
-public class DatabaseConnectionCallable implements DatabaseCallable<Void> {
+import java.util.concurrent.Callable;
 
-    private HikariDataSource dataSource;
+public class DatabaseConnectionCallable implements Callable<Void> {
 
-    private final String serverName;
-    private final int port;
-    private final String databaseName;
-    private final String user;
-    private final String password;
+  private final MysqlDatabase mysqlDatabase;
 
-    public DatabaseConnectionCallable(HikariDataSource dataSource, String serverName, int port, String databaseName, String user, String password) {
-        this.serverName = serverName;
-        this.port = port;
-        this.databaseName = databaseName;
-        this.user = user;
-        this.password = password;
-        this.dataSource = dataSource;
-    }
+  public DatabaseConnectionCallable(MysqlDatabase mysqlDatabase) {
+    this.mysqlDatabase = mysqlDatabase;
+  }
 
-    @Override
-    public Void call() {
-        int cores = Runtime.getRuntime().availableProcessors();
+  @Override
+  public Void call() {
+    int cores = Runtime.getRuntime().availableProcessors();
 
-        this.dataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
-        this.dataSource.addDataSourceProperty("serverName", serverName);
-        this.dataSource.addDataSourceProperty("port", port);
-        this.dataSource.addDataSourceProperty("databaseName", databaseName);
-        this.dataSource.addDataSourceProperty("user", user);
-        this.dataSource.addDataSourceProperty("password", password);
-        this.dataSource.addDataSourceProperty("cachePrepStmts", true);
-        this.dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
-        this.dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-        this.dataSource.addDataSourceProperty("useServerPrepStmts", true);
-        this.dataSource.setMaximumPoolSize((cores * 2) + 1);
+    HikariDataSource dataSource = this.mysqlDatabase.getDataSource();
 
-        return null;
-    }
+    dataSource.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+    dataSource.addDataSourceProperty("serverName", this.mysqlDatabase.getServerName());
+    dataSource.addDataSourceProperty("port", this.mysqlDatabase.getPort());
+    dataSource.addDataSourceProperty("databaseName", this.mysqlDatabase.getDatabaseName());
+    dataSource.addDataSourceProperty("user", this.mysqlDatabase.getUsername());
+    dataSource.addDataSourceProperty("password", this.mysqlDatabase.getPassword());
+    dataSource.addDataSourceProperty("cachePrepStmts", true);
+    dataSource.addDataSourceProperty("prepStmtCacheSize", 250);
+    dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+    dataSource.addDataSourceProperty("useServerPrepStmts", true);
+    dataSource.setMaximumPoolSize((cores * 2) + 1);
+
+    return null;
+  }
+
 }

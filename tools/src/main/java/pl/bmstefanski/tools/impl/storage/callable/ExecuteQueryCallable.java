@@ -1,21 +1,20 @@
 package pl.bmstefanski.tools.impl.storage.callable;
 
-import pl.bmstefanski.tools.storage.DatabaseCallable;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.concurrent.Callable;
 
-public class ExecuteQueryCallable implements DatabaseCallable<ResultSet> {
+public class ExecuteQueryCallable implements Callable<ResultSet> {
 
-    private final PreparedStatement preparedStatement;
+  private final PreparedStatement preparedStatement;
 
-    public ExecuteQueryCallable(PreparedStatement preparedStatement) {
-        this.preparedStatement = preparedStatement;
-    }
+  public ExecuteQueryCallable(PreparedStatement preparedStatement) {
+    this.preparedStatement = preparedStatement;
+  }
 
-    @Override
-    public ResultSet call() throws Exception {
-        return this.preparedStatement.executeQuery();
-    }
+  @Override
+  public ResultSet call() throws Exception {
+    return this.preparedStatement.executeQuery();
+  }
 
 }
