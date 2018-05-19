@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util;
+package pl.bmstefanski.tools.impl.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.GameMode;

@@ -1,7 +1,7 @@
-package pl.bmstefanski.tools.util.title;
+package pl.bmstefanski.tools.impl.util.title;
 
 import org.bukkit.entity.Player;
-import pl.bmstefanski.tools.util.reflect.transition.PacketPlayOutTitle;
+import pl.bmstefanski.tools.impl.util.reflect.transition.PacketPlayOutTitle;
 
 import java.util.Collection;
 

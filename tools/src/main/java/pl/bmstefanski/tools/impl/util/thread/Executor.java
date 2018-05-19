@@ -1,4 +1,4 @@
-package pl.bmstefanski.tools.util.thread;
+package pl.bmstefanski.tools.impl.util.thread;
 
 /*
  * @author bartzzdev

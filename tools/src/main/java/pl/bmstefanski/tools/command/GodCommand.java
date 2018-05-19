@@ -37,7 +37,7 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
 public class GodCommand implements Messageable, CommandExecutor {
 

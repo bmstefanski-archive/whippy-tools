@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.runnable.SaveDataTask;
+import pl.bmstefanski.tools.impl.runnable.SaveDataTask;
 
 public class PlayerQuitListener implements Listener, Messageable {
 

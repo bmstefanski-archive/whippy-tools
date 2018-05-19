@@ -22,29 +22,36 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util;
+package pl.bmstefanski.tools.impl.runnable;
 
-public final class SafeUtils {
+import org.bukkit.scheduler.BukkitRunnable;
+import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
+import pl.bmstefanski.tools.type.StatementType;
+import pl.bmstefanski.tools.impl.util.UUIDUtils;
 
-    private static void reportUnsafe(Throwable throwable) {
-        System.out.println(throwable.toString());
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class SaveDataTask extends BukkitRunnable {
+
+    private final User user;
+
+    public SaveDataTask(User user) {
+        this.user = user;
     }
 
-    public static <T> T safeInit(SafeInitializer<T> initializer) {
-        try {
-            return initializer.initialize();
-        } catch (Exception ex) {
-            reportUnsafe(ex);
-            return null;
+    @Override
+    public void run() {
+        try (PreparedStatement preparedStatement = StatementType.SAVE_PLAYER.create()) {
+            preparedStatement.setBytes(1, UUIDUtils.getBytesFromUUID(this.user.getUUID()));
+            preparedStatement.setString(2, this.user.getName());
+            preparedStatement.setString(3, this.user.getName());
+
+            new DatabaseQueryImpl(preparedStatement).executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
-
-    @FunctionalInterface
-    public interface SafeInitializer<T> {
-
-        T initialize() throws Exception;
-    }
-
-    private SafeUtils() {}
 
 }

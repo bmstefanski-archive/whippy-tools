@@ -36,8 +36,8 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.title.TitleSenderImpl;
-import pl.bmstefanski.tools.util.reflect.transition.PacketPlayOutTitle;
-import pl.bmstefanski.tools.util.title.TitleSender;
+import pl.bmstefanski.tools.impl.util.reflect.transition.PacketPlayOutTitle;
+import pl.bmstefanski.tools.impl.util.title.TitleSender;
 
 public class BroadcastCommand implements Messageable, CommandExecutor {
 

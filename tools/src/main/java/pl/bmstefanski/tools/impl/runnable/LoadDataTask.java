@@ -22,14 +22,14 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.runnable;
+package pl.bmstefanski.tools.impl.runnable;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
 import pl.bmstefanski.tools.storage.DatabaseConsumer;
 import pl.bmstefanski.tools.type.StatementType;
-import pl.bmstefanski.tools.util.UUIDUtils;
+import pl.bmstefanski.tools.impl.util.UUIDUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

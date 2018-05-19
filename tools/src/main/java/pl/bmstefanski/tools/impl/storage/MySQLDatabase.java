@@ -28,7 +28,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.storage.callable.DatabaseConnectionCallable;
 import pl.bmstefanski.tools.storage.DatabaseCallable;
-import pl.bmstefanski.tools.util.thread.Executor;
+import pl.bmstefanski.tools.impl.util.thread.Executor;
 import pl.bmstefanski.tools.impl.util.thread.ExecutorInitializer;
 
 import java.sql.SQLException;

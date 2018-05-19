@@ -22,12 +22,12 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util.reflect;
+package pl.bmstefanski.tools.impl.util.reflect;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import pl.bmstefanski.tools.util.SafeUtils;
+import pl.bmstefanski.tools.impl.util.SafeUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
