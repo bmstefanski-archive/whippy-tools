@@ -33,25 +33,25 @@ import pl.bmstefanski.tools.basic.User;
 
 public class PlayerDeathListener implements Listener {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public PlayerDeathListener(Tools plugin) {
-        this.plugin = plugin;
+  public PlayerDeathListener(Tools plugin) {
+    this.plugin = plugin;
+  }
+
+  @EventHandler
+  public void onPlayerDeath(PlayerDeathEvent event) {
+
+    Player player = event.getEntity().getPlayer();
+    User user = plugin.getUserManager().getUser(player.getUniqueId());
+
+    if (event.getEntity() != null) {
+      user.setLastLocation(player.getLocation());
     }
 
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-
-        Player player = event.getEntity().getPlayer();
-        User user = plugin.getUserManager().getUser(player.getUniqueId());
-
-        if (event.getEntity() != null) {
-            user.setLastLocation(player.getLocation());
-        }
-
-        if (!this.plugin.getConfiguration().getDeathMessages()) {
-            event.setDeathMessage("");
-        }
+    if (!this.plugin.getConfiguration().getDeathMessages()) {
+      event.setDeathMessage("");
     }
+  }
 
 }

@@ -41,47 +41,47 @@ import pl.bmstefanski.tools.impl.util.title.TitleSender;
 
 public class BroadcastCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public BroadcastCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public BroadcastCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "broadcast", usage = "<action/title/subtitle/chat>", min = 2, max = 16, aliases = {"bc"})
+  @Permission("tools.command.broadcast")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    StringBuilder stringBuilder = new StringBuilder();
+
+    for (int i = 1; i < commandArguments.getSize(); i++) {
+      stringBuilder.append(" ");
+      stringBuilder.append(commandArguments.getParam(i));
     }
 
-    @Command(name = "broadcast", usage = "<action/title/subtitle/chat>", min = 2, max = 16, aliases = {"bc"})
-    @Permission("tools.command.broadcast")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        StringBuilder stringBuilder = new StringBuilder();
+    String message = stringBuilder.toString();
+    TitleSender title = new TitleSenderImpl();
 
-        for (int i = 1; i < commandArguments.getSize(); i++) {
-            stringBuilder.append(" ");
-            stringBuilder.append(commandArguments.getParam(i));
-        }
+    switch (commandArguments.getParam(0)) {
+      case "action":
+        title.send(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, Bukkit.getOnlinePlayers(), message);
+        break;
 
-        String message = stringBuilder.toString();
-        TitleSender title = new TitleSenderImpl();
+      case "title":
+        title.send(PacketPlayOutTitle.EnumTitleAction.TITLE, Bukkit.getOnlinePlayers(), message);
+        break;
 
-        switch (commandArguments.getParam(0)) {
-            case "action":
-                title.send(PacketPlayOutTitle.EnumTitleAction.ACTIONBAR, Bukkit.getOnlinePlayers(), message);
-                break;
+      case "subtitle":
+        title.send(PacketPlayOutTitle.EnumTitleAction.TITLE, Bukkit.getOnlinePlayers(), "");
+        title.send(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, Bukkit.getOnlinePlayers(), message);
+        break;
 
-            case "title":
-                title.send(PacketPlayOutTitle.EnumTitleAction.TITLE, Bukkit.getOnlinePlayers(), message);
-                break;
-
-            case "subtitle":
-                title.send(PacketPlayOutTitle.EnumTitleAction.TITLE, Bukkit.getOnlinePlayers(), "");
-                title.send(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, Bukkit.getOnlinePlayers(), message);
-                break;
-
-            case "chat":
-                Bukkit.broadcastMessage(fixColor(StringUtils.replace(messages.getBroadcastFormat(), "%message%", stringBuilder.toString())));
-                break;
-        }
+      case "chat":
+        Bukkit.broadcastMessage(fixColor(StringUtils.replace(messages.getBroadcastFormat(), "%message%", stringBuilder.toString())));
+        break;
     }
+  }
 
 }

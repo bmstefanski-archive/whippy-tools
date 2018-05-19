@@ -14,28 +14,29 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class KickAllCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public KickAllCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
-    }
+  public KickAllCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
 
-    @Command(name = "kickall", max = 16)
-    @Permission("tools.command.kickall")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+  @Command(name = "kickall", max = 16)
+  @Permission("tools.command.kickall")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
-        String reason = "";
+    String reason = "";
 
-        if (commandArguments.getSize() == 0) {
-            reason = fixColor(messages.getDefaultReason());
-        } else if (commandArguments.getSize() > 0) reason = fixColor(StringUtils.join(commandArguments.getParams().toArray(), " ", 0, commandArguments.getArgs()));
+    if (commandArguments.getSize() == 0) {
+      reason = fixColor(messages.getDefaultReason());
+    } else if (commandArguments.getSize() > 0)
+      reason = fixColor(StringUtils.join(commandArguments.getParams().toArray(), " ", 0, commandArguments.getArgs()));
 
-        String finalReason = reason;
-        Bukkit.getOnlinePlayers().forEach(o -> o.kickPlayer(finalReason));
-    }
+    String finalReason = reason;
+    Bukkit.getOnlinePlayers().forEach(o -> o.kickPlayer(finalReason));
+  }
 
 }

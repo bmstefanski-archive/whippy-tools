@@ -34,23 +34,24 @@ import java.time.format.DateTimeFormatter;
 
 public final class ParsingUtils {
 
-    private final static Tools plugin = ToolsImpl.getInstance();
+  private final static Tools plugin = ToolsImpl.getInstance();
 
-    public static String parseBoolean(boolean bool) {
-        return bool ? plugin.getMessages().getBooleanOn() : plugin.getMessages().getBooleanOff();
-    }
+  public static String parseBoolean(boolean bool) {
+    return bool ? plugin.getMessages().getBooleanOn() : plugin.getMessages().getBooleanOff();
+  }
 
-    public static String parseLong(long time) {
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  public static String parseLong(long time) {
+    LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        return date.format(formatter);
-    }
+    return date.format(formatter);
+  }
 
-    public static int parseInt(String integer) {
-        return Integer.parseInt(integer);
-    }
+  public static int parseInt(String integer) {
+    return Integer.parseInt(integer);
+  }
 
-    private ParsingUtils() {}
+  private ParsingUtils() {
+  }
 
 }

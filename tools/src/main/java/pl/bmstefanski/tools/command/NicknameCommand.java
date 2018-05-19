@@ -40,57 +40,57 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class NicknameCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public NicknameCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public NicknameCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "nick", min = 1, max = 2, usage = "[player] [nickname]", aliases = {"setnick", "nickname"})
+  @Permission("tools.command.nick")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 1) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      String nickname = fixColor(commandArguments.getParam(0) + ChatColor.RESET);
+
+      player.setDisplayName(nickname);
+      player.setPlayerListName(nickname);
+
+      sendMessage(player, StringUtils.replace(messages.getSetNickname(), "%nickname%", commandArguments.getParam(0)));
+
+      return;
     }
 
-    @Command(name = "nick", min = 1, max = 2, usage = "[player] [nickname]", aliases = {"setnick", "nickname"})
-    @Permission("tools.command.nick")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.nick.other")) {
 
-        if (commandArguments.getSize() == 1) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+      String nickname = fixColor(commandArguments.getParam(1) + ChatColor.RESET);
 
-            Player player = (Player) commandSender;
-            String nickname = fixColor(commandArguments.getParam(0) + ChatColor.RESET);
+      target.setDisplayName(nickname);
+      target.setPlayerListName(nickname);
 
-            player.setDisplayName(nickname);
-            player.setPlayerListName(nickname);
-
-            sendMessage(player, StringUtils.replace(messages.getSetNickname(), "%nickname%", commandArguments.getParam(0)));
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.nick.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            String nickname = fixColor(commandArguments.getParam(1) + ChatColor.RESET);
-
-            target.setDisplayName(nickname);
-            target.setPlayerListName(nickname);
-
-            sendMessage(target, StringUtils.replace(messages.getSetNickname(), "%nickname%", commandArguments.getParam(1)));
-            sendMessage(commandSender, StringUtils.replaceEach(messages.getSetNicknameOther(),
-                    new String[] {"%player%", "%nickname%"},
-                    new String[] {target.getName(), commandArguments.getParam(1)}
-            ));
-        }
+      sendMessage(target, StringUtils.replace(messages.getSetNickname(), "%nickname%", commandArguments.getParam(1)));
+      sendMessage(commandSender, StringUtils.replaceEach(messages.getSetNicknameOther(),
+        new String[]{"%player%", "%nickname%"},
+        new String[]{target.getName(), commandArguments.getParam(1)}
+      ));
     }
+  }
 
 }

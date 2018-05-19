@@ -37,25 +37,25 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class ReloadCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public ReloadCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
-    }
+  public ReloadCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
 
-    @Command(name = "tools-reload")
-    @Permission("tools.command.reload")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        long startedTime = System.currentTimeMillis();
+  @Command(name = "tools-reload")
+  @Permission("tools.command.reload")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    long startedTime = System.currentTimeMillis();
 
-        long elapsedTime = (System.currentTimeMillis() - startedTime);
-        float elapsedTimeSecond = elapsedTime / 1000F;
+    long elapsedTime = (System.currentTimeMillis() - startedTime);
+    float elapsedTimeSecond = elapsedTime / 1000F;
 
-        sendMessage(commandSender, StringUtils.replace(messages.getSuccessfullyReloaded(), "%time%", elapsedTimeSecond + ""));
-    }
+    sendMessage(commandSender, StringUtils.replace(messages.getSuccessfullyReloaded(), "%time%", elapsedTimeSecond + ""));
+  }
 
 }

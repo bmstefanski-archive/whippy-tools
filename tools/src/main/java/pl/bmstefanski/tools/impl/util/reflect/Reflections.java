@@ -44,252 +44,254 @@ import java.util.Map;
 
 public class Reflections {
 
-    private static final Map<String, Class<?>> CLASS_CACHE = new HashMap<>();
-    private static final Map<String, Field> FIELD_CACHE = new HashMap<>();
-    private static final Map<String, FieldAccessor<?>> FIELD_ACCESSOR_CACHE = new HashMap<>();
-    private static final Map<String, Method> METHOD_CACHE = new HashMap<>();
-    private static final Class<?> INVALID_CLASS = InvalidMarker.class;
-    private static final Method INVALID_METHOD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredMethod("invalidMethodMarker"));
-    private static final Field INVALID_FIELD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredField("invalidFieldMarker"));
-    private static final FieldAccessor<?> INVALID_FIELD_ACCESSOR = getField(INVALID_CLASS, Void.class, 0);
+  private static final Map<String, Class<?>> CLASS_CACHE = new HashMap<>();
+  private static final Map<String, Field> FIELD_CACHE = new HashMap<>();
+  private static final Map<String, FieldAccessor<?>> FIELD_ACCESSOR_CACHE = new HashMap<>();
+  private static final Map<String, Method> METHOD_CACHE = new HashMap<>();
+  private static final Class<?> INVALID_CLASS = InvalidMarker.class;
+  private static final Method INVALID_METHOD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredMethod("invalidMethodMarker"));
+  private static final Field INVALID_FIELD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredField("invalidFieldMarker"));
+  private static final FieldAccessor<?> INVALID_FIELD_ACCESSOR = getField(INVALID_CLASS, Void.class, 0);
 
-    public static String getVersion() {
-        String name = Bukkit.getServer().getClass().getPackage().getName();
-        return name.substring(name.lastIndexOf('.') + 1) + ".";
+  public static String getVersion() {
+    String name = Bukkit.getServer().getClass().getPackage().getName();
+    return name.substring(name.lastIndexOf('.') + 1) + ".";
+  }
+
+  public static String getFixedVersion() {
+    return Bukkit.getServer().getClass().getPackage().getName();
+  }
+
+  public static Class<?> getClassCache(String className) {
+    CLASS_CACHE.remove(className);
+    return getClass(className);
+  }
+
+  public static Class<?> getClass(String className) {
+    Class<?> clazz = CLASS_CACHE.get(className);
+
+    if (clazz != null) {
+      return clazz != INVALID_CLASS ? clazz : null;
     }
 
-    public static String getFixedVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName();
+    try {
+      clazz = Class.forName(className);
+      CLASS_CACHE.put(className, clazz);
+    } catch (ClassNotFoundException ex) {
+      ex.printStackTrace();
+
+      CLASS_CACHE.put(className, INVALID_CLASS);
     }
 
-    public static Class<?> getClassCache(String className) {
-        CLASS_CACHE.remove(className);
-        return getClass(className);
+    return clazz;
+  }
+
+  public static Class<?> getCraftClass(String name) {
+    return getClass("net.minecraft.server." + getVersion() + name);
+  }
+
+  public static Class<?> getBukkitClass(String name) {
+    return getClass("org.bukkit.craftbukkit." + getVersion() + name);
+  }
+
+  public static Object getHandle(Entity entity) {
+    try {
+      return getMethod(entity.getClass(), "getHandle").invoke(entity);
+    } catch (InvocationTargetException | IllegalAccessException ex) {
+      ex.printStackTrace();
     }
 
-    public static Class<?> getClass(String className) {
-        Class<?> clazz = CLASS_CACHE.get(className);
+    return null;
+  }
 
-        if (clazz != null) {
-            return clazz != INVALID_CLASS ? clazz : null;
-        }
-
-        try {
-            clazz = Class.forName(className);
-            CLASS_CACHE.put(className, clazz);
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-
-            CLASS_CACHE.put(className, INVALID_CLASS);
-        }
-
-        return clazz;
+  public static Object getHandle(World world) {
+    try {
+      return getMethod(world.getClass(), "getHandle").invoke(world);
+    } catch (InvocationTargetException | IllegalAccessException ex) {
+      ex.printStackTrace();
     }
 
-    public static Class<?> getCraftClass(String name) {
-        return getClass("net.minecraft.server." + getVersion() + name);
+    return null;
+  }
+
+  private static String constructFieldCacheKey(Class<?> clazz, String fieldName) {
+    return clazz.getName() + "." + fieldName;
+  }
+
+  public static Field getField(Class<?> clazz, String fieldName) {
+    String cacheKey = constructFieldCacheKey(clazz, fieldName);
+    Field field = FIELD_CACHE.get(cacheKey);
+
+    if (field != null) {
+      return field != INVALID_FIELD ? field : null;
     }
 
-    public static Class<?> getBukkitClass(String name) {
-        return getClass("org.bukkit.craftbukkit." + getVersion() + name);
+    try {
+      field = clazz.getDeclaredField(fieldName);
+
+      FIELD_CACHE.put(cacheKey, field);
+    } catch (NoSuchFieldException ex) {
+      ex.printStackTrace();
+      FIELD_CACHE.put(cacheKey, INVALID_FIELD);
     }
 
-    public static Object getHandle(Entity entity) {
-        try {
-            return getMethod(entity.getClass(), "getHandle").invoke(entity);
-        } catch (InvocationTargetException | IllegalAccessException ex) {
-            ex.printStackTrace();
-        }
+    return field;
+  }
 
-        return null;
+  public static <T> FieldAccessor<T> getField(Class<?> target, Class<T> fieldType, int index) {
+    return getField(target, null, fieldType, index);
+  }
+
+  private static <T> FieldAccessor<T> getField(Class<?> target, String fieldName, Class<T> fieldType, int index) {
+    String cacheKey = target.getName() + "." + (fieldName != null ? fieldName : "NONE") + "." + fieldType.getName() + "." + index;
+    FieldAccessor<T> fieldAccessor = (FieldAccessor<T>) FIELD_ACCESSOR_CACHE.get(cacheKey);
+
+    if (fieldAccessor != null) {
+      if (fieldAccessor == INVALID_FIELD_ACCESSOR) {
+        throw new IllegalArgumentException("Cannot find field with type " + fieldType);
+      }
+
+      return fieldAccessor;
     }
 
-    public static Object getHandle(World world) {
-        try {
-            return getMethod(world.getClass(), "getHandle").invoke(world);
-        } catch (InvocationTargetException | IllegalAccessException ex) {
-            ex.printStackTrace();
-        }
+    for (Field field : target.getDeclaredFields()) {
+      if (fieldName == null || field.getName().equals(fieldName) && fieldType.isAssignableFrom(field.getType()) && index-- <= 0) {
+        field.setAccessible(true);
 
-        return null;
-    }
+        fieldAccessor = new FieldAccessor<T>() {
 
-    private static String constructFieldCacheKey(Class<?> clazz, String fieldName) {
-        return clazz.getName() + "." + fieldName;
-    }
-
-    public static Field getField(Class<?> clazz, String fieldName) {
-        String cacheKey = constructFieldCacheKey(clazz, fieldName);
-        Field field = FIELD_CACHE.get(cacheKey);
-
-        if (field != null) {
-            return field != INVALID_FIELD ? field : null;
-        }
-
-        try {
-            field = clazz.getDeclaredField(fieldName);
-
-            FIELD_CACHE.put(cacheKey, field);
-        } catch (NoSuchFieldException ex) {
-            ex.printStackTrace();
-            FIELD_CACHE.put(cacheKey, INVALID_FIELD);
-        }
-
-        return field;
-    }
-
-    public static <T> FieldAccessor<T> getField(Class<?> target, Class<T> fieldType, int index) {
-        return getField(target, null, fieldType, index);
-    }
-
-    private static <T> FieldAccessor<T> getField(Class<?> target, String fieldName, Class<T> fieldType, int index) {
-        String cacheKey = target.getName() + "." + (fieldName != null ? fieldName : "NONE") + "." + fieldType.getName() + "." + index;
-        FieldAccessor<T> fieldAccessor = (FieldAccessor<T>) FIELD_ACCESSOR_CACHE.get(cacheKey);
-
-        if (fieldAccessor != null) {
-            if (fieldAccessor == INVALID_FIELD_ACCESSOR) {
-                throw new IllegalArgumentException("Cannot find field with type " + fieldType);
+          @Override
+          public T get(Object target) {
+            try {
+              return (T) field.get(target);
+            } catch (IllegalAccessException ex) {
+              throw new RuntimeException("Cannot access reflection.", ex);
             }
+          }
 
-            return fieldAccessor;
-        }
-
-        for (Field field : target.getDeclaredFields()) {
-            if (fieldName == null || field.getName().equals(fieldName) && fieldType.isAssignableFrom(field.getType()) && index-- <= 0) {
-                field.setAccessible(true);
-
-                fieldAccessor = new FieldAccessor<T>() {
-
-                    @Override
-                    public T get(Object target) {
-                        try {
-                            return (T) field.get(target);
-                        } catch (IllegalAccessException ex) {
-                            throw new RuntimeException("Cannot access reflection.", ex);
-                        }
-                    }
-
-                    @Override
-                    public void set(Object target, Object value) {
-                        try {
-                            field.set(target, value);
-                        } catch (IllegalAccessException ex) {
-                            throw new RuntimeException("Cannot access reflection.", ex);
-                        }
-                    }
-
-                    @Override
-                    public boolean hasField(Object target) {
-                        return field.getDeclaringClass().isAssignableFrom(target.getClass());
-                    }
-                };
-
-                break;
+          @Override
+          public void set(Object target, Object value) {
+            try {
+              field.set(target, value);
+            } catch (IllegalAccessException ex) {
+              throw new RuntimeException("Cannot access reflection.", ex);
             }
-        }
+          }
 
-        if (fieldAccessor == null && target.getSuperclass() != null) {
-            fieldAccessor = getField(target.getSuperclass(), fieldName, fieldType, index);
-        }
+          @Override
+          public boolean hasField(Object target) {
+            return field.getDeclaringClass().isAssignableFrom(target.getClass());
+          }
+        };
 
-        FIELD_ACCESSOR_CACHE.put(cacheKey, fieldAccessor != null ? fieldAccessor : INVALID_FIELD_ACCESSOR);
-
-        if (fieldAccessor == null) {
-            throw new IllegalArgumentException("Cannot find field with type " + fieldType);
-        }
-
-        return fieldAccessor;
+        break;
+      }
     }
 
-
-    public static Field getPrivateField(Class<?> clazz, String fieldName) {
-        String cacheKey = constructFieldCacheKey(clazz, fieldName);
-        Field field = FIELD_CACHE.get(cacheKey);
-
-        if (field != null) {
-            return field != INVALID_FIELD ? field : null;
-        }
-
-        try {
-            field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-
-            FIELD_CACHE.put(cacheKey, field);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-            FIELD_CACHE.put(cacheKey, INVALID_FIELD);
-        }
-
-        return field;
+    if (fieldAccessor == null && target.getSuperclass() != null) {
+      fieldAccessor = getField(target.getSuperclass(), fieldName, fieldType, index);
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... args) {
-        String cacheKey = clazz.getName() + "." + methodName + "." + (args == null ? "NONE" : Arrays.toString(args));
-        Method method = METHOD_CACHE.get(cacheKey);
+    FIELD_ACCESSOR_CACHE.put(cacheKey, fieldAccessor != null ? fieldAccessor : INVALID_FIELD_ACCESSOR);
 
-        if (method != null) {
-            return method != INVALID_METHOD ? method : null;
-        }
-
-        for (Method m : clazz.getMethods()) {
-            if (m.getName().equals(methodName) && (args == null || classListEqual(args, m.getParameterTypes()))) {
-                method = m;
-                break;
-            }
-        }
-
-        METHOD_CACHE.put(cacheKey, method == null ? INVALID_METHOD : method);
-        return method;
+    if (fieldAccessor == null) {
+      throw new IllegalArgumentException("Cannot find field with type " + fieldType);
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName) {
-        return getMethod(clazz, methodName, null);
+    return fieldAccessor;
+  }
+
+
+  public static Field getPrivateField(Class<?> clazz, String fieldName) {
+    String cacheKey = constructFieldCacheKey(clazz, fieldName);
+    Field field = FIELD_CACHE.get(cacheKey);
+
+    if (field != null) {
+      return field != INVALID_FIELD ? field : null;
     }
 
-    public static Constructor<?> getConstructor(Class<?> clazz, Class<?>... args) {
-        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-            if (Arrays.equals(constructor.getParameterTypes(), args)) {
-                return constructor;
-            }
-        }
+    try {
+      field = clazz.getDeclaredField(fieldName);
+      field.setAccessible(true);
 
-        return null;
+      FIELD_CACHE.put(cacheKey, field);
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
+      FIELD_CACHE.put(cacheKey, INVALID_FIELD);
     }
 
-    public static boolean classListEqual(Class<?>[] firstClazz, Class<?>[] secondClazz) {
-        if (firstClazz.length != secondClazz.length) {
-            return false;
-        }
+    return field;
+  }
 
-        for (int i = 0; i < firstClazz.length; i++) {
-            if (firstClazz[i] != secondClazz[i]) {
-                return false;
-            }
-        }
+  public static Method getMethod(Class<?> clazz, String methodName, Class<?>... args) {
+    String cacheKey = clazz.getName() + "." + methodName + "." + (args == null ? "NONE" : Arrays.toString(args));
+    Method method = METHOD_CACHE.get(cacheKey);
 
-        return true;
+    if (method != null) {
+      return method != INVALID_METHOD ? method : null;
     }
 
-    public interface ConstructorInvoker {
-        Object invoke(Object... args);
+    for (Method m : clazz.getMethods()) {
+      if (m.getName().equals(methodName) && (args == null || classListEqual(args, m.getParameterTypes()))) {
+        method = m;
+        break;
+      }
     }
 
-    public interface MethodInvoker {
-        Object invoke(Object target, Object... args);
+    METHOD_CACHE.put(cacheKey, method == null ? INVALID_METHOD : method);
+    return method;
+  }
+
+  public static Method getMethod(Class<?> clazz, String methodName) {
+    return getMethod(clazz, methodName, null);
+  }
+
+  public static Constructor<?> getConstructor(Class<?> clazz, Class<?>... args) {
+    for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+      if (Arrays.equals(constructor.getParameterTypes(), args)) {
+        return constructor;
+      }
     }
 
-    public interface FieldAccessor<T> {
-        T get(Object target);
-        void set(Object target, Object value);
-        boolean hasField(Object target);
+    return null;
+  }
+
+  public static boolean classListEqual(Class<?>[] firstClazz, Class<?>[] secondClazz) {
+    if (firstClazz.length != secondClazz.length) {
+      return false;
     }
 
-    private static class InvalidMarker {
-        Void invalidFieldMarker;
-
-        void invalidMethodMarker() {
-
-        }
+    for (int i = 0; i < firstClazz.length; i++) {
+      if (firstClazz[i] != secondClazz[i]) {
+        return false;
+      }
     }
+
+    return true;
+  }
+
+  public interface ConstructorInvoker {
+    Object invoke(Object... args);
+  }
+
+  public interface MethodInvoker {
+    Object invoke(Object target, Object... args);
+  }
+
+  public interface FieldAccessor<T> {
+    T get(Object target);
+
+    void set(Object target, Object value);
+
+    boolean hasField(Object target);
+  }
+
+  private static class InvalidMarker {
+    Void invalidFieldMarker;
+
+    void invalidMethodMarker() {
+
+    }
+  }
 
 }

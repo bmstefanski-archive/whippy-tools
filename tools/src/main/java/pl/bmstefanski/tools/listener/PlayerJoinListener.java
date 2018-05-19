@@ -35,32 +35,32 @@ import pl.bmstefanski.tools.basic.User;
 
 public class PlayerJoinListener implements Listener, Messageable {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public PlayerJoinListener(Tools plugin) {
-        this.plugin = plugin;
+  public PlayerJoinListener(Tools plugin) {
+    this.plugin = plugin;
+  }
+
+  @EventHandler
+  public void onPlayerJoin(PlayerJoinEvent event) {
+
+    Player player = event.getPlayer();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+    event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
+
+    user.setLastLocation(player.getLocation());
+
+    if (this.plugin.getConfiguration().getFlyOnJoin()) {
+      if (player.isFlying()) {
+        player.setFlying(true);
+        player.setAllowFlight(true);
+      }
     }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-
-        Player player = event.getPlayer();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
-
-        user.setLastLocation(player.getLocation());
-
-        if (this.plugin.getConfiguration().getFlyOnJoin()) {
-            if (player.isFlying()) {
-                player.setFlying(true);
-                player.setAllowFlight(true);
-            }
-        }
-
-        if (this.plugin.getConfiguration().getSafeLogin()) {
-            player.setFallDistance(0F);
-        }
+    if (this.plugin.getConfiguration().getSafeLogin()) {
+      player.setFallDistance(0F);
     }
+  }
 
 }

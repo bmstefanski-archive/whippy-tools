@@ -39,34 +39,34 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class WorkbenchCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public WorkbenchCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public WorkbenchCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "workbench", usage = "[player]", max = 1, aliases = {"wb", "crafting"})
+  @Permission("tools.command.workbench")
+  @GameOnly
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    Player player = (Player) commandSender;
+
+    if (commandArguments.getSize() == 0) {
+      player.openWorkbench(player.getLocation(), true);
+      return;
     }
 
-    @Command(name = "workbench", usage = "[player]", max = 1, aliases = {"wb", "crafting"})
-    @Permission("tools.command.workbench")
-    @GameOnly
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-
-        Player player = (Player) commandSender;
-
-        if (commandArguments.getSize() == 0) {
-            player.openWorkbench(player.getLocation(), true);
-            return;
-        }
-
-        if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-            sendMessage(player, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-            return;
-        }
-
-        Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-        target.openWorkbench(player.getLocation(), true);
+    if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+      sendMessage(player, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      return;
     }
+
+    Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+    target.openWorkbench(player.getLocation(), true);
+  }
 
 }

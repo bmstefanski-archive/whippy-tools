@@ -32,93 +32,109 @@ import java.util.List;
 
 public interface PluginConfig extends Config {
 
-    @CustomKey("join-format") default String getJoinFormat() {
-        return "&e%player% &adolaczyl do gierki!";
+  @CustomKey("join-format")
+  default String getJoinFormat() {
+    return "&e%player% &adolaczyl do gierki!";
+  }
+
+  @CustomKey("quit-format")
+  default String getQuitFormat() {
+    return "&e%player% &cwyszedl z gierki!";
+  }
+
+  default int getDelay() {
+    return 3;
+  }
+
+  @CustomKey("spawn-on-respawn")
+  default boolean getSpawnRespawn() {
+    return true;
+  }
+
+  @CustomKey("spawn-on-firstjoin")
+  default boolean getSpawnFirstjoin() {
+    return true;
+  }
+
+  @CustomKey("remove-god-on-disconnect")
+  default boolean getRemoveGodOnDisconnect() {
+    return false;
+  }
+
+  @CustomKey("fly-on-join")
+  default boolean getFlyOnJoin() {
+    return true;
+  }
+
+  @CustomKey("freeze-afk-players")
+  default boolean getFreezeAfkPlayers() {
+    return true;
+  }
+
+  @CustomKey("safe-login")
+  default boolean getSafeLogin() {
+    return true;
+  }
+
+  @CustomKey("cancel-afk-on-move")
+  default boolean getCancelAfkOnMove() {
+    return true;
+  }
+
+  @CustomKey("max-nickname-length")
+  default int getMaxNicknameLength() {
+    return 16;
+  }
+
+  @CustomKey("cancel-afk-on-interact")
+  default boolean getCancelAfkOnInteract() {
+    return true;
+  }
+
+  @CustomKey("disable-item-pickup-while-afk")
+  default boolean getDisableItemPickupWhileAfk() {
+    return true;
+  }
+
+  @CustomKey("death-messages")
+  default boolean getDeathMessages() {
+    return false;
+  }
+
+  @CustomKey("blocked-commands")
+  List<String> getBlockedCommands();
+
+  @CustomKey("god-while-afk")
+  default boolean getGodWhileAfk() {
+    return true;
+  }
+
+  @CustomKey("mysql")
+  default MySQL getMySQLSection() {
+    return ConfigManager.createInstance(MySQL.class);
+  }
+
+  interface MySQL extends Config {
+
+    default String getHostname() {
+      return "localhost";
     }
 
-    @CustomKey("quit-format") default String getQuitFormat() {
-        return "&e%player% &cwyszedl z gierki!";
+    default String getDatabase() {
+      return "tools";
     }
 
-    default int getDelay() {
-        return 3;
+    default String getUsername() {
+      return "root";
     }
 
-    @CustomKey("spawn-on-respawn") default boolean getSpawnRespawn() {
-        return true;
+    default String getPassword() {
+      return "root";
     }
 
-    @CustomKey("spawn-on-firstjoin") default boolean getSpawnFirstjoin() {
-        return true;
+    default int getPort() {
+      return 3306;
     }
-
-    @CustomKey("remove-god-on-disconnect") default boolean getRemoveGodOnDisconnect() {
-        return false;
-    }
-
-    @CustomKey("fly-on-join") default boolean getFlyOnJoin() {
-        return true;
-    }
-
-    @CustomKey("freeze-afk-players") default boolean getFreezeAfkPlayers() {
-        return true;
-    }
-
-    @CustomKey("safe-login") default boolean getSafeLogin() {
-        return true;
-    }
-
-    @CustomKey("cancel-afk-on-move") default boolean getCancelAfkOnMove() {
-        return true;
-    }
-
-    @CustomKey("max-nickname-length") default int getMaxNicknameLength() {
-        return 16;
-    }
-
-    @CustomKey("cancel-afk-on-interact") default boolean getCancelAfkOnInteract() {
-        return true;
-    }
-
-    @CustomKey("disable-item-pickup-while-afk") default boolean getDisableItemPickupWhileAfk() {
-        return true;
-    }
-
-    @CustomKey("death-messages") default boolean getDeathMessages() {
-        return false;
-    }
-
-    @CustomKey("blocked-commands") List<String> getBlockedCommands();
-
-    @CustomKey("god-while-afk") default boolean getGodWhileAfk() {
-        return true;
-    }
-
-    @CustomKey("mysql") default MySQL getMySQLSection() {
-        return ConfigManager.createInstance(MySQL.class);
-    }
-
-    interface MySQL extends Config {
-
-        default String getHostname() {
-            return "localhost";
-        }
-
-        default String getDatabase() {
-            return "tools";
-        }
-
-        default String getUsername() {
-            return "root";
-        }
-
-        default String getPassword() {
-            return "root";
-        }
-
-        default int getPort() {
-            return 3306;
-        }
-    }
+  }
 
 }

@@ -41,46 +41,46 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class BackCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public BackCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public BackCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "back", usage = "[player]", max = 1)
+  @Permission("tools.command.back")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+
+      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+      this.plugin.getUserManager().teleportToLocation(user, player.getLocation());
+
+      return;
     }
 
-    @Command(name = "back", usage = "[player]", max = 1)
-    @Permission("tools.command.back")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        if (commandArguments.getSize() == 0) {
+    if (commandSender.hasPermission("tools.command.back.other")) {
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            Player player = (Player) commandSender;
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
 
-            User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-            this.plugin.getUserManager().teleportToLocation(user, player.getLocation());
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.back.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            User user = this.plugin.getUserManager().getUser(target.getUniqueId());
-
-            target.teleport(user.getLastLocation());
-        }
+      target.teleport(user.getLastLocation());
     }
+  }
 
 }

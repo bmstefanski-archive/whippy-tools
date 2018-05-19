@@ -5,10 +5,10 @@ import java.sql.SQLException;
 
 public interface Database {
 
-    void connect() throws SQLException;
+  void connect() throws SQLException;
 
-    boolean closeConnection() throws SQLException;
+  boolean closeConnection() throws SQLException;
 
-    Connection getConnection();
+  Connection getConnection();
 
 }

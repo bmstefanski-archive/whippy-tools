@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 
 public interface DatabaseQuery {
 
-    int executeUpdate();
+  int executeUpdate();
 
-    ResultSet executeQuery();
+  ResultSet executeQuery();
 
 }

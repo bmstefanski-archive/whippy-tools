@@ -32,29 +32,29 @@ import pl.bmstefanski.tools.basic.User;
 @Deprecated
 public class BlazingPackMessageReceivedListener implements PluginMessageListener {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public BlazingPackMessageReceivedListener(Tools plugin) {
-        this.plugin = plugin;
+  public BlazingPackMessageReceivedListener(Tools plugin) {
+    this.plugin = plugin;
+  }
+
+  @Override
+  public void onPluginMessageReceived(String string, Player player, byte[] bytes) {
+
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+    if (string.contains("CPack")) {
+
+      String message = new String(bytes);
+
+      if (message.length() != 4) {
+        user.setSecure(false);
+        return;
+      }
+
+      user.setSecure(true);
     }
 
-    @Override
-    public void onPluginMessageReceived(String string, Player player, byte[] bytes) {
-
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        if (string.contains("CPack")) {
-
-            String message = new String(bytes);
-
-            if (message.length() != 4) {
-                user.setSecure(false);
-                return;
-            }
-
-            user.setSecure(true);
-        }
-
-    }
+  }
 
 }

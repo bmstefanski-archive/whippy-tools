@@ -9,26 +9,26 @@ import pl.bmstefanski.tools.basic.User;
 
 public class EntityPickupItemListener implements Listener {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public EntityPickupItemListener(Tools plugin) {
-        this.plugin = plugin;
-    }
+  public EntityPickupItemListener(Tools plugin) {
+    this.plugin = plugin;
+  }
 
-    @EventHandler
-    public void onPlayerPickup(EntityPickupItemEvent event) {
+  @EventHandler
+  public void onPlayerPickup(EntityPickupItemEvent event) {
 
-        Player player = (Player) event.getEntity();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    Player player = (Player) event.getEntity();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
-        if (event.getEntity() instanceof Player) {
-            if (this.plugin.getConfiguration().getDisableItemPickupWhileAfk()) {
-                if (user.isAfk()) {
-                    event.setCancelled(true);
-                }
-            }
+    if (event.getEntity() instanceof Player) {
+      if (this.plugin.getConfiguration().getDisableItemPickupWhileAfk()) {
+        if (user.isAfk()) {
+          event.setCancelled(true);
         }
-
+      }
     }
+
+  }
 
 }

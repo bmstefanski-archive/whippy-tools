@@ -13,28 +13,28 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerInteractListener implements Listener, Messageable {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public PlayerInteractListener(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public PlayerInteractListener(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @EventHandler
+  public void onPlayerInteract(PlayerInteractEvent event) {
+
+    Player player = event.getPlayer();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+    if (this.plugin.getConfiguration().getCancelAfkOnInteract()) {
+      if (user.isGod()) {
+        user.setAfk(false);
+        sendMessage(player, this.messages.getNoLongerAfk());
+        Bukkit.getOnlinePlayers().forEach(p ->
+          sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+      }
     }
-
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-
-        Player player = event.getPlayer();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        if (this.plugin.getConfiguration().getCancelAfkOnInteract()) {
-            if (user.isGod()) {
-                user.setAfk(false);
-                sendMessage(player, this.messages.getNoLongerAfk());
-                Bukkit.getOnlinePlayers().forEach(p ->
-                        sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
-            }
-        }
-    }
+  }
 
 }

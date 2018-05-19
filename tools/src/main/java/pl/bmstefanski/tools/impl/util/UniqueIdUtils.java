@@ -29,22 +29,23 @@ import java.util.UUID;
 
 public final class UniqueIdUtils {
 
-    public static byte[] getBytesFromUUID(UUID uuid) {
-        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
-        bb.putLong(uuid.getMostSignificantBits());
-        bb.putLong(uuid.getLeastSignificantBits());
+  public static byte[] getBytesFromUUID(UUID uuid) {
+    ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+    bb.putLong(uuid.getMostSignificantBits());
+    bb.putLong(uuid.getLeastSignificantBits());
 
-        return bb.array();
-    }
+    return bb.array();
+  }
 
-    public static UUID getUUIDFromBytes(byte[] bytes) {
-        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
-        Long high = byteBuffer.getLong();
-        Long low = byteBuffer.getLong();
+  public static UUID getUUIDFromBytes(byte[] bytes) {
+    ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+    Long high = byteBuffer.getLong();
+    Long low = byteBuffer.getLong();
 
-        return new UUID(high, low);
-    }
+    return new UUID(high, low);
+  }
 
-    private UniqueIdUtils() {}
+  private UniqueIdUtils() {
+  }
 
 }

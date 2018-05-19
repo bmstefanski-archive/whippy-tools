@@ -35,23 +35,23 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public PlayerCommandPreprocessListener(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public PlayerCommandPreprocessListener(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @EventHandler
+  public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+    String command = event.getMessage().split(" ")[0];
+    HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
+
+    if (helpTopic == null) {
+      event.setCancelled(true);
+      sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
     }
-
-    @EventHandler
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        String command = event.getMessage().split(" ")[0];
-        HelpTopic helpTopic = Bukkit.getHelpMap().getHelpTopic(command);
-
-        if (helpTopic == null) {
-            event.setCancelled(true);
-            sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
-        }
-    }
+  }
 
 }

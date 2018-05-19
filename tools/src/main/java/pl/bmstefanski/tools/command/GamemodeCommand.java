@@ -41,78 +41,78 @@ import pl.bmstefanski.tools.impl.util.GamemodeUtils;
 
 public class GamemodeCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public GamemodeCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public GamemodeCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "gamemode", usage = "<0/1/2/3> [player]", min = 1, max = 2, aliases = {"gm"})
+  @Permission("tools.command.gamemode")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 1) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
+
+      if (gameMode == null) {
+        sendMessage(player, messages.getGamemodeFail());
+        return;
+      }
+
+      if (player.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase())) {
+        player.setGameMode(gameMode);
+        sendMessage(player, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
+        return;
+      }
+
+      sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
+        "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase()));
+
+      return;
     }
 
-    @Command(name = "gamemode", usage = "<0/1/2/3> [player]", min = 1, max = 2, aliases = {"gm"})
-    @Permission("tools.command.gamemode")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.gamemode.other")) {
 
-        if (commandArguments.getSize() == 1) {
+      if (Bukkit.getPlayer(commandArguments.getParam(1)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(1)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(1));
+      GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
 
-            Player player = (Player) commandSender;
-            GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
+      if (gameMode == null) {
+        sendMessage(commandSender, messages.getGamemodeFail());
+        return;
+      }
 
-            if (gameMode == null) {
-                sendMessage(player, messages.getGamemodeFail());
-                return;
-            }
+      if (target.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other")) {
+        target.setGameMode(gameMode);
 
-            if (player.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase())) {
-                player.setGameMode(gameMode);
-                sendMessage(player, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
-                return;
-            }
+        sendMessage(target, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
+        sendMessage(commandSender, StringUtils.replaceEach(messages.getGamemodeSuccessOther(),
+          new String[]{"%gamemode%", "%player%"},
+          new String[]{gameMode.toString(), target.getName()}));
+        return;
+      }
 
-            sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
-                    "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase()));
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.gamemode.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(1)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(1)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(1));
-            GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
-
-            if (gameMode == null) {
-                sendMessage(commandSender, messages.getGamemodeFail());
-                return;
-            }
-
-            if (target.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other")) {
-                target.setGameMode(gameMode);
-
-                sendMessage(target, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
-                sendMessage(commandSender, StringUtils.replaceEach(messages.getGamemodeSuccessOther(),
-                        new String[] {"%gamemode%", "%player%"},
-                        new String[] {gameMode.toString(), target.getName()}));
-                return;
-            }
-
-            sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
-                    "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other"));
-            return;
-        }
-
-        sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(), "%permission%", "tools.command.gamemode.other"));
+      sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
+        "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other"));
+      return;
     }
+
+    sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(), "%permission%", "tools.command.gamemode.other"));
+  }
 
 }

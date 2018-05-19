@@ -39,49 +39,49 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class FeedCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public FeedCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public FeedCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "feed", usage = "[player]", max = 1)
+  @Permission("tools.command.feed")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      player.setFoodLevel(20);
+
+      sendMessage(player, messages.getFed());
+
+      return;
     }
 
-    @Command(name = "feed", usage = "[player]", max = 1)
-    @Permission("tools.command.feed")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.feed.other")) {
 
-        if (commandArguments.getSize() == 0) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
-            Player player = (Player) commandSender;
-            player.setFoodLevel(20);
+      target.setFoodLevel(20);
 
-            sendMessage(player, messages.getFed());
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.feed.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
-            target.setFoodLevel(20);
-
-            sendMessage(target, messages.getFed());
-            sendMessage(commandSender, StringUtils.replace(messages.getFedOther(), "%player%", target.getName()));
-        }
+      sendMessage(target, messages.getFed());
+      sendMessage(commandSender, StringUtils.replace(messages.getFedOther(), "%player%", target.getName()));
     }
+  }
 
 }

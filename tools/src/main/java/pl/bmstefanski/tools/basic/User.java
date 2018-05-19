@@ -8,46 +8,46 @@ import java.util.UUID;
 
 public interface User {
 
-    UUID getUUID();
+  UUID getUUID();
 
-    String getName();
+  String getName();
 
-    String getIp();
+  String getIp();
 
-    Player getPlayer();
+  Player getPlayer();
 
-    void setUUID(UUID uuid);
+  void setUUID(UUID uuid);
 
-    void setName(String name);
+  void setName(String name);
 
-    void setIp(String ip);
+  void setIp(String ip);
 
-    void setGod(boolean god);
+  void setGod(boolean god);
 
-    void setAfk(boolean afk);
+  void setAfk(boolean afk);
 
-    boolean isOnline();
+  boolean isOnline();
 
-    boolean isGod();
+  boolean isGod();
 
-    boolean isAfk();
+  boolean isAfk();
 
-    @Deprecated
-    boolean isSecure();
+  @Deprecated
+  boolean isSecure();
 
-    @Deprecated
-    void setSecure(boolean secure);
+  @Deprecated
+  void setSecure(boolean secure);
 
-    boolean isMark();
+  boolean isMark();
 
-    void setMark(boolean mark);
+  void setMark(boolean mark);
 
-    Location getLastLocation();
+  Location getLastLocation();
 
-    void setLastLocation(Location location);
+  void setLastLocation(Location location);
 
-    BukkitTask getBukkitTask();
+  BukkitTask getBukkitTask();
 
-    void setBukkitTask(BukkitTask bukkitTask);
+  void setBukkitTask(BukkitTask bukkitTask);
 
 }

@@ -36,23 +36,23 @@ import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 public class ToolsCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final PluginConfig config;
+  private final Tools plugin;
+  private final PluginConfig config;
 
-    public ToolsCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.config = plugin.getConfiguration();
-    }
+  public ToolsCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.config = plugin.getConfiguration();
+  }
 
-    @Command(name = "tools")
-    @Permission("tools.command.tools")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        String message = "&e" + plugin.getDescription().getName() +" &7" + plugin.getDescription().getVersion() +
-                " by &e" + plugin.getDescription().getAuthors();
+  @Command(name = "tools")
+  @Permission("tools.command.tools")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    String message = "&e" + plugin.getDescription().getName() + " &7" + plugin.getDescription().getVersion() +
+      " by &e" + plugin.getDescription().getAuthors();
 
-        sendMessage(commandSender, message);
-    }
+    sendMessage(commandSender, message);
+  }
 
 }
