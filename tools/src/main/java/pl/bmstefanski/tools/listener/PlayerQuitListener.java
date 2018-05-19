@@ -32,31 +32,30 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.runnable.SaveDataTask;
 
 public class PlayerQuitListener implements Listener, Messageable {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public PlayerQuitListener(Tools plugin) {
-        this.plugin = plugin;
+  public PlayerQuitListener(Tools plugin) {
+    this.plugin = plugin;
+  }
+
+  @EventHandler
+  public void onPlayerQuit(PlayerQuitEvent event) {
+
+    Player player = event.getPlayer();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+    user.setIp(player.getAddress().getHostName());
+
+    event.setQuitMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
+
+    if (this.plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
+      user.setGod(false);
     }
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-
-        Player player = event.getPlayer();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        user.setIp(player.getAddress().getHostName());
-
-        event.setQuitMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
-        
-        if (this.plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
-            user.setGod(false);
-        }
-
-        new SaveDataTask(user).runTask(this.plugin);
-    }
+    this.plugin.getResource().save(user);
+  }
 
 }

@@ -1,37 +1,54 @@
 package pl.bmstefanski.tools.impl.storage;
 
+import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.storage.callable.ExecuteQueryCallable;
 import pl.bmstefanski.tools.impl.storage.callable.ExecuteUpdateCallable;
-import pl.bmstefanski.tools.storage.DatabaseCallable;
 import pl.bmstefanski.tools.storage.DatabaseQuery;
-import pl.bmstefanski.tools.impl.util.thread.Executor;
-import pl.bmstefanski.tools.impl.util.thread.ExecutorInitializer;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class DatabaseQueryImpl implements DatabaseQuery {
 
-    private final PreparedStatement preparedStatement;
+  private final Tools plugin;
+  private final PreparedStatement preparedStatement;
 
-    public DatabaseQueryImpl(PreparedStatement preparedStatement) {
-        this.preparedStatement = preparedStatement;
+  public DatabaseQueryImpl(Tools plugin, PreparedStatement preparedStatement) {
+    this.plugin = plugin;
+    this.preparedStatement = preparedStatement;
+  }
+
+  @Override
+  public int executeUpdate() {
+    Callable<Integer> executeUpdateCallable = new ExecuteUpdateCallable(this.preparedStatement);
+    Future<Integer> future = this.plugin.getExecutorService().submit(executeUpdateCallable);
+
+    Integer result = 0;
+    try {
+      result = future.get();
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
     }
 
-    @Override
-    public int executeUpdate() {
-        DatabaseCallable<Integer> databaseCallable = new ExecuteUpdateCallable(this.preparedStatement);
-        Executor<Integer> executor = new ExecutorInitializer<Integer>().newExecutor(databaseCallable);
+    return result;
+  }
 
-        return executor.execute();
+  @Override
+  public ResultSet executeQuery() {
+    Callable<ResultSet> executeQueryCallable = new ExecuteQueryCallable(this.preparedStatement);
+    Future<ResultSet> future = this.plugin.getExecutorService().submit(executeQueryCallable);
+
+    ResultSet result = null;
+    try {
+      result = future.get();
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
     }
 
-    @Override
-    public ResultSet executeQuery() {
-        DatabaseCallable<ResultSet> databaseCallable = new ExecuteQueryCallable(this.preparedStatement);
-        Executor<ResultSet> executor = new ExecutorInitializer<ResultSet>().newExecutor(databaseCallable);
-
-        return executor.execute();
-    }
+    return result;
+  }
 
 }
