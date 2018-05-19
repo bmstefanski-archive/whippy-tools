@@ -50,6 +50,7 @@ public class UserResourceImpl implements Resource {
     try (PreparedStatement preparedStatement = StatementFactory.getStatement("players-insert")) {
       preparedStatement.setBytes(1, UniqueIdUtils.getBytesFromUUID(user.getUUID()));
       preparedStatement.setString(2, user.getName());
+      preparedStatement.setString(3, user.getName());
       new DatabaseQueryImpl(this.plugin, preparedStatement).executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();
