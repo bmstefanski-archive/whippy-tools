@@ -80,8 +80,8 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     this.messages.load();
     this.messages.save();
 
-    this.database = DatabaseFactory.getDatabase("mysql");
     this.executorService = Executors.newCachedThreadPool();
+    this.database = DatabaseFactory.getDatabase("mysql");
 
     this.userManager = new UserManagerImpl(this);
     this.bukkitCommands = new BukkitCommands(this);

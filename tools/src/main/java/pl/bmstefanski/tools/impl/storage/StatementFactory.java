@@ -18,7 +18,7 @@ public final class StatementFactory {
 
   static {
     USERS_TABLE_QUERY = new StatementBuilder().createTableIfDoesNotExist("players", "`uuid` BINARY(16) PRIMARY KEY, `name` VARCHAR(16) NOT NULL UNIQUE").build();
-    PLAYERS_INSERT_QUERY= new StatementBuilder().insertInto("players").values("?, ?").build();
+    PLAYERS_INSERT_QUERY= new StatementBuilder().insertInto("players").values("?, ?").onDuplicateKey().update("`name` = ?").build();
     PLAYERS_SELECT_QUERY = new StatementBuilder().select().all().from("players").build();
     PLAYERS_DELETE_QUERY= new StatementBuilder().delete().from("players").where("`uuid` = ?").build();
   }
