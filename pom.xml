@@ -125,6 +125,12 @@
       <artifactId>MockBukkit</artifactId>
       <version>master-ca0b64de9a-1</version>
     </dependency>
+
+    <dependency>
+      <groupId>ch.jalu</groupId>
+      <artifactId>injector</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
 
 </project>
