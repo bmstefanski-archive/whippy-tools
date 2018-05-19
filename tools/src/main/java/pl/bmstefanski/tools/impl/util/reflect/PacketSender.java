@@ -40,37 +40,38 @@ import java.util.List;
 
 public final class PacketSender {
 
-    private static Method getHandle;
-    private static Field playerConnection;
-    private static Method sendPacket;
+  private static Method getHandle;
+  private static Field playerConnection;
+  private static Method sendPacket;
 
-    static {
-        getHandle = Reflections.getMethod(Reflections.getBukkitClass("entity.CraftPlayer"), "getHandle");
-        sendPacket = Reflections.getMethod(Reflections.getCraftClass("PlayerConnection"), "sendPacket");
-        playerConnection = Reflections.getField(Reflections.getCraftClass("EntityPlayer"), "playerConnection");
+  static {
+    getHandle = Reflections.getMethod(Reflections.getBukkitClass("entity.CraftPlayer"), "getHandle");
+    sendPacket = Reflections.getMethod(Reflections.getCraftClass("PlayerConnection"), "sendPacket");
+    playerConnection = Reflections.getField(Reflections.getCraftClass("EntityPlayer"), "playerConnection");
+  }
+
+  public static void sendPacket(Collection<? extends Player> players, List<Object> packets) {
+    Bukkit.getOnlinePlayers().forEach(player -> sendPacket(player, packets));
+  }
+
+  public static void sendPacket(Player target, List<Object> packets) {
+    if (target == null) {
+      return;
     }
 
-    public static void sendPacket(Collection<? extends Player> players, List<Object> packets) {
-        Bukkit.getOnlinePlayers().forEach(player -> sendPacket(player, packets));
+    try {
+      Object handle = getHandle.invoke(target);
+      Object connection = playerConnection.get(handle);
+
+      for (Object packet : packets) {
+        sendPacket.invoke(connection, packet);
+      }
+    } catch (IllegalAccessException | InvocationTargetException ex) {
+      ex.printStackTrace();
     }
+  }
 
-    public static void sendPacket(Player target, List<Object> packets) {
-        if (target == null) {
-            return;
-        }
-
-        try {
-            Object handle = getHandle.invoke(target);
-            Object connection = playerConnection.get(handle);
-
-            for (Object packet : packets) {
-                sendPacket.invoke(connection, packet);
-            }
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private PacketSender() {}
+  private PacketSender() {
+  }
 
 }

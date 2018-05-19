@@ -35,144 +35,144 @@ import java.util.UUID;
 
 public class UserImpl implements User {
 
-    private UUID uuid;
-    private String name;
-    private String ip;
-    private boolean god;
-    private boolean afk;
-    private boolean secure;
-    private boolean mark;
-    private Location lastLocation;
-    private BukkitTask bukkitTask;
+  private UUID uuid;
+  private String name;
+  private String ip;
+  private boolean god;
+  private boolean afk;
+  private boolean secure;
+  private boolean mark;
+  private Location lastLocation;
+  private BukkitTask bukkitTask;
 
-    public UserImpl(UUID uuid) {
-        this.uuid = uuid;
-        this.name = Bukkit.getOfflinePlayer(uuid).getName();
+  public UserImpl(UUID uuid) {
+    this.uuid = uuid;
+    this.name = Bukkit.getOfflinePlayer(uuid).getName();
 
-        ToolsImpl.getInstance().getUserManager().addUser(this);
+    ToolsImpl.getInstance().getUserManager().addUser(this);
+  }
+
+  public UserImpl(String playerName) {
+    this.name = playerName;
+    this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
+
+    ToolsImpl.getInstance().getUserManager().addUser(this);
+  }
+
+  @Override
+  public UUID getUUID() {
+    return uuid;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public String getIp() {
+    return isOnline() ? getPlayer().getAddress().getAddress().toString() : ip;
+  }
+
+  @Override
+  public Player getPlayer() {
+    if (!isOnline()) {
+      return null;
     }
 
-    public UserImpl(String playerName) {
-        this.name = playerName;
-        this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
+    return Bukkit.getPlayer(this.uuid);
+  }
 
-        ToolsImpl.getInstance().getUserManager().addUser(this);
+  @Override
+  public void setUUID(UUID uuid) {
+    this.uuid = uuid;
+  }
+
+  @Override
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public void setIp(String ip) {
+    this.ip = ip;
+  }
+
+  @Override
+  public void setGod(boolean god) {
+    this.god = god;
+  }
+
+  @Override
+  public void setAfk(boolean afk) {
+    this.afk = afk;
+  }
+
+  @Override
+  public boolean isOnline() {
+    if (this.uuid == null) {
+      return false;
     }
 
-    @Override
-    public UUID getUUID() {
-        return uuid;
-    }
+    Player player = Bukkit.getPlayer(this.uuid);
+    return player != null;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public boolean isGod() {
+    return god;
+  }
 
-    @Override
-    public String getIp() {
-        return isOnline() ? getPlayer().getAddress().getAddress().toString() : ip;
-    }
+  @Override
+  public boolean isAfk() {
+    return this.afk;
+  }
 
-    @Override
-    public Player getPlayer() {
-        if (!isOnline()) {
-            return null;
-        }
+  @Override
+  @Deprecated
+  public boolean isSecure() {
+    return this.secure;
+  }
 
-        return Bukkit.getPlayer(this.uuid);
-    }
+  @Override
+  @Deprecated
+  public void setSecure(boolean secure) {
+    this.secure = secure;
+  }
 
-    @Override
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
+  @Override
+  public String toString() {
+    return this.name;
+  }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
+  @Override
+  public boolean isMark() {
+    return this.mark;
+  }
 
-    @Override
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+  @Override
+  public void setMark(boolean mark) {
+    this.mark = mark;
+  }
 
-    @Override
-    public void setGod(boolean god) {
-        this.god = god;
-    }
+  @Override
+  public Location getLastLocation() {
+    return this.lastLocation;
+  }
 
-    @Override
-    public void setAfk(boolean afk) {
-        this.afk = afk;
-    }
+  @Override
+  public void setLastLocation(Location location) {
+    this.lastLocation = location;
+  }
 
-    @Override
-    public boolean isOnline() {
-        if (this.uuid == null) {
-            return false;
-        }
+  @Override
+  public BukkitTask getBukkitTask() {
+    return this.bukkitTask;
+  }
 
-        Player player = Bukkit.getPlayer(this.uuid);
-        return player != null;
-    }
-
-    @Override
-    public boolean isGod() {
-        return god;
-    }
-
-    @Override
-    public boolean isAfk() {
-        return this.afk;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isSecure() {
-        return this.secure;
-    }
-
-    @Override
-    @Deprecated
-    public void setSecure(boolean secure) {
-        this.secure = secure;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
-    @Override
-    public boolean isMark() {
-        return this.mark;
-    }
-
-    @Override
-    public void setMark(boolean mark) {
-        this.mark = mark;
-    }
-
-    @Override
-    public Location getLastLocation() {
-        return this.lastLocation;
-    }
-
-    @Override
-    public void setLastLocation(Location location) {
-        this.lastLocation = location;
-    }
-
-    @Override
-    public BukkitTask getBukkitTask() {
-        return this.bukkitTask;
-    }
-
-    @Override
-    public void setBukkitTask(BukkitTask bukkitTask) {
-        this.bukkitTask = bukkitTask;
-    }
+  @Override
+  public void setBukkitTask(BukkitTask bukkitTask) {
+    this.bukkitTask = bukkitTask;
+  }
 
 }

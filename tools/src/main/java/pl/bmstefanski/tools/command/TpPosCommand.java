@@ -17,55 +17,55 @@ import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
 public class TpPosCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public TpPosCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public TpPosCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "tppos", usage = "[x] [y] [z] [player]", min = 3, max = 4)
+  @Permission("tools.command.tppos")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    int x = ParsingUtils.parseInt(commandArguments.getParam(0));
+    int y = ParsingUtils.parseInt(commandArguments.getParam(1));
+    int z = ParsingUtils.parseInt(commandArguments.getParam(2));
+
+    if (commandArguments.getSize() == 3) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+
+      Location location = new Location(player.getWorld(), x, y, z);
+      player.teleport(location);
+      sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
+        new String[]{"%player%", "%x%", "%y%", "%z%"},
+        new String[]{player.getName(), x + "", y + "", z + ""}));
+
+      return;
     }
 
-    @Command(name = "tppos", usage = "[x] [y] [z] [player]", min = 3, max = 4)
-    @Permission("tools.command.tppos")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-
-        int x = ParsingUtils.parseInt(commandArguments.getParam(0));
-        int y = ParsingUtils.parseInt(commandArguments.getParam(1));
-        int z = ParsingUtils.parseInt(commandArguments.getParam(2));
-
-        if (commandArguments.getSize() == 3) {
-
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
-
-            Player player = (Player) commandSender;
-
-            Location location = new Location(player.getWorld(), x, y, z);
-            player.teleport(location);
-            sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
-                    new String[] {"%player%" ,"%x%", "%y%", "%z%"},
-                    new String[] {player.getName(), x + "", y + "", z + ""}));
-
-            return;
-        }
-
-        if (Bukkit.getPlayer(commandArguments.getParam(3)) == null) {
-            sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(3)));
-            return;
-        }
-
-        Player player = Bukkit.getPlayer(commandArguments.getParam(3));
-        Location location = new Location(player.getWorld(), x, y, z);
-
-        player.teleport(location);
-        sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
-                new String[] {"%player%" ,"%x%", "%y%", "%z%"},
-                new String[] {player.getName(), x + "", y + "", z + ""}));
-
+    if (Bukkit.getPlayer(commandArguments.getParam(3)) == null) {
+      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(3)));
+      return;
     }
+
+    Player player = Bukkit.getPlayer(commandArguments.getParam(3));
+    Location location = new Location(player.getWorld(), x, y, z);
+
+    player.teleport(location);
+    sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
+      new String[]{"%player%", "%x%", "%y%", "%z%"},
+      new String[]{player.getName(), x + "", y + "", z + ""}));
+
+  }
 
 }

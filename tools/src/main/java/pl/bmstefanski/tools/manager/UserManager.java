@@ -8,16 +8,16 @@ import java.util.UUID;
 
 public interface UserManager {
 
-    User getUser(UUID uuid);
+  User getUser(UUID uuid);
 
-    User getUser(String userName);
+  User getUser(String userName);
 
-    void addUser(User user);
+  void addUser(User user);
 
-    void invalidateUser(User user);
+  void invalidateUser(User user);
 
-    Set<User> getOnlinePlayers();
+  Set<User> getOnlinePlayers();
 
-    void teleportToLocation(User user, Location location);
+  void teleportToLocation(User user, Location location);
 
 }

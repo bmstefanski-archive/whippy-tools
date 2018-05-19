@@ -19,70 +19,70 @@ import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
 public class MarkCommand implements CommandExecutor, Messageable {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public MarkCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public MarkCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "mark", usage = "[player]", max = 1)
+  @Permission("tools.command.mark")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+      boolean markState = !user.isMark();
+      user.setMark(markState);
+
+      sendMessage(player, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
+
+      if (markState) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
+        return;
+      }
+
+      player.removePotionEffect(PotionEffectType.GLOWING);
+      return;
     }
 
-    @Command(name = "mark", usage = "[player]", max = 1)
-    @Permission("tools.command.mark")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.mark.other")) {
 
-        if (commandArguments.getSize() == 0) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
 
-            Player player = (Player) commandSender;
-            User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+      boolean markState = !user.isMark();
+      user.setMark(markState);
 
-            boolean markState = !user.isMark();
-            user.setMark(markState);
+      sendMessage(commandSender, StringUtils.replaceEach(messages.getMarkedOther(),
+        new String[]{"%state%", "%player%"},
+        new String[]{ParsingUtils.parseBoolean(markState), target.getName()}));
 
-            sendMessage(player, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
+      sendMessage(target, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
 
-            if (markState) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
-                return;
-            }
+      if (markState) {
+        target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
+        return;
+      }
 
-            player.removePotionEffect(PotionEffectType.GLOWING);
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.mark.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            User user = this.plugin.getUserManager().getUser(target.getUniqueId());
-
-            boolean markState = !user.isMark();
-            user.setMark(markState);
-
-            sendMessage(commandSender, StringUtils.replaceEach(messages.getMarkedOther(),
-                    new String[] {"%state%", "%player%"},
-                    new String[] {ParsingUtils.parseBoolean(markState), target.getName()}));
-
-            sendMessage(target, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
-
-            if (markState) {
-                target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
-                return;
-            }
-
-            target.removePotionEffect(PotionEffectType.GLOWING);
-        }
+      target.removePotionEffect(PotionEffectType.GLOWING);
     }
+  }
 
 }

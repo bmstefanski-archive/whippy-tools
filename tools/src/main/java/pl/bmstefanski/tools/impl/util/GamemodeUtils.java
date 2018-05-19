@@ -29,21 +29,22 @@ import org.bukkit.GameMode;
 
 public final class GamemodeUtils {
 
-    private static GameMode getGameMode(String string) {
-        for (GameMode mode : GameMode.values()) {
-            if (mode.name().toLowerCase().contains(string.toLowerCase())) {
-                return mode;
-            }
-        }
-        return null;
+  private static GameMode getGameMode(String string) {
+    for (GameMode mode : GameMode.values()) {
+      if (mode.name().toLowerCase().contains(string.toLowerCase())) {
+        return mode;
+      }
     }
+    return null;
+  }
 
-    public static GameMode parseGameMode(String string) {
-        if (StringUtils.isNumeric(string)) {
-            return GameMode.getByValue(Integer.valueOf(string));
-        } else return getGameMode(string);
-    }
+  public static GameMode parseGameMode(String string) {
+    if (StringUtils.isNumeric(string)) {
+      return GameMode.getByValue(Integer.valueOf(string));
+    } else return getGameMode(string);
+  }
 
-    private GamemodeUtils() {}
+  private GamemodeUtils() {
+  }
 
 }

@@ -39,37 +39,37 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class EnderchestCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public EnderchestCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public EnderchestCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "enderchest", usage = "[player]", aliases = {"ender", "ec"}, max = 1)
+  @Permission("tools.command.enderchest")
+  @GameOnly
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    Player player = (Player) commandSender;
+
+    if (commandArguments.getSize() == 0) {
+      player.openInventory(player.getEnderChest());
+      return;
     }
 
-    @Command(name = "enderchest", usage = "[player]", aliases = {"ender", "ec"}, max = 1)
-    @Permission("tools.command.enderchest")
-    @GameOnly
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        Player player = (Player) commandSender;
+    if (player.hasPermission("tools.command.enderchest.other")) {
 
-        if (commandArguments.getSize() == 0) {
-            player.openInventory(player.getEnderChest());
-            return;
-        }
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(player, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-        if (player.hasPermission("tools.command.enderchest.other")) {
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+      player.openInventory(target.getEnderChest());
 
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(player, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            player.openInventory(target.getEnderChest());
-
-        }
     }
+  }
 
 }

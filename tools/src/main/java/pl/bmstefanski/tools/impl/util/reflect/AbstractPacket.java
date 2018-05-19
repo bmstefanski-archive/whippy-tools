@@ -7,18 +7,18 @@ import java.util.Collections;
 
 public abstract class AbstractPacket {
 
-    protected Object packet;
+  protected Object packet;
 
-    public void send(Player player) {
-        PacketSender.sendPacket(player, Collections.singletonList(packet));
-    }
+  public void send(Player player) {
+    PacketSender.sendPacket(player, Collections.singletonList(packet));
+  }
 
-    public void send(Collection<? extends Player> players) {
-        PacketSender.sendPacket(players, Collections.singletonList(packet));
-    }
+  public void send(Collection<? extends Player> players) {
+    PacketSender.sendPacket(players, Collections.singletonList(packet));
+  }
 
-    public Object getPacket() {
-        return packet;
-    }
+  public Object getPacket() {
+    return packet;
+  }
 
 }

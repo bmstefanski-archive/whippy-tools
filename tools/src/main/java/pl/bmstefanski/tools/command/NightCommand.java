@@ -16,44 +16,44 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class NightCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public NightCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public NightCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "night", usage = "[world]", max = 1)
+  @Permission("tools.command.night")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      player.getWorld().setTime(12566);
+
+      sendMessage(player, StringUtils.replace(messages.getNight(), "%world%", player.getWorld().getName()));
+
+      return;
     }
 
-    @Command(name = "night", usage = "[world]", max = 1)
-    @Permission("tools.command.night")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-
-        if (commandArguments.getSize() == 0) {
-
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
-
-            Player player = (Player) commandSender;
-            player.getWorld().setTime(12566);
-
-            sendMessage(player, StringUtils.replace(messages.getNight(), "%world%", player.getWorld().getName()));
-
-            return;
-        }
-
-        if (Bukkit.getWorld(commandArguments.getParam(0)) == null) {
-            sendMessage(commandSender, StringUtils.replace(messages.getWorldNotFound(), "%world%", commandArguments.getParam(0)));
-            return;
-        }
-
-        World world = Bukkit.getWorld(commandArguments.getParam(0));
-        world.setTime(12566);
-
-        sendMessage(commandSender, StringUtils.replace(messages.getNight(), "%world%", world.getName()));
+    if (Bukkit.getWorld(commandArguments.getParam(0)) == null) {
+      sendMessage(commandSender, StringUtils.replace(messages.getWorldNotFound(), "%world%", commandArguments.getParam(0)));
+      return;
     }
+
+    World world = Bukkit.getWorld(commandArguments.getParam(0));
+    world.setTime(12566);
+
+    sendMessage(commandSender, StringUtils.replace(messages.getNight(), "%world%", world.getName()));
+  }
 
 }

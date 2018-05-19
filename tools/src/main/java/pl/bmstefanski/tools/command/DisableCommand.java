@@ -36,21 +36,21 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class DisableCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public DisableCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
-    }
+  public DisableCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
 
-    @Command(name = "disable")
-    @Permission("tools.command.disable")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-        plugin.getServer().getPluginManager().disablePlugin(plugin);
-        sendMessage(commandSender, messages.getSuccessfullyDisabled());
-    }
+  @Command(name = "disable")
+  @Permission("tools.command.disable")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    plugin.getServer().getPluginManager().disablePlugin(plugin);
+    sendMessage(commandSender, messages.getSuccessfullyDisabled());
+  }
 
 }

@@ -33,26 +33,26 @@ import pl.bmstefanski.tools.basic.User;
 
 public class EntityDamageListener implements Listener {
 
-    private final Tools plugin;
+  private final Tools plugin;
 
-    public EntityDamageListener(Tools plugin) {
-        this.plugin = plugin;
+  public EntityDamageListener(Tools plugin) {
+    this.plugin = plugin;
+  }
+
+  @EventHandler
+  public void onEntityDamage(EntityDamageEvent event) {
+
+    if (!(event.getEntity() instanceof Player)) {
+      return;
     }
 
-    @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
+    Player player = (Player) event.getEntity();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-
-        Player player = (Player) event.getEntity();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        if (user.isGod()) {
-            event.setCancelled(true);
-        }
-
+    if (user.isGod()) {
+      event.setCancelled(true);
     }
+
+  }
 
 }

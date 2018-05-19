@@ -7,12 +7,12 @@ import java.util.Collection;
 
 public interface TitleSender {
 
-    void send(PacketPlayOutTitle.EnumTitleAction action, Player player, String message);
+  void send(PacketPlayOutTitle.EnumTitleAction action, Player player, String message);
 
-    void send(PacketPlayOutTitle.EnumTitleAction action, Collection<? extends Player> players, String message);
+  void send(PacketPlayOutTitle.EnumTitleAction action, Collection<? extends Player> players, String message);
 
-    void clearTitle();
+  void clearTitle();
 
-    void resetTitle();
+  void resetTitle();
 
 }

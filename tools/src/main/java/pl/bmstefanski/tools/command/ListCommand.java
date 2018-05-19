@@ -40,32 +40,30 @@ import java.util.Arrays;
 
 public class ListCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public ListCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public ListCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "list", usage = "[full/basic]", min = 1, max = 1)
+  @Permission("tools.command.list")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getParam(0).equalsIgnoreCase("basic")) {
+      int playersOnlineSize = plugin.getUserManager().getOnlinePlayers().size();
+      int maxPlayers = Bukkit.getMaxPlayers();
+
+      sendMessage(commandSender, StringUtils.replaceEach(messages.getListBasic(),
+        new String[]{"%online%", "%max%"},
+        new String[]{playersOnlineSize + "", maxPlayers + ""}));
+    } else if (commandArguments.getParam(0).equalsIgnoreCase("full")) {
+      sendMessage(commandSender, StringUtils.replace(messages.getListFull(), "%online%", Arrays.toString(plugin.getUserManager().getOnlinePlayers().toArray())));
     }
-
-    @Command(name = "list", usage = "[full/basic]", min = 1, max = 1)
-    @Permission("tools.command.list")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-
-        if (commandArguments.getParam(0).equalsIgnoreCase("basic")) {
-            int playersOnlineSize = plugin.getUserManager().getOnlinePlayers().size();
-            int maxPlayers = Bukkit.getMaxPlayers();
-
-            sendMessage(commandSender, StringUtils.replaceEach(messages.getListBasic(),
-                    new String[] {"%online%", "%max%"},
-                    new String[] {playersOnlineSize + "", maxPlayers + ""}));
-        }
-
-        else if (commandArguments.getParam(0).equalsIgnoreCase("full")) {
-            sendMessage(commandSender, StringUtils.replace(messages.getListFull(), "%online%", Arrays.toString(plugin.getUserManager().getOnlinePlayers().toArray())));
-        }
-    }
+  }
 
 }

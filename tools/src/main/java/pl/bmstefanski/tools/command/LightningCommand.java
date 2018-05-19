@@ -40,52 +40,52 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class LightningCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public LightningCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public LightningCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "lightning", usage = "[player]", max = 1, aliases = {"thorn"})
+  @Permission("tools.command.lightning")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      World world = player.getWorld();
+
+      world.strikeLightning(player.getLocation());
+
+      sendMessage(player, messages.getStruck());
+
+      return;
     }
 
-    @Command(name = "lightning", usage = "[player]", max = 1, aliases = {"thorn"})
-    @Permission("tools.command.lightning")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.lightning.other")) {
 
-        if (commandArguments.getSize() == 0) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
-            Player player = (Player) commandSender;
-            World world = player.getWorld();
+      World world = target.getWorld();
+      world.strikeLightning(target.getLocation());
 
-            world.strikeLightning(player.getLocation());
-
-            sendMessage(player, messages.getStruck());
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.lightning.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
-            World world = target.getWorld();
-            world.strikeLightning(target.getLocation());
-
-            sendMessage(commandSender, StringUtils.replace(messages.getStruckOther(), "%player%", target.getName()));
-            sendMessage(target, messages.getStruck());
-        }
+      sendMessage(commandSender, StringUtils.replace(messages.getStruckOther(), "%player%", target.getName()));
+      sendMessage(target, messages.getStruck());
     }
+  }
 
 }

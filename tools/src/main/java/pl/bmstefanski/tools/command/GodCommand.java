@@ -41,58 +41,58 @@ import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
 public class GodCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public GodCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public GodCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "god", usage = "[player]", max = 1)
+  @Permission("tools.command.god")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+      boolean godState = !user.isGod();
+      user.setGod(godState);
+
+      sendMessage(player, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
+
+      return;
     }
 
-    @Command(name = "god", usage = "[player]", max = 1)
-    @Permission("tools.command.god")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.god.other")) {
 
-        if (commandArguments.getSize() == 0) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
 
-            Player player = (Player) commandSender;
-            User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-            boolean godState = !user.isGod();
-            user.setGod(godState);
-
-            sendMessage(player, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
-
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.god.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-            User user = this.plugin.getUserManager().getUser(target.getUniqueId());
-
-            boolean godState = !user.isGod();
-            user.setGod(godState);
+      boolean godState = !user.isGod();
+      user.setGod(godState);
 
 
-            sendMessage(commandSender, StringUtils.replaceEach(messages.getGodSwitchedOther(),
-                    new String[] {"%state%", "%player%"},
-                    new String[] {ParsingUtils.parseBoolean(godState), target.getName()}));
-            sendMessage(target, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
+      sendMessage(commandSender, StringUtils.replaceEach(messages.getGodSwitchedOther(),
+        new String[]{"%state%", "%player%"},
+        new String[]{ParsingUtils.parseBoolean(godState), target.getName()}));
+      sendMessage(target, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
 
-        }
     }
+  }
 
 }

@@ -33,45 +33,45 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class TeleportRequestTask implements Runnable, Messageable {
 
-    private final Tools plugin;
-    private final Messages messages;
-    private final Location location;
-    private final User user;
+  private final Tools plugin;
+  private final Messages messages;
+  private final Location location;
+  private final User user;
 
-    private int delay;
+  private int delay;
 
-    public TeleportRequestTask(Tools plugin, Location location, User user) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
-        this.location = location;
-        this.user = user;
+  public TeleportRequestTask(Tools plugin, Location location, User user) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+    this.location = location;
+    this.user = user;
 
-        this.delay = this.plugin.getConfiguration().getDelay();
+    this.delay = this.plugin.getConfiguration().getDelay();
+  }
+
+  @Override
+  public void run() {
+
+    Player player = this.user.getPlayer();
+    Location lastLocation = this.user.getLastLocation();
+
+    if (player.getLocation().distance(this.location) > 0.5) {
+      this.user.getBukkitTask().cancel();
+      this.user.setBukkitTask(null);
+
+      sendMessage(player, this.messages.getTeleportCancelled());
+      return;
     }
 
-    @Override
-    public void run() {
+    if (delay == 0) {
+      player.teleport(lastLocation);
+      this.user.getBukkitTask().cancel();
+      this.user.setBukkitTask(null);
 
-        Player player = this.user.getPlayer();
-        Location lastLocation = this.user.getLastLocation();
-
-        if (player.getLocation().distance(this.location) > 0.5) {
-            this.user.getBukkitTask().cancel();
-            this.user.setBukkitTask(null);
-
-            sendMessage(player, this.messages.getTeleportCancelled());
-            return;
-        }
-
-        if (delay == 0) {
-            player.teleport(lastLocation);
-            this.user.getBukkitTask().cancel();
-            this.user.setBukkitTask(null);
-
-            sendMessage(player, this.messages.getTeleportSuccess());
-            return;
-        }
-
-        delay--;
+      sendMessage(player, this.messages.getTeleportSuccess());
+      return;
     }
+
+    delay--;
+  }
 }

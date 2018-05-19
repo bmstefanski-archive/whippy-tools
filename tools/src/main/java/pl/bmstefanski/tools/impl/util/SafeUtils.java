@@ -26,25 +26,26 @@ package pl.bmstefanski.tools.impl.util;
 
 public final class SafeUtils {
 
-    private static void reportUnsafe(Throwable throwable) {
-        System.out.println(throwable.toString());
+  private static void reportUnsafe(Throwable throwable) {
+    System.out.println(throwable.toString());
+  }
+
+  public static <T> T safeInit(SafeInitializer<T> initializer) {
+    try {
+      return initializer.initialize();
+    } catch (Exception ex) {
+      reportUnsafe(ex);
+      return null;
     }
+  }
 
-    public static <T> T safeInit(SafeInitializer<T> initializer) {
-        try {
-            return initializer.initialize();
-        } catch (Exception ex) {
-            reportUnsafe(ex);
-            return null;
-        }
-    }
+  @FunctionalInterface
+  public interface SafeInitializer<T> {
 
-    @FunctionalInterface
-    public interface SafeInitializer<T> {
+    T initialize() throws Exception;
+  }
 
-        T initialize() throws Exception;
-    }
-
-    private SafeUtils() {}
+  private SafeUtils() {
+  }
 
 }

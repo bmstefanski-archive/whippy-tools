@@ -11,30 +11,30 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class PlayerLoginListener implements Listener {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public PlayerLoginListener(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public PlayerLoginListener(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @EventHandler
+  public void onPlayerLogin(PlayerLoginEvent event) {
+
+    Player player = event.getPlayer();
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+
+    if (!player.hasPlayedBefore()) {
+      user.setName(player.getName());
     }
 
-    @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    int maxNicknameLength = this.plugin.getConfiguration().getMaxNicknameLength();
 
-        Player player = event.getPlayer();
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-
-        if (!player.hasPlayedBefore()) {
-            user.setName(player.getName());
-        }
-
-        int maxNicknameLength = this.plugin.getConfiguration().getMaxNicknameLength();
-
-        if (player.getName().length() > maxNicknameLength) {
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
-            return;
-        }
+    if (player.getName().length() > maxNicknameLength) {
+      event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));
+      return;
     }
+  }
 
 }

@@ -42,68 +42,68 @@ import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
 public class WhoisCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public WhoisCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public WhoisCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "whois", usage = "[player]", max = 1)
+  @Permission("tools.command.whois")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+
+      sendMessage(player, messageContent(player));
+      return;
     }
 
-    @Command(name = "whois", usage = "[player]", max = 1)
-    @Permission("tools.command.whois")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+    if (commandSender.hasPermission("tools.command.whois.other")) {
 
-        if (commandArguments.getSize() == 0) {
+      if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        return;
+      }
 
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
+      Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
-            Player player = (Player) commandSender;
-
-            sendMessage(player, messageContent(player));
-            return;
-        }
-
-        if (commandSender.hasPermission("tools.command.whois.other")) {
-
-            if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-                sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-                return;
-            }
-
-            Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
-            sendMessage(commandSender, messageContent(target));
-        }
+      sendMessage(commandSender, messageContent(target));
     }
+  }
 
-    private String messageContent(Player player) {
-        User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+  private String messageContent(Player player) {
+    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
 
-        Location location = player.getLocation();
-        String playerHealth = player.getHealth() + "/20";
-        String playerFoodLevel = player.getFoodLevel() + "/20";
-        String playerGamemode = player.getGameMode().toString().toLowerCase();
-        String playerLocation = "("
-                + player.getWorld().getName() + ", "
-                + location.getBlockX() + ", "
-                + location.getBlockY() + ", "
-                + location.getBlockZ() + ")";
-        String playerJoin = ParsingUtils.parseLong(player.getFirstPlayed());
-        String playerLast = user.isOnline() ? "online" : ParsingUtils.parseLong(player.getLastPlayed());
-        String whois = listToString(messages.getWhois());
+    Location location = player.getLocation();
+    String playerHealth = player.getHealth() + "/20";
+    String playerFoodLevel = player.getFoodLevel() + "/20";
+    String playerGamemode = player.getGameMode().toString().toLowerCase();
+    String playerLocation = "("
+      + player.getWorld().getName() + ", "
+      + location.getBlockX() + ", "
+      + location.getBlockY() + ", "
+      + location.getBlockZ() + ")";
+    String playerJoin = ParsingUtils.parseLong(player.getFirstPlayed());
+    String playerLast = user.isOnline() ? "online" : ParsingUtils.parseLong(player.getLastPlayed());
+    String whois = listToString(messages.getWhois());
 
-        return StringUtils.replaceEach(whois,
-                new String[] {"%nickname%", "%uuid%", "%ip%", "%registered%", "%last%", "%location%", "%hp%", "%hunger%", "%gamemode%", "%god%", "%fly%"},
-                new String[] {player.getName(), player.getUniqueId().toString(), player.getAddress().getAddress().toString(),
-                        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtils.parseBoolean(user.isGod()),
-                        ParsingUtils.parseBoolean(player.isFlying())
-                });
-    }
+    return StringUtils.replaceEach(whois,
+      new String[]{"%nickname%", "%uuid%", "%ip%", "%registered%", "%last%", "%location%", "%hp%", "%hunger%", "%gamemode%", "%god%", "%fly%"},
+      new String[]{player.getName(), player.getUniqueId().toString(), player.getAddress().getAddress().toString(),
+        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtils.parseBoolean(user.isGod()),
+        ParsingUtils.parseBoolean(player.isFlying())
+      });
+  }
 
 }

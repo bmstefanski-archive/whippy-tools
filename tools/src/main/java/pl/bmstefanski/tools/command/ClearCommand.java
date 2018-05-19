@@ -39,46 +39,46 @@ import pl.bmstefanski.tools.storage.configuration.Messages;
 
 public class ClearCommand implements Messageable, CommandExecutor {
 
-    private final Tools plugin;
-    private final Messages messages;
+  private final Tools plugin;
+  private final Messages messages;
 
-    public ClearCommand(Tools plugin) {
-        this.plugin = plugin;
-        this.messages = plugin.getMessages();
+  public ClearCommand(Tools plugin) {
+    this.plugin = plugin;
+    this.messages = plugin.getMessages();
+  }
+
+  @Command(name = "clear", usage = "[player]", max = 1, aliases = {"ci"})
+  @Permission("tools.command.clear")
+  @GameOnly(false)
+  @Override
+  public void execute(CommandSender commandSender, CommandArguments commandArguments) {
+
+    if (commandArguments.getSize() == 0) {
+
+      if (!(commandSender instanceof Player)) {
+        sendMessage(commandSender, messages.getOnlyPlayer());
+        return;
+      }
+
+      Player player = (Player) commandSender;
+      player.getInventory().clear();
+
+      sendMessage(player, messages.getClear());
+
+      return;
     }
 
-    @Command(name = "clear", usage = "[player]", max = 1, aliases = {"ci"})
-    @Permission("tools.command.clear")
-    @GameOnly(false)
-    @Override
-    public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-
-        if (commandArguments.getSize() == 0) {
-
-            if (!(commandSender instanceof Player)) {
-                sendMessage(commandSender, messages.getOnlyPlayer());
-                return;
-            }
-
-            Player player = (Player) commandSender;
-            player.getInventory().clear();
-
-            sendMessage(player, messages.getClear());
-
-            return;
-        }
-
-        if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-            sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
-            return;
-        }
-
-        Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
-        target.getInventory().clear();
-
-        sendMessage(target, messages.getClear());
-        sendMessage(commandSender, StringUtils.replace(messages.getClearOther(), "%player%", target.getName()));
+    if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
+      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      return;
     }
+
+    Player target = Bukkit.getPlayer(commandArguments.getParam(0));
+
+    target.getInventory().clear();
+
+    sendMessage(target, messages.getClear());
+    sendMessage(commandSender, StringUtils.replace(messages.getClearOther(), "%player%", target.getName()));
+  }
 
 }
