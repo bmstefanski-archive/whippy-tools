@@ -17,7 +17,7 @@
   </modules>
 
   <build>
-    <finalName>WhippyTools:${project.version}</finalName>
+    <finalName>WhippyTools ${project.version}</finalName>
 
     <resources>
       <resource>
