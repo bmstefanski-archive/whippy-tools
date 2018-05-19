@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util.reflect;
+package pl.bmstefanski.tools.impl.util.reflect;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

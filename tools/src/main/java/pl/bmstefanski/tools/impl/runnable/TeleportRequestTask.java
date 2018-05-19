@@ -22,7 +22,7 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.runnable;
+package pl.bmstefanski.tools.impl.runnable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

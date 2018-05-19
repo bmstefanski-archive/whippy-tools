@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import pl.bmstefanski.tools.impl.util.ParsingUtils;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import static org.junit.Assert.*;

@@ -22,35 +22,29 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util;
+package pl.bmstefanski.tools.impl.util;
 
-import pl.bmstefanski.tools.Tools;
-import pl.bmstefanski.tools.impl.ToolsImpl;
+import java.nio.ByteBuffer;
+import java.util.UUID;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+public final class UUIDUtils {
 
-public final class ParsingUtils {
+    public static byte[] getBytesFromUUID(UUID uuid) {
+        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+        bb.putLong(uuid.getMostSignificantBits());
+        bb.putLong(uuid.getLeastSignificantBits());
 
-    private final static Tools plugin = ToolsImpl.getInstance();
-
-    public static String parseBoolean(boolean bool) {
-        return bool ? plugin.getMessages().getBooleanOn() : plugin.getMessages().getBooleanOff();
+        return bb.array();
     }
 
-    public static String parseLong(long time) {
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static UUID getUUIDFromBytes(byte[] bytes) {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
+        Long high = byteBuffer.getLong();
+        Long low = byteBuffer.getLong();
 
-        return date.format(formatter);
+        return new UUID(high, low);
     }
 
-    public static int parseInt(String integer) {
-        return Integer.parseInt(integer);
-    }
-
-    private ParsingUtils() {}
+    private UUIDUtils() {}
 
 }

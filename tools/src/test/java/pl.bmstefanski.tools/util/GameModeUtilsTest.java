@@ -2,6 +2,7 @@ package pl.bmstefanski.tools.util;
 
 import org.bukkit.GameMode;
 import org.junit.Test;
+import pl.bmstefanski.tools.impl.util.GamemodeUtils;
 
 import static org.junit.Assert.*;
 

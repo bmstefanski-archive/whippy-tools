@@ -1,4 +1,4 @@
-package pl.bmstefanski.tools.util.reflect;
+package pl.bmstefanski.tools.impl.util.reflect;
 
 import org.bukkit.entity.Player;
 

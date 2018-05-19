@@ -8,7 +8,6 @@ package pl.bmstefanski.tools.impl.util.thread;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.ToolsImpl;
 import pl.bmstefanski.tools.storage.DatabaseCallable;
-import pl.bmstefanski.tools.util.thread.Executor;
 
 public class ExecutorInitializer<T> {
 

@@ -2,9 +2,8 @@ package pl.bmstefanski.tools.impl.util.title;
 
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.util.reflect.AbstractPacket;
-import pl.bmstefanski.tools.util.reflect.transition.PacketPlayOutTitle;
-import pl.bmstefanski.tools.util.title.TitleSender;
+import pl.bmstefanski.tools.impl.util.reflect.AbstractPacket;
+import pl.bmstefanski.tools.impl.util.reflect.transition.PacketPlayOutTitle;
 
 import java.util.Collection;
 

@@ -1,6 +1,7 @@
 package pl.bmstefanski.tools.util;
 
 import org.junit.Test;
+import pl.bmstefanski.tools.impl.util.UUIDUtils;
 
 import java.util.UUID;
 

@@ -37,7 +37,7 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.util.GamemodeUtils;
+import pl.bmstefanski.tools.impl.util.GamemodeUtils;
 
 public class GamemodeCommand implements Messageable, CommandExecutor {
 

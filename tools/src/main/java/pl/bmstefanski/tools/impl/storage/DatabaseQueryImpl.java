@@ -4,7 +4,7 @@ import pl.bmstefanski.tools.impl.storage.callable.ExecuteQueryCallable;
 import pl.bmstefanski.tools.impl.storage.callable.ExecuteUpdateCallable;
 import pl.bmstefanski.tools.storage.DatabaseCallable;
 import pl.bmstefanski.tools.storage.DatabaseQuery;
-import pl.bmstefanski.tools.util.thread.Executor;
+import pl.bmstefanski.tools.impl.util.thread.Executor;
 import pl.bmstefanski.tools.impl.util.thread.ExecutorInitializer;
 
 import java.sql.PreparedStatement;

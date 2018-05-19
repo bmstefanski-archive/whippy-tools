@@ -22,10 +22,10 @@
  SOFTWARE.
  */
 
-package pl.bmstefanski.tools.util.reflect.transition;
+package pl.bmstefanski.tools.impl.util.reflect.transition;
 
-import pl.bmstefanski.tools.util.reflect.AbstractPacket;
-import pl.bmstefanski.tools.util.reflect.Reflections;
+import pl.bmstefanski.tools.impl.util.reflect.AbstractPacket;
+import pl.bmstefanski.tools.impl.util.reflect.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
 
