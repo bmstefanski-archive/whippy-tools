@@ -11,6 +11,7 @@ import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.basic.UserImpl;
 import pl.bmstefanski.tools.impl.runnable.TeleportRequestTask;
+import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
