@@ -33,15 +33,11 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public PlayerCommandPreprocessListener(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @EventHandler
   public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {

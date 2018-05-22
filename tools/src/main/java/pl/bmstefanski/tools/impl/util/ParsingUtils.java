@@ -34,10 +34,14 @@ import java.time.format.DateTimeFormatter;
 
 public final class ParsingUtils {
 
-  private final static Tools plugin = ToolsImpl.getInstance();
+  private static final Tools TOOLS;
+
+  static {
+    TOOLS = ToolsImpl.getInstance();
+  }
 
   public static String parseBoolean(boolean bool) {
-    return bool ? plugin.getMessages().getBooleanOn() : plugin.getMessages().getBooleanOff();
+    return bool ? TOOLS.getMessages().getBooleanOn() : TOOLS.getMessages().getBooleanOff();
   }
 
   public static String parseLong(long time) {

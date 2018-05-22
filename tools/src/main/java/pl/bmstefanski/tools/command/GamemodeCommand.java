@@ -39,15 +39,11 @@ import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.GamemodeUtils;
 
+import javax.inject.Inject;
+
 public class GamemodeCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public GamemodeCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "gamemode", usage = "<0/1/2/3> [player]", min = 1, max = 2, aliases = {"gm"})
   @Permission("tools.command.gamemode")

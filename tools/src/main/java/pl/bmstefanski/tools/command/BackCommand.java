@@ -35,19 +35,16 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
+
+import javax.inject.Inject;
 
 public class BackCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public BackCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
 
   @Command(name = "back", usage = "[player]", max = 1)
   @Permission("tools.command.back")
@@ -63,8 +60,8 @@ public class BackCommand implements Messageable, CommandExecutor {
 
       Player player = (Player) commandSender;
 
-      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
-      this.plugin.getUserManager().teleportToLocation(user, player.getLocation());
+      User user = this.userManager.getUser(player.getUniqueId());
+      this.userManager.teleportToLocation(user, player.getLocation());
 
       return;
     }
@@ -77,7 +74,7 @@ public class BackCommand implements Messageable, CommandExecutor {
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
+      User user = this.userManager.getUser(target.getUniqueId());
 
       target.teleport(user.getLastLocation());
     }

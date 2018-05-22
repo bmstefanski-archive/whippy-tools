@@ -34,14 +34,17 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class DisableCommand implements Messageable, CommandExecutor {
 
   private final Tools plugin;
   private final Messages messages;
 
-  public DisableCommand(Tools plugin) {
+  @Inject
+  DisableCommand(Tools plugin, Messages messages) {
     this.plugin = plugin;
-    this.messages = plugin.getMessages();
+    this.messages = messages;
   }
 
   @Command(name = "disable")

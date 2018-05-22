@@ -30,6 +30,7 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 public class TeleportRequestTask implements Runnable, Messageable {
 
@@ -40,13 +41,13 @@ public class TeleportRequestTask implements Runnable, Messageable {
 
   private int delay;
 
-  public TeleportRequestTask(Tools plugin, Location location, User user) {
+  public TeleportRequestTask(Tools plugin, Messages messages, PluginConfig config, Location location, User user) {
     this.plugin = plugin;
-    this.messages = plugin.getMessages();
+    this.messages = messages;
     this.location = location;
     this.user = user;
 
-    this.delay = this.plugin.getConfiguration().getDelay();
+    this.delay = config.getDelay();
   }
 
   @Override

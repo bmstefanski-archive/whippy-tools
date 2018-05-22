@@ -36,18 +36,16 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
+import javax.inject.Inject;
+
 public class GodCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public GodCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
 
   @Command(name = "god", usage = "[player]", max = 1)
   @Permission("tools.command.god")
@@ -63,7 +61,7 @@ public class GodCommand implements Messageable, CommandExecutor {
       }
 
       Player player = (Player) commandSender;
-      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+      User user = this.userManager.getUser(player.getUniqueId());
 
       boolean godState = !user.isGod();
       user.setGod(godState);
@@ -81,7 +79,7 @@ public class GodCommand implements Messageable, CommandExecutor {
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
+      User user = this.userManager.getUser(target.getUniqueId());
 
       boolean godState = !user.isGod();
       user.setGod(godState);

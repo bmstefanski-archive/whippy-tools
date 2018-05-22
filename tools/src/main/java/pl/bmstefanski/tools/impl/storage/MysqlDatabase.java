@@ -4,14 +4,17 @@ import com.zaxxer.hikari.HikariDataSource;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.storage.callable.DatabaseConnectionCallable;
 
+import javax.inject.Inject;
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class MysqlDatabase extends AbstractDatabase {
 
   private final Tools plugin;
+  private final ExecutorService executorService;
   private HikariDataSource dataSource;
 
   private final String databaseName;
@@ -20,8 +23,9 @@ public class MysqlDatabase extends AbstractDatabase {
   private final String password;
   private final int port;
 
-  public MysqlDatabase(Tools plugin, String databaseName, String serverName, String username, String password, int port) {
+  public MysqlDatabase(Tools plugin, ExecutorService executorService, String databaseName, String serverName, String username, String password, int port) {
     this.plugin = plugin;
+    this.executorService = executorService;
     this.databaseName = databaseName;
     this.serverName = serverName;
     this.username = username;
@@ -41,7 +45,7 @@ public class MysqlDatabase extends AbstractDatabase {
   @Override
   public void connect() {
     Callable<Void> databaseCallable = new DatabaseConnectionCallable(this);
-    Future<Void> future = this.plugin.getExecutorService().submit(databaseCallable);
+    Future<Void> future = this.executorService.submit(databaseCallable);
 
     try {
       future.get();

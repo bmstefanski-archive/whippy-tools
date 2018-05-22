@@ -32,30 +32,33 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.storage.Resource;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerQuitListener implements Listener, Messageable {
 
-  private final Tools plugin;
-
-  public PlayerQuitListener(Tools plugin) {
-    this.plugin = plugin;
-  }
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
+  @Inject private Resource resource;
 
   @EventHandler
   public void onPlayerQuit(PlayerQuitEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     user.setIp(player.getAddress().getHostName());
 
-    event.setQuitMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getQuitFormat(), "%player%", player.getName())));
+    event.setQuitMessage(fixColor(StringUtils.replace(this.config.getQuitFormat(), "%player%", player.getName())));
 
-    if (this.plugin.getConfiguration().getRemoveGodOnDisconnect() && user.isGod()) {
+    if (this.config.getRemoveGodOnDisconnect() && user.isGod()) {
       user.setGod(false);
     }
 
-    this.plugin.getResource().save(user);
+    this.resource.save(user);
   }
 
 }
