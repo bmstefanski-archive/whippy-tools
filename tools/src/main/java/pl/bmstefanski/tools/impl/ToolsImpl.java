@@ -38,7 +38,7 @@ import pl.bmstefanski.tools.impl.manager.UserManagerImpl;
 import pl.bmstefanski.tools.impl.storage.DatabaseFactory;
 import pl.bmstefanski.tools.impl.storage.resource.UserResourceImpl;
 import pl.bmstefanski.tools.listener.*;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.Database;
 import pl.bmstefanski.tools.storage.Resource;
 import pl.bmstefanski.tools.storage.configuration.Messages;

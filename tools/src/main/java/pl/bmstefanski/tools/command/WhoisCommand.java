@@ -35,9 +35,8 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtils;
 

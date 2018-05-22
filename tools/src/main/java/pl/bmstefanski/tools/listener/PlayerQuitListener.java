@@ -30,9 +30,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.Resource;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 

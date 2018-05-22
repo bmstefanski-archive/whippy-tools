@@ -26,9 +26,8 @@ package pl.bmstefanski.tools.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 
 import javax.inject.Inject;
 

@@ -1,8 +1,7 @@
 package pl.bmstefanski.tools.impl.storage.resource;
 
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
 import pl.bmstefanski.tools.impl.storage.StatementFactory;
 import pl.bmstefanski.tools.impl.util.UniqueIdUtils;

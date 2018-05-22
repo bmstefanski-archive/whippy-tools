@@ -28,9 +28,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.manager.UserManager;
 
 import javax.inject.Inject;
 
