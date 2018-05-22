@@ -1,8 +1,7 @@
-package pl.bmstefanski.tools.util;
+package pl.bmstefanski.tools.impl.util;
 
 import org.bukkit.GameMode;
 import org.junit.Test;
-import pl.bmstefanski.tools.impl.util.GamemodeUtils;
 
 import static org.junit.Assert.*;
 

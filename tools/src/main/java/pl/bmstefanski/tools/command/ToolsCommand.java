@@ -34,14 +34,17 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
+import javax.inject.Inject;
+
 public class ToolsCommand implements Messageable, CommandExecutor {
 
   private final Tools plugin;
   private final PluginConfig config;
 
-  public ToolsCommand(Tools plugin) {
+  @Inject
+  ToolsCommand(Tools plugin, PluginConfig config) {
     this.plugin = plugin;
-    this.config = plugin.getConfiguration();
+    this.config = config;
   }
 
   @Command(name = "tools")

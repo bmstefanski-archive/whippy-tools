@@ -37,18 +37,16 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
+import javax.inject.Inject;
+
 public class WhoisCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public WhoisCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
 
   @Command(name = "whois", usage = "[player]", max = 1)
   @Permission("tools.command.whois")
@@ -83,7 +81,7 @@ public class WhoisCommand implements Messageable, CommandExecutor {
   }
 
   private String messageContent(Player player) {
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     Location location = player.getLocation();
     String playerHealth = player.getHealth() + "/20";

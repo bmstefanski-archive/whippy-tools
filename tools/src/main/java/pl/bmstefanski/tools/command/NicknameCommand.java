@@ -38,15 +38,11 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class NicknameCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public NicknameCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "nick", min = 1, max = 2, usage = "[player] [nickname]", aliases = {"setnick", "nickname"})
   @Permission("tools.command.nick")

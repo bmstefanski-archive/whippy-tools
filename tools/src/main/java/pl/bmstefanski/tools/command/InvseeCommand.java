@@ -13,15 +13,11 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class InvseeCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public InvseeCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "invsee", usage = "[player]", max = 1)
   @Permission("tools.command.invsee")

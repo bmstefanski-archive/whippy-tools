@@ -15,15 +15,11 @@ import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
+import javax.inject.Inject;
+
 public class TpPosCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public TpPosCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "tppos", usage = "[x] [y] [z] [player]", min = 3, max = 4)
   @Permission("tools.command.tppos")

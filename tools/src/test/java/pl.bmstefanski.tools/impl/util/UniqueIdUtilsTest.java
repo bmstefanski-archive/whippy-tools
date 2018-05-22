@@ -1,7 +1,6 @@
-package pl.bmstefanski.tools.util;
+package pl.bmstefanski.tools.impl.util;
 
 import org.junit.Test;
-import pl.bmstefanski.tools.impl.util.UniqueIdUtils;
 
 import java.util.UUID;
 

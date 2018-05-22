@@ -30,26 +30,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerDeathListener implements Listener {
 
-  private final Tools plugin;
-
-  public PlayerDeathListener(Tools plugin) {
-    this.plugin = plugin;
-  }
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
 
   @EventHandler
   public void onPlayerDeath(PlayerDeathEvent event) {
 
     Player player = event.getEntity().getPlayer();
-    User user = plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     if (event.getEntity() != null) {
       user.setLastLocation(player.getLocation());
     }
 
-    if (!this.plugin.getConfiguration().getDeathMessages()) {
+    if (!this.config.getDeathMessages()) {
       event.setDeathMessage("");
     }
   }

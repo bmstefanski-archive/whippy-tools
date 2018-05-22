@@ -24,6 +24,8 @@
 
 package pl.bmstefanski.tools.impl;
 
+import ch.jalu.injector.Injector;
+import ch.jalu.injector.InjectorBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,7 +38,7 @@ import pl.bmstefanski.tools.impl.manager.UserManagerImpl;
 import pl.bmstefanski.tools.impl.storage.DatabaseFactory;
 import pl.bmstefanski.tools.impl.storage.resource.UserResourceImpl;
 import pl.bmstefanski.tools.listener.*;
-import pl.bmstefanski.tools.manager.UserManager;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.Database;
 import pl.bmstefanski.tools.storage.Resource;
 import pl.bmstefanski.tools.storage.configuration.Messages;
@@ -60,6 +62,7 @@ public class ToolsImpl extends JavaPlugin implements Tools {
   private Messages messages;
   private Database database;
   private Resource resource;
+  private Injector injector;
 
   public ToolsImpl() {
     instance = this;
@@ -67,10 +70,9 @@ public class ToolsImpl extends JavaPlugin implements Tools {
 
   @Override
   public void onEnable() {
-
+    this.injector = new InjectorBuilder().addDefaultHandlers("pl.bmstefanski.tools").create();
     this.pluginConfig = ConfigManager.createInstance(PluginConfig.class);
     this.messages = ConfigManager.createInstance(Messages.class);
-
 
     this.pluginConfig.bindFile(pluginConfigFile);
     this.messages.bindFile(messagesFile);
@@ -82,62 +84,70 @@ public class ToolsImpl extends JavaPlugin implements Tools {
 
     this.executorService = Executors.newCachedThreadPool();
     this.database = DatabaseFactory.getDatabase("mysql");
+    this.injector.register(Database.class, this.database);
 
-    this.userManager = new UserManagerImpl(this);
-    this.bukkitCommands = new BukkitCommands(this);
+    this.injector.register(Tools.class, this);
+    this.injector.register(PluginConfig.class, this.pluginConfig);
+    this.injector.register(Messages.class, this.messages);
+    this.injector.register(ExecutorService.class, this.executorService);
 
-    this.resource = new UserResourceImpl(this);
+    this.userManager = this.injector.getSingleton(UserManagerImpl.class);
+    this.injector.register(UserManager.class, this.userManager);
+
+    this.resource = this.injector.getSingleton(UserResourceImpl.class);
     this.resource.checkTable();
     this.resource.load();
+    this.injector.register(Resource.class, this.resource);
 
-    Bukkit.getMessenger().registerIncomingPluginChannel(this, "MC|CPack", new BlazingPackMessageReceivedListener(this));
+    this.bukkitCommands = new BukkitCommands(this);
+
+    Bukkit.getMessenger().registerIncomingPluginChannel(this, "MC|CPack", this.injector.getSingleton(BlazingPackMessageReceivedListener.class));
 
     this.registerListeners(
-      new PlayerCommandPreprocessListener(this),
-      new PlayerJoinListener(this),
-      new PlayerQuitListener(this),
-      new PlayerMoveListener(this),
-      new EntityDamageListener(this),
-      new PlayerDeathListener(this),
-      new PlayerLoginListener(this),
-      new PlayerInteractListener(this),
-      new EntityPickupItemListener(this)
+      PlayerCommandPreprocessListener.class,
+      PlayerJoinListener.class,
+      PlayerQuitListener.class,
+      PlayerMoveListener.class,
+      EntityDamageListener.class,
+      PlayerDeathListener.class,
+      PlayerLoginListener.class,
+      PlayerInteractListener.class,
+      EntityPickupItemListener.class
     );
 
     this.registerCommands(
-      new ToolsCommand(this),
-      new WhoisCommand(this),
-      new WorkbenchCommand(this),
-      new ReloadCommand(this),
-      new ListCommand(this),
-      new HealCommand(this),
-      new GodCommand(this),
-      new GamemodeCommand(this),
-      new FlyCommand(this),
-      new FeedCommand(this),
-      new EnderchestCommand(this),
-      new DisableCommand(this),
-      new ClearCommand(this),
-      new BroadcastCommand(this),
-      new BackCommand(this),
-      new AfkCommand(this),
-      new HatCommand(this),
-      new SkullCommand(this),
-      new TpCommand(this),
-      new TpHereCommand(this),
-      new TpPosCommand(this),
-      new DayCommand(this),
-      new NightCommand(this),
-      new RepairCommand(this),
-      new KickCommand(this),
-      new KickAllCommand(this),
-      new DayCommand(this),
-      new NightCommand(this),
-      new LightningCommand(this),
-      new NicknameCommand(this),
-      new RealnameCommand(this),
-      new TpAllCommand(this),
-      new MarkCommand(this)
+      AfkCommand.class,
+      BackCommand.class,
+      BroadcastCommand.class,
+      ClearCommand.class,
+      DayCommand.class,
+      DisableCommand.class,
+      EnderchestCommand.class,
+      FeedCommand.class,
+      FlyCommand.class,
+      GamemodeCommand.class,
+      GodCommand.class,
+      HatCommand.class,
+      HealCommand.class,
+      InvseeCommand.class,
+      KickAllCommand.class,
+      KickCommand.class,
+      LightningCommand.class,
+      ListCommand.class,
+      MarkCommand.class,
+      NicknameCommand.class,
+      NightCommand.class,
+      RealnameCommand.class,
+      ReloadCommand.class,
+      RepairCommand.class,
+      SkullCommand.class,
+      ToolsCommand.class,
+      TpAllCommand.class,
+      TpCommand.class,
+      TpHereCommand.class,
+      TpPosCommand.class,
+      WhoisCommand.class,
+      WorkbenchCommand.class
     );
 
   }
@@ -148,35 +158,24 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     this.messages.save();
   }
 
-  private void registerCommands(CommandExecutor... executors) {
-
-    for (CommandExecutor commandExecutor : executors) {
-      this.bukkitCommands.register(commandExecutor);
-      this.bukkitCommands.unregisterBlockedCommands(commandExecutor, this.pluginConfig.getBlockedCommands());
+  @SafeVarargs
+  private final void registerCommands(Class<? extends CommandExecutor>... executors) {
+    for (Class<? extends CommandExecutor> commandExecutor : executors) {
+      this.bukkitCommands.register(this.injector.getSingleton(commandExecutor));
+      this.bukkitCommands.unregisterBlockedCommands(this.injector.getSingleton(commandExecutor), this.pluginConfig.getBlockedCommands());
     }
-
   }
 
-  private void registerListeners(Listener... listeners) {
-
-    for (Listener listener : listeners) {
-      Bukkit.getPluginManager().registerEvents(listener, this);
+  @SafeVarargs
+  private final void registerListeners(Class<? extends Listener>... listeners) {
+    for (Class<? extends Listener> listener : listeners) {
+      Bukkit.getPluginManager().registerEvents(this.injector.getSingleton(listener), this);
     }
   }
 
   @Override
-  public PluginConfig getConfiguration() {
+  public PluginConfig getPluginConfig() {
     return this.pluginConfig;
-  }
-
-  @Override
-  public Database getDatabase() {
-    return this.database;
-  }
-
-  @Override
-  public UserManager getUserManager() {
-    return this.userManager;
   }
 
   @Override
@@ -185,18 +184,13 @@ public class ToolsImpl extends JavaPlugin implements Tools {
   }
 
   @Override
-  public BukkitCommands getBukkitCommands() {
-    return this.bukkitCommands;
+  public Database getDatabase() {
+    return this.database;
   }
 
   @Override
   public ExecutorService getExecutorService() {
     return this.executorService;
-  }
-
-  @Override
-  public Resource getResource() {
-    return this.resource;
   }
 
   public static ToolsImpl getInstance() {

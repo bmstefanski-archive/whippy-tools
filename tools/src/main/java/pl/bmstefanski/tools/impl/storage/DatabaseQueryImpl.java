@@ -1,30 +1,31 @@
 package pl.bmstefanski.tools.impl.storage;
 
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.storage.callable.ExecuteQueryCallable;
 import pl.bmstefanski.tools.impl.storage.callable.ExecuteUpdateCallable;
 import pl.bmstefanski.tools.storage.DatabaseQuery;
 
+import javax.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class DatabaseQueryImpl implements DatabaseQuery {
 
-  private final Tools plugin;
+  private final ExecutorService executorService;
   private final PreparedStatement preparedStatement;
 
-  public DatabaseQueryImpl(Tools plugin, PreparedStatement preparedStatement) {
-    this.plugin = plugin;
+  public DatabaseQueryImpl(ExecutorService executorService, PreparedStatement preparedStatement) {
+    this.executorService = executorService;
     this.preparedStatement = preparedStatement;
   }
 
   @Override
   public int executeUpdate() {
     Callable<Integer> executeUpdateCallable = new ExecuteUpdateCallable(this.preparedStatement);
-    Future<Integer> future = this.plugin.getExecutorService().submit(executeUpdateCallable);
+    Future<Integer> future = this.executorService.submit(executeUpdateCallable);
 
     Integer result = 0;
     try {
@@ -39,7 +40,7 @@ public class DatabaseQueryImpl implements DatabaseQuery {
   @Override
   public ResultSet executeQuery() {
     Callable<ResultSet> executeQueryCallable = new ExecuteQueryCallable(this.preparedStatement);
-    Future<ResultSet> future = this.plugin.getExecutorService().submit(executeQueryCallable);
+    Future<ResultSet> future = this.executorService.submit(executeQueryCallable);
 
     ResultSet result = null;
     try {

@@ -48,15 +48,11 @@ public class UserImpl implements User {
   public UserImpl(UUID uuid) {
     this.uuid = uuid;
     this.name = Bukkit.getOfflinePlayer(uuid).getName();
-
-    ToolsImpl.getInstance().getUserManager().addUser(this);
   }
 
   public UserImpl(String playerName) {
     this.name = playerName;
     this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
-
-    ToolsImpl.getInstance().getUserManager().addUser(this);
   }
 
   @Override

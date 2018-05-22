@@ -14,15 +14,11 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class NightCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public NightCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "night", usage = "[world]", max = 1)
   @Permission("tools.command.night")

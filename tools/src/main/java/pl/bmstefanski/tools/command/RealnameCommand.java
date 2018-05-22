@@ -37,15 +37,11 @@ import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
+import javax.inject.Inject;
+
 public class RealnameCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public RealnameCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "realname", max = 1, usage = "[player]")
   @Permission("tools.command.realname.other")

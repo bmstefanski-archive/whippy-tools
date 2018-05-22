@@ -1,4 +1,4 @@
-package pl.bmstefanski.tools.manager;
+package pl.bmstefanski.tools.impl.manager;
 
 import org.bukkit.Location;
 import pl.bmstefanski.tools.basic.User;

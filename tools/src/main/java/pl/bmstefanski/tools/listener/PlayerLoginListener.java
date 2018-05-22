@@ -7,29 +7,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerLoginListener implements Listener {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public PlayerLoginListener(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
 
   @EventHandler
   public void onPlayerLogin(PlayerLoginEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     if (!player.hasPlayedBefore()) {
       user.setName(player.getName());
     }
 
-    int maxNicknameLength = this.plugin.getConfiguration().getMaxNicknameLength();
+    int maxNicknameLength = this.config.getMaxNicknameLength();
 
     if (player.getName().length() > maxNicknameLength) {
       event.disallow(PlayerLoginEvent.Result.KICK_OTHER, StringUtils.replace(this.messages.getTooLongNickname(), "%max%", maxNicknameLength + ""));

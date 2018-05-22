@@ -9,25 +9,25 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerInteractListener implements Listener, Messageable {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public PlayerInteractListener(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
 
   @EventHandler
   public void onPlayerInteract(PlayerInteractEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
-    if (this.plugin.getConfiguration().getCancelAfkOnInteract()) {
+    if (this.config.getCancelAfkOnInteract()) {
       if (user.isGod()) {
         user.setAfk(false);
         sendMessage(player, this.messages.getNoLongerAfk());

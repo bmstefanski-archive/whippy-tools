@@ -30,14 +30,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
+
+import javax.inject.Inject;
 
 public class EntityDamageListener implements Listener {
 
-  private final Tools plugin;
-
-  public EntityDamageListener(Tools plugin) {
-    this.plugin = plugin;
-  }
+  @Inject private UserManager userManager;
 
   @EventHandler
   public void onEntityDamage(EntityDamageEvent event) {
@@ -47,7 +46,7 @@ public class EntityDamageListener implements Listener {
     }
 
     Player player = (Player) event.getEntity();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     if (user.isGod()) {
       event.setCancelled(true);

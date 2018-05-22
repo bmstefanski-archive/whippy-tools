@@ -33,25 +33,25 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerMoveListener implements Listener, Messageable {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public PlayerMoveListener(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
 
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
-    if (!this.plugin.getConfiguration().getCancelAfkOnMove() && !this.plugin.getConfiguration().getFreezeAfkPlayers()) {
+    if (!this.config.getCancelAfkOnMove() && !this.config.getFreezeAfkPlayers()) {
       event.getHandlers().unregister(this);
 
       return;
@@ -59,12 +59,12 @@ public class PlayerMoveListener implements Listener, Messageable {
 
     if (user.isAfk()) {
 
-      if (this.plugin.getConfiguration().getFreezeAfkPlayers()) {
+      if (this.config.getFreezeAfkPlayers()) {
         event.setTo(event.getFrom());
         return;
       }
 
-      if (this.plugin.getConfiguration().getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
+      if (this.config.getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
         user.setAfk(false);
         sendMessage(player, this.messages.getNoLongerAfk());
         Bukkit.getOnlinePlayers().forEach(p ->

@@ -28,20 +28,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
+
+import javax.inject.Inject;
 
 @Deprecated
 public class BlazingPackMessageReceivedListener implements PluginMessageListener {
 
-  private final Tools plugin;
-
-  public BlazingPackMessageReceivedListener(Tools plugin) {
-    this.plugin = plugin;
-  }
+  @Inject private UserManager userManager;
 
   @Override
   public void onPluginMessageReceived(String string, Player player, byte[] bytes) {
 
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
     if (string.contains("CPack")) {
 

@@ -39,15 +39,11 @@ import pl.bmstefanski.tools.impl.util.title.TitleSenderImpl;
 import pl.bmstefanski.tools.impl.util.reflect.transition.PacketPlayOutTitle;
 import pl.bmstefanski.tools.impl.util.title.TitleSender;
 
+import javax.inject.Inject;
+
 public class BroadcastCommand implements Messageable, CommandExecutor {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public BroadcastCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
 
   @Command(name = "broadcast", usage = "<action/title/subtitle/chat>", min = 2, max = 16, aliases = {"bc"})
   @Permission("tools.command.broadcast")

@@ -30,35 +30,35 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
+
+import javax.inject.Inject;
 
 public class PlayerJoinListener implements Listener, Messageable {
 
-  private final Tools plugin;
-
-  public PlayerJoinListener(Tools plugin) {
-    this.plugin = plugin;
-  }
+  @Inject private UserManager userManager;
+  @Inject private PluginConfig config;
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId());
 
-    event.setJoinMessage(fixColor(StringUtils.replace(this.plugin.getConfiguration().getJoinFormat(), "%player%", player.getName())));
+    event.setJoinMessage(fixColor(StringUtils.replace(this.config.getJoinFormat(), "%player%", player.getName())));
 
     user.setLastLocation(player.getLocation());
 
-    if (this.plugin.getConfiguration().getFlyOnJoin()) {
+    if (this.config.getFlyOnJoin()) {
       if (player.isFlying()) {
         player.setFlying(true);
         player.setAllowFlight(true);
       }
     }
 
-    if (this.plugin.getConfiguration().getSafeLogin()) {
+    if (this.config.getSafeLogin()) {
       player.setFallDistance(0F);
     }
   }

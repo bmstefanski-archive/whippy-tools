@@ -14,18 +14,16 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtils;
 
+import javax.inject.Inject;
+
 public class MarkCommand implements CommandExecutor, Messageable {
 
-  private final Tools plugin;
-  private final Messages messages;
-
-  public MarkCommand(Tools plugin) {
-    this.plugin = plugin;
-    this.messages = plugin.getMessages();
-  }
+  @Inject private Messages messages;
+  @Inject private UserManager userManager;
 
   @Command(name = "mark", usage = "[player]", max = 1)
   @Permission("tools.command.mark")
@@ -41,7 +39,7 @@ public class MarkCommand implements CommandExecutor, Messageable {
       }
 
       Player player = (Player) commandSender;
-      User user = this.plugin.getUserManager().getUser(player.getUniqueId());
+      User user = this.userManager.getUser(player.getUniqueId());
 
       boolean markState = !user.isMark();
       user.setMark(markState);
@@ -65,7 +63,7 @@ public class MarkCommand implements CommandExecutor, Messageable {
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-      User user = this.plugin.getUserManager().getUser(target.getUniqueId());
+      User user = this.userManager.getUser(target.getUniqueId());
 
       boolean markState = !user.isMark();
       user.setMark(markState);

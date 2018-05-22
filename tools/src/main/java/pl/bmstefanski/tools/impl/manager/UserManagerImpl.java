@@ -10,15 +10,19 @@ import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.basic.UserImpl;
-import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.impl.runnable.TeleportRequestTask;
+import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
+import javax.inject.Inject;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class UserManagerImpl implements UserManager {
 
   private final Tools plugin;
+  private final Messages messages;
+  private final PluginConfig config;
 
   private final Map<UUID, User> uuidUserMap = new HashMap<>();
   private final Map<String, User> nameUserMap = new HashMap<>();
@@ -26,9 +30,11 @@ public class UserManagerImpl implements UserManager {
   private final Cache<UUID, User> uuidUserCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
   private final Cache<String, User> nameUserCache = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build();
 
-
-  public UserManagerImpl(Tools plugin) {
+  @Inject
+  UserManagerImpl(Tools plugin, Messages messages, PluginConfig config) {
     this.plugin = plugin;
+    this.messages = messages;
+    this.config = config;
   }
 
   @Override
@@ -105,7 +111,7 @@ public class UserManagerImpl implements UserManager {
     Validate.notNull(user);
 
     if (user.getBukkitTask() != null) {
-      String translatedMessage = ChatColor.translateAlternateColorCodes('&', this.plugin.getMessages().getCurrentlyTeleporting());
+      String translatedMessage = ChatColor.translateAlternateColorCodes('&', this.messages.getCurrentlyTeleporting());
       user.getPlayer().sendMessage(translatedMessage);
       return;
     }
@@ -115,7 +121,7 @@ public class UserManagerImpl implements UserManager {
       user.setLastLocation(lastLocation);
     }
 
-    Runnable runnable = new TeleportRequestTask(this.plugin, location, user);
+    Runnable runnable = new TeleportRequestTask(this.plugin, this.messages, this.config, location, user);
     BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(this.plugin, runnable, 0, 20);
     user.setBukkitTask(bukkitTask);
   }
