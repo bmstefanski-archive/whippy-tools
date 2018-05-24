@@ -32,7 +32,7 @@ public class UserManagerImpl implements UserManager {
   private final ConcurrentMap<UUID, User> userUniqueIdMap = new ConcurrentHashMap<>(16, 0.9F, 1);
 
   @Inject
-  public UserManagerImpl(Tools plugin, Messages messages, PluginConfig config, Server server) {
+  UserManagerImpl(Tools plugin, Messages messages, PluginConfig config, Server server) {
     this.plugin = plugin;
     this.messages = messages;
     this.config = config;
