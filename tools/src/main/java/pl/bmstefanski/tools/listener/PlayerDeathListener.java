@@ -43,7 +43,7 @@ public class PlayerDeathListener implements Listener {
   public void onPlayerDeath(PlayerDeathEvent event) {
 
     Player player = event.getEntity().getPlayer();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (event.getEntity() != null) {
       user.setLastLocation(player.getLocation());

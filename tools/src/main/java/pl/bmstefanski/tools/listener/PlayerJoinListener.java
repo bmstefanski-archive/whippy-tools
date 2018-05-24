@@ -45,7 +45,11 @@ public class PlayerJoinListener implements Listener, Messageable {
   public void onPlayerJoin(PlayerJoinEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
+
+    if (!user.getName().isPresent()) {
+      user.setName(player.getName());
+    }
 
     event.setJoinMessage(fixColor(StringUtils.replace(this.config.getJoinFormat(), "%player%", player.getName())));
 

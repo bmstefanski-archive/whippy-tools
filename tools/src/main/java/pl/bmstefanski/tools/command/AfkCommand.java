@@ -30,7 +30,7 @@ public class AfkCommand implements Messageable, CommandExecutor {
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
     Player player = (Player) commandSender;
 
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (user.isAfk()) {
       user.setAfk(false);

@@ -19,7 +19,7 @@ public class EntityPickupItemListener implements Listener {
   public void onPlayerPickup(EntityPickupItemEvent event) {
 
     Player player = (Player) event.getEntity();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (event.getEntity() instanceof Player) {
       if (this.config.getDisableItemPickupWhileAfk()) {

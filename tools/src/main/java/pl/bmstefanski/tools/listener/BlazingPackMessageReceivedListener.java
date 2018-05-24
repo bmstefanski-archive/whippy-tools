@@ -39,7 +39,7 @@ public class BlazingPackMessageReceivedListener implements PluginMessageListener
   @Override
   public void onPluginMessageReceived(String string, Player player, byte[] bytes) {
 
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (string.contains("CPack")) {
 

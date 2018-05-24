@@ -27,6 +27,7 @@ package pl.bmstefanski.tools.impl;
 import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.diorite.config.ConfigManager;
@@ -66,10 +67,15 @@ public class ToolsImpl extends JavaPlugin implements Tools {
 
   public ToolsImpl() {
     instance = this;
+
   }
 
   @Override
   public void onEnable() {
+    this.initialize();
+  }
+
+  private void initialize() {
     this.injector = new InjectorBuilder().addDefaultHandlers("pl.bmstefanski.tools").create();
     this.pluginConfig = ConfigManager.createInstance(PluginConfig.class);
     this.messages = ConfigManager.createInstance(Messages.class);
@@ -90,14 +96,16 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     this.injector.register(PluginConfig.class, this.pluginConfig);
     this.injector.register(Messages.class, this.messages);
     this.injector.register(ExecutorService.class, this.executorService);
+    this.injector.register(Server.class, this.getServer());
 
     this.userManager = this.injector.getSingleton(UserManagerImpl.class);
     this.injector.register(UserManager.class, this.userManager);
 
     this.resource = this.injector.getSingleton(UserResourceImpl.class);
+    this.injector.register(Resource.class, this.resource);
+
     this.resource.checkTable();
     this.resource.load();
-    this.injector.register(Resource.class, this.resource);
 
     this.bukkitCommands = new BukkitCommands(this);
 
@@ -112,7 +120,8 @@ public class ToolsImpl extends JavaPlugin implements Tools {
       PlayerDeathListener.class,
       PlayerLoginListener.class,
       PlayerInteractListener.class,
-      EntityPickupItemListener.class
+      EntityPickupItemListener.class,
+      PlayerPreLoginListener.class
     );
 
     this.registerCommands(
@@ -149,7 +158,6 @@ public class ToolsImpl extends JavaPlugin implements Tools {
       WhoisCommand.class,
       WorkbenchCommand.class
     );
-
   }
 
   @Override

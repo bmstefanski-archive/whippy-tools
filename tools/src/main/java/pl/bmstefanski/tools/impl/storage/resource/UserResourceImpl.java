@@ -1,6 +1,7 @@
 package pl.bmstefanski.tools.impl.storage.resource;
 
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.basic.UserImpl;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
 import pl.bmstefanski.tools.impl.storage.StatementFactory;
@@ -17,8 +18,14 @@ import java.util.function.Consumer;
 
 public class UserResourceImpl implements Resource {
 
-  @Inject private UserManager userManager;
-  @Inject private ExecutorService executorService;
+  private final UserManager userManager;
+  private final ExecutorService executorService;
+
+  @Inject
+  UserResourceImpl(UserManager userManager, ExecutorService executorService) {
+    this.userManager = userManager;
+    this.executorService = executorService;
+  }
 
   @Override
   public void load() {
@@ -29,9 +36,14 @@ public class UserResourceImpl implements Resource {
       try {
         while (resultSet.next()) {
           UUID uniqueId = UniqueIdUtils.getUUIDFromBytes(resultSet.getBytes("uuid"));
-          User user = this.userManager.getUser(uniqueId);
 
-          user.setUUID(uniqueId);
+          User user = this.userManager.getUser(uniqueId).orElseGet(() -> {
+            User newUser = new UserImpl(uniqueId);
+            this.userManager.addUser(newUser);
+            return newUser;
+          });
+
+          user.setUniqueId(uniqueId);
           user.setName(resultSet.getString("name"));
 
           preparedStatement.close();
@@ -47,9 +59,9 @@ public class UserResourceImpl implements Resource {
   @Override
   public void save(User user) {
     try (PreparedStatement preparedStatement = StatementFactory.getStatement("players-insert")) {
-      preparedStatement.setBytes(1, UniqueIdUtils.getBytesFromUUID(user.getUUID()));
-      preparedStatement.setString(2, user.getName());
-      preparedStatement.setString(3, user.getName());
+      preparedStatement.setBytes(1, UniqueIdUtils.getBytesFromUUID(user.getUniqueId()));
+      preparedStatement.setString(2, user.getName().get());
+      preparedStatement.setString(3, user.getName().get());
       new DatabaseQueryImpl(this.executorService, preparedStatement).executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -58,7 +70,7 @@ public class UserResourceImpl implements Resource {
 
   @Override
   public void checkTable() {
-    try(PreparedStatement preparedStatement = StatementFactory.getStatement("users-table")) {
+    try (PreparedStatement preparedStatement = StatementFactory.getStatement("users-table")) {
       new DatabaseQueryImpl(this.executorService, preparedStatement).executeUpdate();
     } catch (SQLException ex) {
       ex.printStackTrace();

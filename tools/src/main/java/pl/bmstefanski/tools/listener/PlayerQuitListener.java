@@ -25,12 +25,14 @@
 package pl.bmstefanski.tools.listener;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.event.UserQuitEvent;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.Resource;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
@@ -47,7 +49,7 @@ public class PlayerQuitListener implements Listener, Messageable {
   public void onPlayerQuit(PlayerQuitEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     user.setIp(player.getAddress().getHostName());
 
@@ -56,6 +58,9 @@ public class PlayerQuitListener implements Listener, Messageable {
     if (this.config.getRemoveGodOnDisconnect() && user.isGod()) {
       user.setGod(false);
     }
+
+    UserQuitEvent userQuitEvent = new UserQuitEvent(user);
+    Bukkit.getPluginManager().callEvent(userQuitEvent);
 
     this.resource.save(user);
   }

@@ -38,7 +38,7 @@ public class MarkCommand implements CommandExecutor, Messageable {
       }
 
       Player player = (Player) commandSender;
-      User user = this.userManager.getUser(player.getUniqueId());
+      User user = this.userManager.getUser(player.getUniqueId()).get();
 
       boolean markState = !user.isMark();
       user.setMark(markState);
@@ -62,7 +62,7 @@ public class MarkCommand implements CommandExecutor, Messageable {
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-      User user = this.userManager.getUser(target.getUniqueId());
+      User user = this.userManager.getUser(target.getUniqueId()).get();
 
       boolean markState = !user.isMark();
       user.setMark(markState);
