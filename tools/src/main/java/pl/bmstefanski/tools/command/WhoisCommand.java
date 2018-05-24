@@ -80,7 +80,7 @@ public class WhoisCommand implements Messageable, CommandExecutor {
   }
 
   private String messageContent(Player player) {
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     Location location = player.getLocation();
     String playerHealth = player.getHealth() + "/20";

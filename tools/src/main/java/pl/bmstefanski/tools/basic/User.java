@@ -4,19 +4,20 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface User {
 
-  UUID getUUID();
+  UUID getUniqueId();
 
-  String getName();
+  Optional<String> getName();
 
   String getIp();
 
   Player getPlayer();
 
-  void setUUID(UUID uuid);
+  void setUniqueId(UUID uniqueId);
 
   void setName(String name);
 

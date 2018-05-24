@@ -59,7 +59,7 @@ public class BackCommand implements Messageable, CommandExecutor {
 
       Player player = (Player) commandSender;
 
-      User user = this.userManager.getUser(player.getUniqueId());
+      User user = this.userManager.getUser(player.getUniqueId()).get();
       this.userManager.teleportToLocation(user, player.getLocation());
 
       return;
@@ -73,7 +73,7 @@ public class BackCommand implements Messageable, CommandExecutor {
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-      User user = this.userManager.getUser(target.getUniqueId());
+      User user = this.userManager.getUser(target.getUniqueId()).get();
 
       target.teleport(user.getLastLocation());
     }

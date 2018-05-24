@@ -24,7 +24,7 @@ public class PlayerInteractListener implements Listener, Messageable {
   public void onPlayerInteract(PlayerInteractEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (this.config.getCancelAfkOnInteract()) {
       if (user.isGod()) {

@@ -29,13 +29,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import pl.bmstefanski.tools.basic.User;
-import pl.bmstefanski.tools.impl.ToolsImpl;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserImpl implements User {
 
-  private UUID uuid;
+  private UUID uniqueId;
   private String name;
   private String ip;
   private boolean god;
@@ -45,24 +46,29 @@ public class UserImpl implements User {
   private Location lastLocation;
   private BukkitTask bukkitTask;
 
-  public UserImpl(UUID uuid) {
-    this.uuid = uuid;
-    this.name = Bukkit.getOfflinePlayer(uuid).getName();
+  public UserImpl(UUID uniqueId) {
+    this.uniqueId = uniqueId;
+    this.name = Bukkit.getOfflinePlayer(uniqueId).getName();
+  }
+
+  public UserImpl(Player player) {
+    this.uniqueId = player.getUniqueId();
+    this.name = player.getName();
   }
 
   public UserImpl(String playerName) {
     this.name = playerName;
-    this.uuid = Bukkit.getOfflinePlayer(playerName).getUniqueId();
+    this.uniqueId = UUID.nameUUIDFromBytes(("OfflinePlayer:" + this.name).getBytes(StandardCharsets.UTF_8));
   }
 
   @Override
-  public UUID getUUID() {
-    return uuid;
+  public UUID getUniqueId() {
+    return uniqueId;
   }
 
   @Override
-  public String getName() {
-    return name;
+  public Optional<String> getName() {
+    return Optional.ofNullable(this.name);
   }
 
   @Override
@@ -76,12 +82,12 @@ public class UserImpl implements User {
       return null;
     }
 
-    return Bukkit.getPlayer(this.uuid);
+    return Bukkit.getPlayer(this.uniqueId);
   }
 
   @Override
-  public void setUUID(UUID uuid) {
-    this.uuid = uuid;
+  public void setUniqueId(UUID uniqueId) {
+    this.uniqueId = uniqueId;
   }
 
   @Override
@@ -106,11 +112,11 @@ public class UserImpl implements User {
 
   @Override
   public boolean isOnline() {
-    if (this.uuid == null) {
+    if (this.uniqueId == null) {
       return false;
     }
 
-    Player player = Bukkit.getPlayer(this.uuid);
+    Player player = Bukkit.getPlayer(this.uniqueId);
     return player != null;
   }
 

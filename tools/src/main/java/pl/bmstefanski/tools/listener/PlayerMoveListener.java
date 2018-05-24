@@ -48,7 +48,7 @@ public class PlayerMoveListener implements Listener, Messageable {
   public void onPlayerMove(PlayerMoveEvent event) {
 
     Player player = event.getPlayer();
-    User user = this.userManager.getUser(player.getUniqueId());
+    User user = this.userManager.getUser(player.getUniqueId()).get();
 
     if (!this.config.getCancelAfkOnMove() && !this.config.getFreezeAfkPlayers()) {
       event.getHandlers().unregister(this);
