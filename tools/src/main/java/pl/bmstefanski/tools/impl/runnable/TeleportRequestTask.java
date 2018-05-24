@@ -57,7 +57,7 @@ public class TeleportRequestTask implements Runnable, Messageable {
     Location lastLocation = this.user.getLastLocation();
 
     if (player.getLocation().distance(this.location) > 0.5) {
-      this.user.getBukkitTask().cancel();
+      this.user.getBukkitTask().get().cancel();
       this.user.setBukkitTask(null);
 
       sendMessage(player, this.messages.getTeleportCancelled());
@@ -66,7 +66,7 @@ public class TeleportRequestTask implements Runnable, Messageable {
 
     if (delay == 0) {
       player.teleport(lastLocation);
-      this.user.getBukkitTask().cancel();
+      this.user.getBukkitTask().get().cancel();
       this.user.setBukkitTask(null);
 
       sendMessage(player, this.messages.getTeleportSuccess());

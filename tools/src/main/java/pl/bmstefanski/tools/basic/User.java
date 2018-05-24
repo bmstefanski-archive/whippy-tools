@@ -47,7 +47,7 @@ public interface User {
 
   void setLastLocation(Location location);
 
-  BukkitTask getBukkitTask();
+  Optional<BukkitTask> getBukkitTask();
 
   void setBukkitTask(BukkitTask bukkitTask);
 
