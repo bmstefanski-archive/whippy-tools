@@ -1,10 +1,10 @@
 package pl.bmstefanski.tools.manager;
 
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.tools.basic.User;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -24,5 +24,9 @@ public interface UserManager {
   Set<User> getOnlinePlayers();
 
   void teleportToLocation(User user, Location location);
+
+  ImmutableMap<String, User> getUserNameMap();
+
+  ImmutableMap<UUID, User> getUserUniqueIdMap();
 
 }

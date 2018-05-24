@@ -168,8 +168,8 @@ public class UserImpl implements User {
   }
 
   @Override
-  public BukkitTask getBukkitTask() {
-    return this.bukkitTask;
+  public Optional<BukkitTask> getBukkitTask() {
+    return Optional.ofNullable(this.bukkitTask);
   }
 
   @Override

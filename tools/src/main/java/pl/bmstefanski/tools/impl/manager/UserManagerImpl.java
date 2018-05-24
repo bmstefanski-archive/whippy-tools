@@ -1,5 +1,6 @@
 package pl.bmstefanski.tools.impl.manager;
 
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -93,10 +94,10 @@ public class UserManagerImpl implements UserManager {
   }
 
   @Override
-  public void teleportToLocation(User user, Location location) { // todo optional throw
+  public void teleportToLocation(User user, Location location) {
     Validate.notNull(user);
 
-    if (user.getBukkitTask() != null) {
+    if (user.getBukkitTask().isPresent()) {
       String translatedMessage = ChatColor.translateAlternateColorCodes('&', this.messages.getCurrentlyTeleporting());
       user.getPlayer().sendMessage(translatedMessage);
       return;
@@ -110,6 +111,16 @@ public class UserManagerImpl implements UserManager {
     Runnable runnable = new TeleportRequestTask(this.plugin, this.messages, this.config, location, user);
     BukkitTask bukkitTask = Bukkit.getScheduler().runTaskTimer(this.plugin, runnable, 0, 20);
     user.setBukkitTask(bukkitTask);
+  }
+
+  @Override
+  public ImmutableMap<String, User> getUserNameMap() {
+    return ImmutableMap.copyOf(this.userNameMap);
+  }
+
+  @Override
+  public ImmutableMap<UUID, User> getUserUniqueIdMap() {
+    return ImmutableMap.copyOf(this.userUniqueIdMap);
   }
 
 }
