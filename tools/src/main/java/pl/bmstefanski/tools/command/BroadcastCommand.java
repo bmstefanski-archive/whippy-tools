@@ -45,7 +45,7 @@ public class BroadcastCommand implements Messageable, CommandExecutor {
 
   @Inject private Messages messages;
 
-  @Command(name = "broadcast", usage = "<action/title/subtitle/chat>", min = 2, max = 16, aliases = {"bc"})
+  @Command(name = "broadcast", usage = "<action/title/subtitle/message>", min = 2, max = 16, aliases = {"bc"})
   @Permission("tools.command.broadcast")
   @GameOnly(false)
   @Override
@@ -74,7 +74,7 @@ public class BroadcastCommand implements Messageable, CommandExecutor {
         title.send(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, Bukkit.getOnlinePlayers(), message);
         break;
 
-      case "chat":
+      case "message":
         Bukkit.broadcastMessage(fixColor(StringUtils.replace(messages.getBroadcastFormat(), "%message%", stringBuilder.toString())));
         break;
     }

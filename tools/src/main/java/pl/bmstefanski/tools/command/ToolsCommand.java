@@ -25,6 +25,7 @@
 package pl.bmstefanski.tools.command;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
 import pl.bmstefanski.commands.Messageable;
@@ -32,6 +33,8 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
@@ -54,8 +57,7 @@ public class ToolsCommand implements Messageable, CommandExecutor {
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
     String message = "&e" + plugin.getDescription().getName() + " &7" + plugin.getDescription().getVersion() +
       " by &e" + plugin.getDescription().getAuthors();
-
-    sendMessage(commandSender, message);
+    // todo
   }
 
 }
