@@ -67,7 +67,6 @@ public class ToolsImpl extends JavaPlugin implements Tools {
 
   public ToolsImpl() {
     instance = this;
-
   }
 
   @Override

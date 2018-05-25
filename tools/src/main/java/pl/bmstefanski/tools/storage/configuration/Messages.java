@@ -191,50 +191,9 @@ public interface Messages extends Config {
     return "&cMusisz wybrac tryb!";
   }
 
-  @CustomKey("ban-format")
-  default List<String> getBanFormat() {
-    return Arrays.asList(
-      "&8&m---------------------------------------------------&r",
-      "  &cZostales zbanowany przez: &e%punisher% &cdo &e%until%",
-      "  &7Odbanuj sie na: &ewww.dzienkiStary.pl",
-      "  &7Powod: %reason%",
-      "&8&m---------------------------------------------------"
-    );
-  }
-
-  @CustomKey("already-banned")
-  default String getAlreadyBanned() {
-    return "&cGracz &7%player% &cjest juz zbanowany!";
-  }
-
   @CustomKey("default-reason")
   default String getDefaultReason() {
     return "&cAdmin ma zawsze racje!";
-  }
-
-  @CustomKey("permanent-ban")
-  default String getPermanentBan() {
-    return "&cna zawsze";
-  }
-
-  @CustomKey("not-banned")
-  default String getNotBanned() {
-    return "&cGracz &7%player% &cnie jest zbanowany.";
-  }
-
-  @CustomKey("successfully-unbanned")
-  default String getSuccessfullyUnbanned() {
-    return "&cPomyslnie odbanowano gracza &7%player%";
-  }
-
-  @CustomKey("successfully-banned")
-  default String getSuccessfullyBanned() {
-    return "&cPomyslnie zbanowano gracza &7%player%";
-  }
-
-  @CustomKey("cannot-ban-yourself")
-  default String getCannotBanYourself() {
-    return "&cNie mozesz sie zbanowac!";
   }
 
   default String getTeleport() {
