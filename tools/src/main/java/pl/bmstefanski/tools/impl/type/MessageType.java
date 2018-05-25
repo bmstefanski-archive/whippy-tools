@@ -34,7 +34,7 @@ public enum MessageType {
   BROADCAST_FORMAT(getInstance().getMessages().getBroadcastFormat()),
   CLEAR(getInstance().getMessages().getClear()),
   CLEAR_OTHER(getInstance().getMessages().getClearOther()),
-  WHOIS(StringUtils.join(getInstance().getMessages().getWhois(), ",")),
+  WHOIS(StringUtils.join(getInstance().getMessages().getWhois(), "\n")),
   GAMEMODE_FAIL(getInstance().getMessages().getGamemodeFail()),
   DEFAULT_REASON(getInstance().getMessages().getDefaultReason()),
   TELEPORT(getInstance().getMessages().getTeleport()),
