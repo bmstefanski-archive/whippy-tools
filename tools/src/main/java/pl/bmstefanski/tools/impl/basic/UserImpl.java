@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public class UserImpl implements User {
 
-  private UUID uniqueId;
+  private final UUID uniqueId;
   private String name;
   private String ip;
   private boolean god;
@@ -83,11 +83,6 @@ public class UserImpl implements User {
     }
 
     return Bukkit.getPlayer(this.uniqueId);
-  }
-
-  @Override
-  public void setUniqueId(UUID uniqueId) {
-    this.uniqueId = uniqueId;
   }
 
   @Override

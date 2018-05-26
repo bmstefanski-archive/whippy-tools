@@ -17,8 +17,6 @@ public interface User {
 
   Player getPlayer();
 
-  void setUniqueId(UUID uniqueId);
-
   void setName(String name);
 
   void setIp(String ip);

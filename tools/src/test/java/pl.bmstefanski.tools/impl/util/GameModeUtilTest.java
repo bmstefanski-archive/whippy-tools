@@ -16,7 +16,7 @@ public class GameModeUtilTest {
   }
 
   @Test
-  public void shouldReturnProperEnmmFromStringValue() {
+  public void shouldReturnProperEnumFromStringValue() {
     GameMode gameMode = GamemodeUtil.parseGameMode("survival");
     GameMode newGameMode = GameMode.SURVIVAL;
 
