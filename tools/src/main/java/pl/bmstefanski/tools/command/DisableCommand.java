@@ -32,11 +32,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class DisableCommand implements Messageable, CommandExecutor {
+public class DisableCommand implements CommandExecutor {
 
   private final Tools plugin;
   private final Messages messages;
@@ -52,8 +54,8 @@ public class DisableCommand implements Messageable, CommandExecutor {
   @GameOnly(false)
   @Override
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
-    plugin.getServer().getPluginManager().disablePlugin(plugin);
-    sendMessage(commandSender, messages.getSuccessfullyDisabled());
+    MessageBundle.create(MessageType.SUCCESSFULLY_DISABLED).sendTo(commandSender);
+    this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
   }
 
 }

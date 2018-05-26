@@ -11,11 +11,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class TpHereCommand implements Messageable, CommandExecutor {
+public class TpHereCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -26,18 +28,20 @@ public class TpHereCommand implements Messageable, CommandExecutor {
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
     if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+        .withField("player", commandArguments.getParam(0))
+        .sendTo(commandSender);
       return;
     }
 
     Player player = (Player) commandSender;
     Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
     target.teleport(player);
-    sendMessage(player, StringUtils.replaceEach(messages.getTpSuccess(),
-      new String[]{"%player%", "%target%"},
-      new String[]{target.getName(), player.getName()}));
 
+    MessageBundle.create(MessageType.TP_SUCCESS)
+      .withField("player", player.getName())
+      .withField("target", target.getName())
+      .sendTo(player);
   }
 
 }

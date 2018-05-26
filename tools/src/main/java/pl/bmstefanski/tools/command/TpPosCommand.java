@@ -11,13 +11,14 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
-public class TpPosCommand implements Messageable, CommandExecutor {
+public class TpPosCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -27,41 +28,47 @@ public class TpPosCommand implements Messageable, CommandExecutor {
   @Override
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
-    int x = ParsingUtils.parseInt(commandArguments.getParam(0));
-    int y = ParsingUtils.parseInt(commandArguments.getParam(1));
-    int z = ParsingUtils.parseInt(commandArguments.getParam(2));
+    int x = ParsingUtil.parseInt(commandArguments.getParam(0));
+    int y = ParsingUtil.parseInt(commandArguments.getParam(1));
+    int z = ParsingUtil.parseInt(commandArguments.getParam(2));
 
     if (commandArguments.getSize() == 3) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
-
       Location location = new Location(player.getWorld(), x, y, z);
       player.teleport(location);
-      sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
-        new String[]{"%player%", "%x%", "%y%", "%z%"},
-        new String[]{player.getName(), x + "", y + "", z + ""}));
 
+      MessageBundle.create(MessageType.TPPOS)
+        .withField("player", player.getName())
+        .withField("x", x + "")
+        .withField("y", y + "")
+        .withField("z", z + "")
+        .sendTo(player);
       return;
     }
 
     if (Bukkit.getPlayer(commandArguments.getParam(3)) == null) {
-      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(3)));
+      MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+        .withField("player", commandArguments.getParam(3))
+        .sendTo(commandSender);
       return;
     }
 
     Player player = Bukkit.getPlayer(commandArguments.getParam(3));
     Location location = new Location(player.getWorld(), x, y, z);
-
     player.teleport(location);
-    sendMessage(player, StringUtils.replaceEach(messages.getTppos(),
-      new String[]{"%player%", "%x%", "%y%", "%z%"},
-      new String[]{player.getName(), x + "", y + "", z + ""}));
 
+    MessageBundle.create(MessageType.TPPOS)
+      .withField("player", player.getName())
+      .withField("x", x + "")
+      .withField("y", y + "")
+      .withField("z", z + "")
+      .sendTo(player);
   }
 
 }

@@ -2,12 +2,11 @@ package pl.bmstefanski.tools.impl.util.message;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.tools.basic.User;
 
 import java.util.Collection;
-
-import static pl.bmstefanski.tools.impl.util.MessageUtil.*;
 
 public final class MessageBuilder {
 
@@ -25,10 +24,10 @@ public final class MessageBuilder {
     return this;
   }
 
-  public void sendTo(Player player) {
-    Validate.notNull(player, "Player cannot be null!");
+  public void sendTo(CommandSender commandSender) {
+    Validate.notNull(commandSender, "Command sender cannot be null!");
 
-    player.sendMessage(colored(this.messageContent));
+    commandSender.sendMessage(this.messageContent);
   }
 
   public void sendTo(Collection<? extends Player> players) {

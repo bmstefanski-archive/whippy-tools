@@ -24,25 +24,26 @@
 
 package pl.bmstefanski.tools.listener;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
 
-public class PlayerMoveListener implements Listener, Messageable {
+public class PlayerMoveListener implements Listener {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
   @Inject private PluginConfig config;
+  @Inject private Server server;
 
   @EventHandler
   public void onPlayerMove(PlayerMoveEvent event) {
@@ -65,9 +66,10 @@ public class PlayerMoveListener implements Listener, Messageable {
 
       if (this.config.getCancelAfkOnMove() && event.getFrom() == event.getTo()) {
         user.setAfk(false);
-        sendMessage(player, this.messages.getNoLongerAfk());
-        Bukkit.getOnlinePlayers().forEach(p ->
-          sendMessage(p, StringUtils.replace(this.messages.getNoLongerAfkGlobal(), "%player%", player.getName())));
+        MessageBundle.create(MessageType.NO_LONGER_AFK).sendTo(player);
+        MessageBundle.create(MessageType.NO_LONGER_AFK_GLOBAL)
+          .withField("player", player.getName())
+          .sendTo(this.server.getOnlinePlayers());
       }
     }
   }

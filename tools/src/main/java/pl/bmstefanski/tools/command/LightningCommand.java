@@ -36,11 +36,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class LightningCommand implements Messageable, CommandExecutor {
+public class LightningCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -53,24 +55,24 @@ public class LightningCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
       World world = player.getWorld();
-
       world.strikeLightning(player.getLocation());
 
-      sendMessage(player, messages.getStruck());
-
+      MessageBundle.create(MessageType.STRUCK).sendTo(player);
       return;
     }
 
     if (commandSender.hasPermission("tools.command.lightning.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
@@ -79,8 +81,10 @@ public class LightningCommand implements Messageable, CommandExecutor {
       World world = target.getWorld();
       world.strikeLightning(target.getLocation());
 
-      sendMessage(commandSender, StringUtils.replace(messages.getStruckOther(), "%player%", target.getName()));
-      sendMessage(target, messages.getStruck());
+      MessageBundle.create(MessageType.STRUCK_OTHER)
+        .withField("player", target.getName())
+        .sendTo(commandSender);
+      MessageBundle.create(MessageType.STRUCK).sendTo(target);
     }
   }
 

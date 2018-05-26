@@ -27,7 +27,7 @@ package pl.bmstefanski.tools.impl.util;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-public final class UniqueIdUtils {
+public final class UniqueIdUtil {
 
   public static byte[] getBytesFromUUID(UUID uuid) {
     ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
@@ -45,7 +45,7 @@ public final class UniqueIdUtils {
     return new UUID(high, low);
   }
 
-  private UniqueIdUtils() {
+  private UniqueIdUtil() {
   }
 
 }

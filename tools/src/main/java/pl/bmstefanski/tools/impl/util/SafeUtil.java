@@ -24,38 +24,28 @@
 
 package pl.bmstefanski.tools.impl.util;
 
-import pl.bmstefanski.tools.Tools;
-import pl.bmstefanski.tools.impl.ToolsImpl;
+public final class SafeUtil {
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-
-public final class ParsingUtils {
-
-  private static final Tools TOOLS;
-
-  static {
-    TOOLS = ToolsImpl.getInstance();
+  private static void reportUnsafe(Throwable throwable) {
+    System.out.println(throwable.toString());
   }
 
-  public static String parseBoolean(boolean bool) {
-    return bool ? TOOLS.getMessages().getBooleanOn() : TOOLS.getMessages().getBooleanOff();
+  public static <T> T safeInit(SafeInitializer<T> initializer) {
+    try {
+      return initializer.initialize();
+    } catch (Exception ex) {
+      reportUnsafe(ex);
+      return null;
+    }
   }
 
-  public static String parseLong(long time) {
-    LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  @FunctionalInterface
+  public interface SafeInitializer<T> {
 
-    return date.format(formatter);
+    T initialize() throws Exception;
   }
 
-  public static int parseInt(String integer) {
-    return Integer.parseInt(integer);
-  }
-
-  private ParsingUtils() {
+  private SafeUtil() {
   }
 
 }

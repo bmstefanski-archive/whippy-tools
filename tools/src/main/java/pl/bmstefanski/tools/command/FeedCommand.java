@@ -35,11 +35,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class FeedCommand implements Messageable, CommandExecutor {
+public class FeedCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -52,22 +54,23 @@ public class FeedCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
       player.setFoodLevel(20);
 
-      sendMessage(player, messages.getFed());
-
+      MessageBundle.create(MessageType.FED).sendTo(player);
       return;
     }
 
     if (commandSender.hasPermission("tools.command.feed.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
@@ -75,8 +78,10 @@ public class FeedCommand implements Messageable, CommandExecutor {
 
       target.setFoodLevel(20);
 
-      sendMessage(target, messages.getFed());
-      sendMessage(commandSender, StringUtils.replace(messages.getFedOther(), "%player%", target.getName()));
+      MessageBundle.create(MessageType.FED).sendTo(target);
+      MessageBundle.create(MessageType.FED_OTHER)
+        .withField("player", target.getName())
+        .sendTo(commandSender);
     }
   }
 

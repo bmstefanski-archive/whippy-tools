@@ -28,7 +28,7 @@ public enum MessageType {
   SPAWN_FAILED(getInstance().getMessages().getSpawnFailed()),
   TELEPORT_CANCELLED(getInstance().getMessages().getTeleportCancelled()),
   CURRENTLY_TELEPORTING(getInstance().getMessages().getCurrentlyTeleporting()),
-  GOD_SWITHCED(getInstance().getMessages().getGodSwitched()),
+  GOD_SWITCHED(getInstance().getMessages().getGodSwitched()),
   GOD_SWITCHED_OTHER(getInstance().getMessages().getGodSwitchedOther()),
   TELEPORT_SUCCESS(getInstance().getMessages().getTeleportSuccess()),
   BROADCAST_FORMAT(getInstance().getMessages().getBroadcastFormat()),

@@ -35,11 +35,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class RealnameCommand implements Messageable, CommandExecutor {
+public class RealnameCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -52,31 +54,36 @@ public class RealnameCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
 
-      sendMessage(player, StringUtils.replace(messages.getRealname(), "%nickname%", player.getName()));
-
+      MessageBundle.create(MessageType.REALNAME)
+        .withField("nickname", player.getName())
+        .sendTo(player);
       return;
     }
 
     if (commandSender.hasPermission("tools.command.realname.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
-      sendMessage(target, StringUtils.replace(messages.getRealname(), "%nickname%", target.getName()));
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getRealnameOther(),
-        new String[]{"%player%", "%nickname%"},
-        new String[]{target.getName(), target.getName()}
-      ));
+      MessageBundle.create(MessageType.REALNAME)
+        .withField("nickname", target.getName())
+        .sendTo(target);
+      MessageBundle.create(MessageType.REALNAME_OTHER)
+        .withField("player", target.getName())
+        .withField("nickname", target.getName())
+        .sendTo(commandSender);
     }
   }
 

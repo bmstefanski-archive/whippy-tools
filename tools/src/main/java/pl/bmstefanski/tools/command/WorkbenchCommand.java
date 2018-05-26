@@ -35,11 +35,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class WorkbenchCommand implements Messageable, CommandExecutor {
+public class WorkbenchCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -57,7 +59,9 @@ public class WorkbenchCommand implements Messageable, CommandExecutor {
     }
 
     if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-      sendMessage(player, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+        .withField("player", commandArguments.getParam(0))
+        .sendTo(player);
       return;
     }
 

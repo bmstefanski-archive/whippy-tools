@@ -12,11 +12,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class DayCommand implements Messageable, CommandExecutor {
+public class DayCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -28,27 +30,33 @@ public class DayCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
       player.getWorld().setTime(24000);
 
-      sendMessage(player, StringUtils.replace(messages.getDay(), "%world%", player.getWorld().getName()));
+      MessageBundle.create(MessageType.DAY)
+        .withField("world", player.getWorld().getName())
+        .sendTo(player);
 
       return;
     }
 
     if (Bukkit.getWorld(commandArguments.getParam(0)) == null) {
-      sendMessage(commandSender, StringUtils.replace(messages.getWorldNotFound(), "%world%", commandArguments.getParam(0)));
+      MessageBundle.create(MessageType.WORLD_NOT_FOUND)
+        .withField("world", commandArguments.getParam(0))
+        .sendTo(commandSender);
       return;
     }
 
     World world = Bukkit.getWorld(commandArguments.getParam(0));
     world.setTime(24000);
 
-    sendMessage(commandSender, StringUtils.replace(messages.getDay(), "%world%", world.getName()));
+    MessageBundle.create(MessageType.DAY)
+      .withField("world", world.getName())
+      .sendTo(commandSender);
   }
 
 }

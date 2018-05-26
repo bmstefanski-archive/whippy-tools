@@ -31,18 +31,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
-public class WhoisCommand implements Messageable, CommandExecutor {
+public class WhoisCommand implements CommandExecutor {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
@@ -56,30 +57,32 @@ public class WhoisCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
 
-      sendMessage(player, messageContent(player));
+      MessageBundle.create(this.message(player)).sendTo(player);
       return;
     }
 
     if (commandSender.hasPermission("tools.command.whois.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
-      sendMessage(commandSender, messageContent(target));
+      MessageBundle.create(this.message(target)).sendTo(commandSender);
     }
   }
 
-  private String messageContent(Player player) {
+  private String message(Player player) {
     User user = this.userManager.getUser(player.getUniqueId()).get();
 
     Location location = player.getLocation();
@@ -91,15 +94,15 @@ public class WhoisCommand implements Messageable, CommandExecutor {
       + location.getBlockX() + ", "
       + location.getBlockY() + ", "
       + location.getBlockZ() + ")";
-    String playerJoin = ParsingUtils.parseLong(player.getFirstPlayed());
-    String playerLast = user.isOnline() ? "online" : ParsingUtils.parseLong(player.getLastPlayed());
-    String whois = listToString(messages.getWhois());
+    String playerJoin = ParsingUtil.parseLong(player.getFirstPlayed());
+    String playerLast = user.isOnline() ? "online" : ParsingUtil.parseLong(player.getLastPlayed());
+    String whois = MessageBundle.create(MessageType.WHOIS).toString();
 
     return StringUtils.replaceEach(whois,
       new String[]{"%nickname%", "%uuid%", "%ip%", "%registered%", "%last%", "%location%", "%hp%", "%hunger%", "%gamemode%", "%god%", "%fly%"},
       new String[]{player.getName(), player.getUniqueId().toString(), player.getAddress().getAddress().toString(),
-        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtils.parseBoolean(user.isGod()),
-        ParsingUtils.parseBoolean(player.isFlying())
+        playerJoin, playerLast, playerLocation, playerHealth, playerFoodLevel, playerGamemode, ParsingUtil.parseBoolean(user.isGod()),
+        ParsingUtil.parseBoolean(player.isFlying())
       });
   }
 

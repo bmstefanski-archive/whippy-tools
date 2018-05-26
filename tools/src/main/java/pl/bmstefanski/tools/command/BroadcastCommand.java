@@ -24,26 +24,20 @@
 
 package pl.bmstefanski.tools.command;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
-import pl.bmstefanski.tools.storage.configuration.Messages;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.impl.util.title.TitleSenderImpl;
 import pl.bmstefanski.tools.impl.util.reflect.transition.PacketPlayOutTitle;
 import pl.bmstefanski.tools.impl.util.title.TitleSender;
 
-import javax.inject.Inject;
-
-public class BroadcastCommand implements Messageable, CommandExecutor {
-
-  @Inject private Messages messages;
+public class BroadcastCommand implements CommandExecutor {
 
   @Command(name = "broadcast", usage = "<action/title/subtitle/message>", min = 2, max = 16, aliases = {"bc"})
   @Permission("tools.command.broadcast")
@@ -75,7 +69,9 @@ public class BroadcastCommand implements Messageable, CommandExecutor {
         break;
 
       case "message":
-        Bukkit.broadcastMessage(fixColor(StringUtils.replace(messages.getBroadcastFormat(), "%message%", stringBuilder.toString())));
+        MessageBundle.create(MessageType.BROADCAST_FORMAT)
+          .withField("message", stringBuilder.toString())
+          .sendTo(Bukkit.getOnlinePlayers());
         break;
     }
   }

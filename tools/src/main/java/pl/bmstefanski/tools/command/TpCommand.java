@@ -11,11 +11,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class TpCommand implements Messageable, CommandExecutor {
+public class TpCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -28,38 +30,41 @@ public class TpCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 1) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
       player.teleport(target);
-      sendMessage(commandSender, messages.getTeleportSuccess());
 
+      MessageBundle.create(MessageType.TELEPORT_SUCCESS).sendTo(commandSender);
       return;
     }
 
     if (Bukkit.getPlayer(commandArguments.getParam(0)) == null || Bukkit.getPlayer(commandArguments.getParam(1)) == null) {
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getTpFailed(),
-        new String[]{"%player%", "%target%"},
-        new String[]{commandArguments.getParam(0), commandArguments.getParam(1)}));
+      MessageBundle.create(MessageType.TP_FAILED)
+        .withField("player", commandArguments.getParam(0))
+        .withField("target", commandArguments.getParam(1))
+        .sendTo(commandSender);
       return;
     }
 
     Player player = Bukkit.getPlayer(commandArguments.getParam(0));
     Player target = Bukkit.getPlayer(commandArguments.getParam(1));
-
     player.teleport(target);
-    sendMessage(commandSender, StringUtils.replaceEach(messages.getTpSuccess(),
-      new String[]{"%player%", "%target%"},
-      new String[]{player.getName(), target.getName()}));
+
+    MessageBundle.create(MessageType.TP_SUCCESS)
+      .withField("player", player.getName())
+      .withField("target", target.getName())
+      .sendTo(commandSender);
   }
 
 }

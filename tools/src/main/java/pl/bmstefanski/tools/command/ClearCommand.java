@@ -35,11 +35,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class ClearCommand implements Messageable, CommandExecutor {
+public class ClearCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -52,29 +54,31 @@ public class ClearCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
       player.getInventory().clear();
 
-      sendMessage(player, messages.getClear());
-
+      MessageBundle.create(MessageType.CLEAR).sendTo(player);
       return;
     }
 
     if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+        .withField("player", commandArguments.getParam(0))
+        .sendTo(commandSender);
       return;
     }
 
     Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
     target.getInventory().clear();
 
-    sendMessage(target, messages.getClear());
-    sendMessage(commandSender, StringUtils.replace(messages.getClearOther(), "%player%", target.getName()));
+    MessageBundle.create(MessageType.CLEAR).sendTo(target);
+    MessageBundle.create(MessageType.CLEAR_OTHER)
+      .withField("player", target.getName())
+      .sendTo(commandSender);
   }
 
 }

@@ -13,13 +13,15 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
-public class MarkCommand implements CommandExecutor, Messageable {
+public class MarkCommand implements CommandExecutor {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
@@ -33,7 +35,7 @@ public class MarkCommand implements CommandExecutor, Messageable {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
@@ -43,7 +45,9 @@ public class MarkCommand implements CommandExecutor, Messageable {
       boolean markState = !user.isMark();
       user.setMark(markState);
 
-      sendMessage(player, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
+      MessageBundle.create(MessageType.MARKED)
+        .withField("state", ParsingUtil.parseBoolean(markState))
+        .sendTo(player);
 
       if (markState) {
         player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));
@@ -57,7 +61,9 @@ public class MarkCommand implements CommandExecutor, Messageable {
     if (commandSender.hasPermission("tools.command.mark.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
@@ -67,11 +73,13 @@ public class MarkCommand implements CommandExecutor, Messageable {
       boolean markState = !user.isMark();
       user.setMark(markState);
 
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getMarkedOther(),
-        new String[]{"%state%", "%player%"},
-        new String[]{ParsingUtils.parseBoolean(markState), target.getName()}));
-
-      sendMessage(target, StringUtils.replace(messages.getMarked(), "%state%", ParsingUtils.parseBoolean(markState)));
+      MessageBundle.create(MessageType.MARKED_OTHER)
+        .withField("state", ParsingUtil.parseBoolean(markState))
+        .withField("player", target.getName())
+        .sendTo(commandSender);
+      MessageBundle.create(MessageType.MARKED)
+        .withField("state", ParsingUtil.parseBoolean(markState))
+        .sendTo(target);
 
       if (markState) {
         target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 1, false, false));

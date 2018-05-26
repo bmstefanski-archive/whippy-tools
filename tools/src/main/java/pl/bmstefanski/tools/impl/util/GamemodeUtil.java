@@ -24,28 +24,27 @@
 
 package pl.bmstefanski.tools.impl.util;
 
-public final class SafeUtils {
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.GameMode;
 
-  private static void reportUnsafe(Throwable throwable) {
-    System.out.println(throwable.toString());
-  }
+public final class GamemodeUtil {
 
-  public static <T> T safeInit(SafeInitializer<T> initializer) {
-    try {
-      return initializer.initialize();
-    } catch (Exception ex) {
-      reportUnsafe(ex);
-      return null;
+  private static GameMode getGameMode(String string) {
+    for (GameMode mode : GameMode.values()) {
+      if (mode.name().toLowerCase().contains(string.toLowerCase())) {
+        return mode;
+      }
     }
+    return null;
   }
 
-  @FunctionalInterface
-  public interface SafeInitializer<T> {
-
-    T initialize() throws Exception;
+  public static GameMode parseGameMode(String string) {
+    if (StringUtils.isNumeric(string)) {
+      return GameMode.getByValue(Integer.valueOf(string));
+    } else return getGameMode(string);
   }
 
-  private SafeUtils() {
+  private GamemodeUtil() {
   }
 
 }

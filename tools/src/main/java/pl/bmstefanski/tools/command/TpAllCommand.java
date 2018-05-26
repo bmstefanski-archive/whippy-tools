@@ -11,11 +11,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class TpAllCommand implements Messageable, CommandExecutor {
+public class TpAllCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -28,27 +30,28 @@ public class TpAllCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 1) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(0));
-
       Bukkit.getOnlinePlayers().forEach(player -> player.teleport(target));
-      sendMessage(target, messages.getTeleportSuccess());
 
+      MessageBundle.create(MessageType.TELEPORT_SUCCESS).sendTo(target);
       return;
     }
 
     if (!(commandSender instanceof Player)) {
-      sendMessage(commandSender, messages.getOnlyPlayer());
+      MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
       return;
     }
 
     Player target = (Player) commandSender;
 
     Bukkit.getOnlinePlayers().forEach(player -> player.teleport(target));
-    sendMessage(target, messages.getTeleportSuccess());
+    MessageBundle.create(MessageType.TELEPORT_SUCCESS).sendTo(target);
   }
 
 }

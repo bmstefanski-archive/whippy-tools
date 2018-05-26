@@ -35,12 +35,14 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class BackCommand implements Messageable, CommandExecutor {
+public class BackCommand implements CommandExecutor {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
@@ -53,14 +55,14 @@ public class BackCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
 
       User user = this.userManager.getUser(player.getUniqueId()).get();
-      sendMessage(player, this.messages.getTeleport());
+      MessageBundle.create(MessageType.TELEPORT).sendTo(player);
       this.userManager.teleportToLocation(user, player.getLocation());
 
       return;
@@ -69,7 +71,9 @@ public class BackCommand implements Messageable, CommandExecutor {
     if (commandSender.hasPermission("tools.command.back.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 

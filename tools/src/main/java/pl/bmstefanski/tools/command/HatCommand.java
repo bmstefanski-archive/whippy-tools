@@ -12,11 +12,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class HatCommand implements Messageable, CommandExecutor {
+public class HatCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -34,7 +36,7 @@ public class HatCommand implements Messageable, CommandExecutor {
     item.setAmount(1);
 
     if (playerInventory.getItemInMainHand().getType().equals(Material.AIR)) {
-      sendMessage(player, messages.getHatCantBeAir());
+      MessageBundle.create(MessageType.HAT_CANT_BE_AIR).sendTo(player);
       return;
     }
 
@@ -42,7 +44,8 @@ public class HatCommand implements Messageable, CommandExecutor {
       playerInventory.setHelmet(item);
       playerInventory.removeItem(item);
       player.updateInventory();
-      sendMessage(player, messages.getHat());
+
+      MessageBundle.create(MessageType.HAT).sendTo(player);
       return;
     }
 
@@ -50,7 +53,8 @@ public class HatCommand implements Messageable, CommandExecutor {
     playerInventory.setHelmet(item);
     playerInventory.removeItem(item);
     player.updateInventory();
-    sendMessage(player, messages.getHat());
+
+    MessageBundle.create(MessageType.HAT).sendTo(player);
   }
 
 }
