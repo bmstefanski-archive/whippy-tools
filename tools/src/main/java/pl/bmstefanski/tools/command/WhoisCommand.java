@@ -38,14 +38,12 @@ import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
 public class WhoisCommand implements CommandExecutor {
 
-  @Inject private Messages messages;
   @Inject private UserManager userManager;
 
   @Command(name = "whois", usage = "[player]", max = 1)

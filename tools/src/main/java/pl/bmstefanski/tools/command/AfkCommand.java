@@ -12,7 +12,6 @@ import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
@@ -20,7 +19,6 @@ import javax.inject.Inject;
 public class AfkCommand implements CommandExecutor {
 
   @Inject private UserManager userManager;
-  @Inject private Messages messages;
   @Inject private PluginConfig config;
   @Inject private Server server;
 

@@ -24,27 +24,22 @@
 
 package pl.bmstefanski.tools.command;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 
 public class ListCommand implements CommandExecutor {
 
-  @Inject private Messages messages;
   @Inject private UserManager userManager;
 
   @Command(name = "list", usage = "[full/basic]", min = 1, max = 1)

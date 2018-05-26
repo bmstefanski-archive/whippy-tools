@@ -24,7 +24,6 @@
 
 package pl.bmstefanski.tools.command;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -35,14 +34,9 @@ import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
-import javax.inject.Inject;
-
 public class FlyCommand implements CommandExecutor {
-
-  @Inject private Messages messages;
 
   @Command(name = "fly", usage = "[player]", max = 1)
   @Permission("tools.command.fly")
