@@ -29,14 +29,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
 
-public class PlayerJoinListener implements Listener, Messageable {
+import static pl.bmstefanski.tools.impl.util.MessageUtil.*;
+
+public class PlayerJoinListener implements Listener {
 
   @Inject private UserManager userManager;
   @Inject private PluginConfig config;
@@ -51,7 +52,7 @@ public class PlayerJoinListener implements Listener, Messageable {
       user.setName(player.getName());
     }
 
-    event.setJoinMessage(fixColor(StringUtils.replace(this.config.getJoinFormat(), "%player%", player.getName())));
+    event.setJoinMessage(colored(StringUtils.replace(this.config.getJoinFormat(), "%player%", player.getName())));
 
     user.setLastLocation(player.getLocation());
 

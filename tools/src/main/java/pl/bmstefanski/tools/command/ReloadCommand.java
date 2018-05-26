@@ -33,11 +33,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class ReloadCommand implements Messageable, CommandExecutor {
+public class ReloadCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -51,7 +53,9 @@ public class ReloadCommand implements Messageable, CommandExecutor {
     long elapsedTime = (System.currentTimeMillis() - startedTime);
     float elapsedTimeSecond = elapsedTime / 1000F;
 
-    sendMessage(commandSender, StringUtils.replace(messages.getSuccessfullyReloaded(), "%time%", elapsedTimeSecond + ""));
+    MessageBundle.create(MessageType.SUCCESSFULLY_RELOADED)
+      .withField("time", elapsedTimeSecond + "")
+      .sendTo(commandSender);
   }
 
 }

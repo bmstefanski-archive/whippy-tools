@@ -24,27 +24,38 @@
 
 package pl.bmstefanski.tools.impl.util;
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.GameMode;
+import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.ToolsImpl;
 
-public final class GamemodeUtils {
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
-  private static GameMode getGameMode(String string) {
-    for (GameMode mode : GameMode.values()) {
-      if (mode.name().toLowerCase().contains(string.toLowerCase())) {
-        return mode;
-      }
-    }
-    return null;
+public final class ParsingUtil {
+
+  private static final Tools TOOLS;
+
+  static {
+    TOOLS = ToolsImpl.getInstance();
   }
 
-  public static GameMode parseGameMode(String string) {
-    if (StringUtils.isNumeric(string)) {
-      return GameMode.getByValue(Integer.valueOf(string));
-    } else return getGameMode(string);
+  public static String parseBoolean(boolean bool) {
+    return bool ? TOOLS.getMessages().getBooleanOn() : TOOLS.getMessages().getBooleanOff();
   }
 
-  private GamemodeUtils() {
+  public static String parseLong(long time) {
+    LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("Europe/Warsaw"));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    return date.format(formatter);
+  }
+
+  public static int parseInt(String integer) {
+    return Integer.parseInt(integer);
+  }
+
+  private ParsingUtil() {
   }
 
 }

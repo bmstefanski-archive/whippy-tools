@@ -12,11 +12,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class RepairCommand implements Messageable, CommandExecutor {
+public class RepairCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -29,17 +31,20 @@ public class RepairCommand implements Messageable, CommandExecutor {
     ItemStack item = player.getInventory().getItemInMainHand();
 
     if (item.getType() == Material.AIR) {
-      sendMessage(player, messages.getCannotRepair());
+      MessageBundle.create(MessageType.CANNOT_REPAIR).sendTo(player);
       return;
     }
 
     if (item.getDurability() == item.getType().getMaxDurability()) {
-      sendMessage(player, messages.getCannotRepairFull());
+      MessageBundle.create(MessageType.CANNOT_REPAIR_FULL).sendTo(player);
       return;
     }
 
     item.setDurability((short) 0);
-    sendMessage(player, StringUtils.replace(messages.getRepaired(), "%item%", item.getType().name().toLowerCase()));
+
+    MessageBundle.create(MessageType.REPAIRED)
+      .withField("item", item.getType().name().toLowerCase())
+      .sendTo(player);
   }
 
 }

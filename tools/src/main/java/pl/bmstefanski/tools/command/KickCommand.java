@@ -6,16 +6,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class KickCommand implements Messageable, CommandExecutor {
+import static pl.bmstefanski.tools.impl.util.MessageUtil.*;
+
+public class KickCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -26,23 +28,25 @@ public class KickCommand implements Messageable, CommandExecutor {
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
 
     if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-      sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+      MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+        .withField("player", commandArguments.getParam(0))
+        .sendTo(commandSender);
       return;
     }
 
     Player target = Bukkit.getPlayer(commandArguments.getParam(0));
 
     if (commandSender.getName().equals(target.getName())) {
-      sendMessage(commandSender, messages.getCannotKickYourself());
+      MessageBundle.create(MessageType.CANNOT_KICK_YOURSELF).sendTo(commandSender);
       return;
     }
 
     String reason = "";
 
     if (commandArguments.getSize() == 1) {
-      reason = fixColor(messages.getDefaultReason());
+      reason = colored(messages.getDefaultReason());
     } else if (commandArguments.getSize() > 1)
-      reason = fixColor(StringUtils.join(commandArguments.getParams().toArray(), " ", 1, commandArguments.getArgs()));
+      reason = colored(StringUtils.join(commandArguments.getParams().toArray(), " ", 1, commandArguments.getArgs()));
 
     target.kickPlayer(reason);
   }

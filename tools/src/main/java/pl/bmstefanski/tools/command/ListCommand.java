@@ -24,6 +24,7 @@
 
 package pl.bmstefanski.tools.command;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -33,13 +34,15 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 
-public class ListCommand implements Messageable, CommandExecutor {
+public class ListCommand implements CommandExecutor {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
@@ -54,11 +57,14 @@ public class ListCommand implements Messageable, CommandExecutor {
       int playersOnlineSize = this.userManager.getOnlinePlayers().size();
       int maxPlayers = Bukkit.getMaxPlayers();
 
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getListBasic(),
-        new String[]{"%online%", "%max%"},
-        new String[]{playersOnlineSize + "", maxPlayers + ""}));
+      MessageBundle.create(MessageType.LIST_BASIC)
+        .withField("online", playersOnlineSize + "")
+        .withField("max", maxPlayers + "")
+        .sendTo(commandSender);
     } else if (commandArguments.getParam(0).equalsIgnoreCase("full")) {
-      sendMessage(commandSender, StringUtils.replace(messages.getListFull(), "%online%", Arrays.toString(this.userManager.getOnlinePlayers().toArray())));
+      MessageBundle.create(MessageType.LIST_FULL)
+        .withField("online", Arrays.toString(this.userManager.getOnlinePlayers().toArray()))
+        .sendTo(commandSender);
     }
   }
 

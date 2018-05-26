@@ -30,17 +30,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
-public class FlyCommand implements Messageable, CommandExecutor {
+public class FlyCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -53,7 +53,7 @@ public class FlyCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
@@ -62,7 +62,9 @@ public class FlyCommand implements Messageable, CommandExecutor {
       boolean flyState = !player.isFlying();
       player.setAllowFlight(flyState);
 
-      sendMessage(player, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtils.parseBoolean(flyState)));
+      MessageBundle.create(MessageType.FLY_SWITCHED)
+        .withField("state", ParsingUtil.parseBoolean(flyState))
+        .sendTo(player);
 
       return;
     }
@@ -70,7 +72,9 @@ public class FlyCommand implements Messageable, CommandExecutor {
     if (commandSender.hasPermission("tools.command.fly.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
@@ -79,13 +83,14 @@ public class FlyCommand implements Messageable, CommandExecutor {
 
       target.setAllowFlight(flyState);
 
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getFlySwitchedOther(),
-        new String[]{"%state%", "%player%"},
-        new String[]{ParsingUtils.parseBoolean(flyState), target.getName()}));
-
-      sendMessage(target, StringUtils.replace(messages.getFlySwitched(), "%state%", ParsingUtils.parseBoolean(flyState)));
+      MessageBundle.create(MessageType.FLY_SWITCHED_OTHER)
+        .withField("state", ParsingUtil.parseBoolean(flyState))
+        .withField("player", target.getName())
+        .sendTo(commandSender);
+      MessageBundle.create(MessageType.FLY_SWITCHED)
+        .withField("state", ParsingUtil.parseBoolean(flyState))
+        .sendTo(target);
     }
-
   }
 
 }

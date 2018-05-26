@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.event.UserQuitEvent;
 import pl.bmstefanski.tools.manager.UserManager;
@@ -39,7 +38,9 @@ import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
 
-public class PlayerQuitListener implements Listener, Messageable {
+import static pl.bmstefanski.tools.impl.util.MessageUtil.*;
+
+public class PlayerQuitListener implements Listener {
 
   @Inject private UserManager userManager;
   @Inject private PluginConfig config;
@@ -53,7 +54,7 @@ public class PlayerQuitListener implements Listener, Messageable {
 
     user.setIp(player.getAddress().getHostName());
 
-    event.setQuitMessage(fixColor(StringUtils.replace(this.config.getQuitFormat(), "%player%", player.getName())));
+    event.setQuitMessage(colored(StringUtils.replace(this.config.getQuitFormat(), "%player%", player.getName())));
 
     if (this.config.getRemoveGodOnDisconnect() && user.isGod()) {
       user.setGod(false);

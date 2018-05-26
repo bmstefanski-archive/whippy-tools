@@ -39,15 +39,13 @@ import pl.bmstefanski.tools.storage.configuration.PluginConfig;
 
 import javax.inject.Inject;
 
-public class ToolsCommand implements Messageable, CommandExecutor {
+public class ToolsCommand implements CommandExecutor {
 
   private final Tools plugin;
-  private final PluginConfig config;
 
   @Inject
-  ToolsCommand(Tools plugin, PluginConfig config) {
+  ToolsCommand(Tools plugin) {
     this.plugin = plugin;
-    this.config = config;
   }
 
   @Command(name = "tools")
@@ -57,7 +55,8 @@ public class ToolsCommand implements Messageable, CommandExecutor {
   public void execute(CommandSender commandSender, CommandArguments commandArguments) {
     String message = "&e" + plugin.getDescription().getName() + " &7" + plugin.getDescription().getVersion() +
       " by &e" + plugin.getDescription().getAuthors();
-    // todo
+
+    MessageBundle.create(message).sendTo(commandSender);
   }
 
 }

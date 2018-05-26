@@ -35,13 +35,14 @@ import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.GamemodeUtils;
+import pl.bmstefanski.tools.impl.util.GamemodeUtil;
 
 import javax.inject.Inject;
 
-public class GamemodeCommand implements Messageable, CommandExecutor {
+public class GamemodeCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -54,26 +55,29 @@ public class GamemodeCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 1) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
       Player player = (Player) commandSender;
-      GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
+      GameMode gameMode = GamemodeUtil.parseGameMode(commandArguments.getParam(0));
 
       if (gameMode == null) {
-        sendMessage(player, messages.getGamemodeFail());
+        MessageBundle.create(MessageType.GAMEMODE_FAIL).sendTo(player);
         return;
       }
 
       if (player.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase())) {
         player.setGameMode(gameMode);
-        sendMessage(player, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
+        MessageBundle.create(MessageType.GAMEMODE_SUCCESS)
+          .withField("gamemode", gameMode.toString())
+          .sendTo(player);
         return;
       }
 
-      sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
-        "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase()));
+      MessageBundle.create(MessageType.NO_PERMISSIONS)
+        .withField("permission", "tools.command.gamemode" + gameMode.toString().toLowerCase())
+        .sendTo(commandSender);
 
       return;
     }
@@ -81,34 +85,42 @@ public class GamemodeCommand implements Messageable, CommandExecutor {
     if (commandSender.hasPermission("tools.command.gamemode.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(1)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(1)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(1))
+          .sendTo(commandSender);
         return;
       }
 
       Player target = Bukkit.getPlayer(commandArguments.getParam(1));
-      GameMode gameMode = GamemodeUtils.parseGameMode(commandArguments.getParam(0));
+      GameMode gameMode = GamemodeUtil.parseGameMode(commandArguments.getParam(0));
 
       if (gameMode == null) {
-        sendMessage(commandSender, messages.getGamemodeFail());
+        MessageBundle.create(MessageType.GAMEMODE_FAIL).sendTo(commandSender);
         return;
       }
 
       if (target.hasPermission("tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other")) {
         target.setGameMode(gameMode);
 
-        sendMessage(target, StringUtils.replace(messages.getGamemodeSuccess(), "%gamemode%", gameMode.toString()));
-        sendMessage(commandSender, StringUtils.replaceEach(messages.getGamemodeSuccessOther(),
-          new String[]{"%gamemode%", "%player%"},
-          new String[]{gameMode.toString(), target.getName()}));
+        MessageBundle.create(MessageType.GAMEMODE_SUCCESS)
+          .withField("gamemode", gameMode.toString())
+          .sendTo(target);
+        MessageBundle.create(MessageType.GAMEMODE_SUCCESS_OTHER)
+          .withField("gamemode", gameMode.toString())
+          .withField("player", target.getName())
+          .sendTo(commandSender);
         return;
       }
 
-      sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(),
-        "%permission%", "tools.command.gamemode." + gameMode.toString().toLowerCase() + ".other"));
+      MessageBundle.create(MessageType.NO_PERMISSIONS)
+        .withField("permission", "tools.command.gamemode" + gameMode.toString().toLowerCase() + "other")
+        .sendTo(commandSender);
       return;
     }
 
-    sendMessage(commandSender, StringUtils.replace(messages.getNoPermissions(), "%permission%", "tools.command.gamemode.other"));
+    MessageBundle.create(MessageType.NO_PERMISSIONS)
+      .withField("permission", "tools.command.gamemode.other")
+      .sendTo(commandSender);
   }
 
 }

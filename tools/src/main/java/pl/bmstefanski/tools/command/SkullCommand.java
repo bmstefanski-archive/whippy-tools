@@ -15,11 +15,13 @@ import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class SkullCommand implements Messageable, CommandExecutor {
+public class SkullCommand implements CommandExecutor {
 
   @Inject private Messages messages;
 
@@ -37,7 +39,8 @@ public class SkullCommand implements Messageable, CommandExecutor {
       skullMeta.setOwningPlayer(player);
       skullItem.setItemMeta(skullMeta);
       player.getInventory().addItem(skullItem);
-      sendMessage(player, messages.getSkullOnly());
+
+      MessageBundle.create(MessageType.SKULL_ONLY).sendTo(player);
       return;
     }
 
@@ -47,7 +50,9 @@ public class SkullCommand implements Messageable, CommandExecutor {
     skullItem.setItemMeta(skullMeta);
     player.getInventory().addItem(skullItem);
 
-    sendMessage(player, StringUtils.replace(messages.getSkullSomeone(), "%player%", commandArguments.getParam(0)));
+    MessageBundle.create(MessageType.SKULL_SOMEONE)
+      .withField("player", commandArguments.getParam(0))
+      .sendTo(player);
   }
 
 }

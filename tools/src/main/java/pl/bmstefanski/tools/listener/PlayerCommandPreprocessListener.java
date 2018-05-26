@@ -29,13 +29,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.help.HelpTopic;
-import pl.bmstefanski.commands.Messageable;
-import pl.bmstefanski.tools.Tools;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.storage.configuration.Messages;
 
 import javax.inject.Inject;
 
-public class PlayerCommandPreprocessListener implements Listener, Messageable {
+public class PlayerCommandPreprocessListener implements Listener {
 
   @Inject private Messages messages;
 
@@ -46,7 +46,9 @@ public class PlayerCommandPreprocessListener implements Listener, Messageable {
 
     if (helpTopic == null) {
       event.setCancelled(true);
-      sendMessage(event.getPlayer(), this.messages.getUnknownCommand().replace("%command%", command));
+      MessageBundle.create(MessageType.UNKNOWN_COMMAND)
+        .withField("command", command)
+        .sendTo(event.getPlayer());
     }
   }
 

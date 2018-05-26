@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class GameModeUtilsTest {
+public class GameModeUtilTest {
 
   @Test
   public void shouldReturnCorrectEnumFromNumberValue() {
-    GameMode gameMode = GamemodeUtils.parseGameMode("1");
+    GameMode gameMode = GamemodeUtil.parseGameMode("1");
     GameMode newGameMode = GameMode.CREATIVE;
 
     assertEquals(gameMode, newGameMode);
@@ -17,7 +17,7 @@ public class GameModeUtilsTest {
 
   @Test
   public void shouldReturnProperEnmmFromStringValue() {
-    GameMode gameMode = GamemodeUtils.parseGameMode("survival");
+    GameMode gameMode = GamemodeUtil.parseGameMode("survival");
     GameMode newGameMode = GameMode.SURVIVAL;
 
     assertEquals(gameMode, newGameMode);
@@ -25,7 +25,7 @@ public class GameModeUtilsTest {
 
   @Test
   public void failWhenTheExpectedValueIsNotTheSame() {
-    GameMode gameMode = GamemodeUtils.parseGameMode("adventure");
+    GameMode gameMode = GamemodeUtil.parseGameMode("adventure");
     GameMode newGameMode = GameMode.SPECTATOR;
 
     assertNotEquals(gameMode, newGameMode);
@@ -33,7 +33,7 @@ public class GameModeUtilsTest {
 
   @Test
   public void failWhenTheValueDoesNotExist() {
-    GameMode gameMode = GamemodeUtils.parseGameMode("extraMode");
+    GameMode gameMode = GamemodeUtil.parseGameMode("extraMode");
 
     assertNull(gameMode);
   }

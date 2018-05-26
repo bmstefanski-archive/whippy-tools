@@ -30,18 +30,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
 import pl.bmstefanski.tools.basic.User;
+import pl.bmstefanski.tools.impl.type.MessageType;
+import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.storage.configuration.Messages;
-import pl.bmstefanski.tools.impl.util.ParsingUtils;
+import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
-public class GodCommand implements Messageable, CommandExecutor {
+public class GodCommand implements CommandExecutor {
 
   @Inject private Messages messages;
   @Inject private UserManager userManager;
@@ -55,7 +56,7 @@ public class GodCommand implements Messageable, CommandExecutor {
     if (commandArguments.getSize() == 0) {
 
       if (!(commandSender instanceof Player)) {
-        sendMessage(commandSender, messages.getOnlyPlayer());
+        MessageBundle.create(MessageType.ONLY_PLAYER).sendTo(commandSender);
         return;
       }
 
@@ -65,7 +66,9 @@ public class GodCommand implements Messageable, CommandExecutor {
       boolean godState = !user.isGod();
       user.setGod(godState);
 
-      sendMessage(player, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
+      MessageBundle.create(MessageType.GOD_SWITCHED)
+        .withField("state", ParsingUtil.parseBoolean(godState))
+        .sendTo(player);
 
       return;
     }
@@ -73,7 +76,9 @@ public class GodCommand implements Messageable, CommandExecutor {
     if (commandSender.hasPermission("tools.command.god.other")) {
 
       if (Bukkit.getPlayer(commandArguments.getParam(0)) == null) {
-        sendMessage(commandSender, StringUtils.replace(messages.getPlayerNotFound(), "%player%", commandArguments.getParam(0)));
+        MessageBundle.create(MessageType.PLAYER_NOT_FOUND)
+          .withField("player", commandArguments.getParam(0))
+          .sendTo(commandSender);
         return;
       }
 
@@ -83,12 +88,13 @@ public class GodCommand implements Messageable, CommandExecutor {
       boolean godState = !user.isGod();
       user.setGod(godState);
 
-
-      sendMessage(commandSender, StringUtils.replaceEach(messages.getGodSwitchedOther(),
-        new String[]{"%state%", "%player%"},
-        new String[]{ParsingUtils.parseBoolean(godState), target.getName()}));
-      sendMessage(target, StringUtils.replace(messages.getGodSwitched(), "%state%", ParsingUtils.parseBoolean(godState)));
-
+      MessageBundle.create(MessageType.GOD_SWITCHED_OTHER)
+        .withField("state", ParsingUtil.parseBoolean(godState))
+        .withField("player", target.getName())
+        .sendTo(commandSender);
+      MessageBundle.create(MessageType.GOD_SWITCHED)
+        .withField("state", ParsingUtil.parseBoolean(godState))
+        .sendTo(target);
     }
   }
 

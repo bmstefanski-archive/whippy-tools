@@ -5,7 +5,7 @@ import pl.bmstefanski.tools.impl.basic.UserImpl;
 import pl.bmstefanski.tools.manager.UserManager;
 import pl.bmstefanski.tools.impl.storage.DatabaseQueryImpl;
 import pl.bmstefanski.tools.impl.storage.StatementFactory;
-import pl.bmstefanski.tools.impl.util.UniqueIdUtils;
+import pl.bmstefanski.tools.impl.util.UniqueIdUtil;
 import pl.bmstefanski.tools.storage.Resource;
 
 import javax.inject.Inject;
@@ -35,7 +35,7 @@ public class UserResourceImpl implements Resource {
     Consumer<ResultSet> consumer = result -> {
       try {
         while (resultSet.next()) {
-          UUID uniqueId = UniqueIdUtils.getUUIDFromBytes(resultSet.getBytes("uuid"));
+          UUID uniqueId = UniqueIdUtil.getUUIDFromBytes(resultSet.getBytes("uuid"));
 
           User user = this.userManager.getUser(uniqueId).orElseGet(() -> {
             User newUser = new UserImpl(uniqueId);
@@ -59,7 +59,7 @@ public class UserResourceImpl implements Resource {
   @Override
   public void save(User user) {
     try (PreparedStatement preparedStatement = StatementFactory.getStatement("players-insert")) {
-      preparedStatement.setBytes(1, UniqueIdUtils.getBytesFromUUID(user.getUniqueId()));
+      preparedStatement.setBytes(1, UniqueIdUtil.getBytesFromUUID(user.getUniqueId()));
       preparedStatement.setString(2, user.getName().get());
       preparedStatement.setString(3, user.getName().get());
       new DatabaseQueryImpl(this.executorService, preparedStatement).executeUpdate();

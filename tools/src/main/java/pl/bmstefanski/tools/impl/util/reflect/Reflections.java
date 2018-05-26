@@ -27,7 +27,7 @@ package pl.bmstefanski.tools.impl.util.reflect;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import pl.bmstefanski.tools.impl.util.SafeUtils;
+import pl.bmstefanski.tools.impl.util.SafeUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -49,8 +49,8 @@ public class Reflections {
   private static final Map<String, FieldAccessor<?>> FIELD_ACCESSOR_CACHE = new HashMap<>();
   private static final Map<String, Method> METHOD_CACHE = new HashMap<>();
   private static final Class<?> INVALID_CLASS = InvalidMarker.class;
-  private static final Method INVALID_METHOD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredMethod("invalidMethodMarker"));
-  private static final Field INVALID_FIELD = SafeUtils.safeInit(() -> InvalidMarker.class.getDeclaredField("invalidFieldMarker"));
+  private static final Method INVALID_METHOD = SafeUtil.safeInit(() -> InvalidMarker.class.getDeclaredMethod("invalidMethodMarker"));
+  private static final Field INVALID_FIELD = SafeUtil.safeInit(() -> InvalidMarker.class.getDeclaredField("invalidFieldMarker"));
   private static final FieldAccessor<?> INVALID_FIELD_ACCESSOR = getField(INVALID_CLASS, Void.class, 0);
 
   public static String getVersion() {

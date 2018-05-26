@@ -6,12 +6,12 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class UniqueIdUtilsTest {
+public class UniqueIdUtilTest {
 
   @Test
   public void shouldHas16BytesFromUniqueId() {
     UUID uniqueId = UUID.randomUUID();
-    byte[] bytes = UniqueIdUtils.getBytesFromUUID(uniqueId);
+    byte[] bytes = UniqueIdUtil.getBytesFromUUID(uniqueId);
 
     assertEquals(16, bytes.length);
   }
@@ -19,8 +19,8 @@ public class UniqueIdUtilsTest {
   @Test
   public void shouldReconstructSameUniqueIdFromBytes() {
     UUID uniqueId = UUID.randomUUID();
-    byte[] bytes = UniqueIdUtils.getBytesFromUUID(uniqueId);
-    UUID newUniqueId = UniqueIdUtils.getUUIDFromBytes(bytes);
+    byte[] bytes = UniqueIdUtil.getBytesFromUUID(uniqueId);
+    UUID newUniqueId = UniqueIdUtil.getUUIDFromBytes(bytes);
 
     assertEquals(uniqueId, newUniqueId);
   }
@@ -28,8 +28,8 @@ public class UniqueIdUtilsTest {
   @Test
   public void shouldGenerateSameUniqueIdFromBytesWhenItIsFromString() {
     UUID uniqueId = UUID.fromString("02cea57b-a0fb-4391-985e-89e76d642240");
-    byte[] bytes = UniqueIdUtils.getBytesFromUUID(uniqueId);
-    UUID newUniqueId = UniqueIdUtils.getUUIDFromBytes(bytes);
+    byte[] bytes = UniqueIdUtil.getBytesFromUUID(uniqueId);
+    UUID newUniqueId = UniqueIdUtil.getUUIDFromBytes(bytes);
 
     assertEquals(uniqueId, newUniqueId);
   }
