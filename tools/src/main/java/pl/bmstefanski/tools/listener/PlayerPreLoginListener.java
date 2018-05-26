@@ -14,6 +14,8 @@ import pl.bmstefanski.tools.manager.UserManager;
 import javax.inject.Inject;
 import java.util.Optional;
 
+import static pl.bmstefanski.tools.impl.util.MessageUtil.*;
+
 public class PlayerPreLoginListener implements Listener {
 
   @Inject private UserManager userManager;
@@ -38,7 +40,7 @@ public class PlayerPreLoginListener implements Listener {
     if (!optionalUser.isPresent()) {
       User user = new UserImpl(event.getUniqueId());
       this.userManager.addUser(user);
-      event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, "§aAccount has been created! Log In Again"); // todo
+      event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, colored("&aAccount has been created! Log In Again"));
     }
   }
 
