@@ -1,6 +1,5 @@
 package pl.bmstefanski.tools.command;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -10,20 +9,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
-import pl.bmstefanski.tools.storage.configuration.Messages;
-
-import javax.inject.Inject;
 
 public class SkullCommand implements CommandExecutor {
-
-  @Inject private Messages messages;
 
   @Command(name = "skull", usage = "[player]", max = 1)
   @Permission("tools.command.skull")

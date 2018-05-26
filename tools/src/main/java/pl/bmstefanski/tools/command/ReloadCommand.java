@@ -24,24 +24,16 @@
 
 package pl.bmstefanski.tools.command;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import pl.bmstefanski.commands.CommandArguments;
 import pl.bmstefanski.commands.CommandExecutor;
-import pl.bmstefanski.commands.Messageable;
 import pl.bmstefanski.commands.annotation.Command;
 import pl.bmstefanski.commands.annotation.GameOnly;
 import pl.bmstefanski.commands.annotation.Permission;
-import pl.bmstefanski.tools.Tools;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
-import pl.bmstefanski.tools.storage.configuration.Messages;
-
-import javax.inject.Inject;
 
 public class ReloadCommand implements CommandExecutor {
-
-  @Inject private Messages messages;
 
   @Command(name = "tools-reload")
   @Permission("tools.command.reload")

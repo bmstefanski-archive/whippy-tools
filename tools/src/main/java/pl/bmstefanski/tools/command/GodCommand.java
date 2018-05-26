@@ -24,7 +24,6 @@
 
 package pl.bmstefanski.tools.command;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,14 +36,12 @@ import pl.bmstefanski.tools.basic.User;
 import pl.bmstefanski.tools.impl.type.MessageType;
 import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 import pl.bmstefanski.tools.manager.UserManager;
-import pl.bmstefanski.tools.storage.configuration.Messages;
 import pl.bmstefanski.tools.impl.util.ParsingUtil;
 
 import javax.inject.Inject;
 
 public class GodCommand implements CommandExecutor {
 
-  @Inject private Messages messages;
   @Inject private UserManager userManager;
 
   @Command(name = "god", usage = "[player]", max = 1)
