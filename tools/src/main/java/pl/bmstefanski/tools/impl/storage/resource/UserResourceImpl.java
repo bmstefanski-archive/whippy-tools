@@ -43,7 +43,6 @@ public class UserResourceImpl implements Resource {
             return newUser;
           });
 
-          user.setUniqueId(uniqueId);
           user.setName(resultSet.getString("name"));
 
           preparedStatement.close();

@@ -18,10 +18,10 @@ public abstract class AbstractDatabase implements Database {
   public boolean closeConnection() throws SQLException {
     if (this.connection != null) {
       this.connection.close();
-      return false;
+      return true;
     }
 
-    return true;
+    return false;
   }
 
 }

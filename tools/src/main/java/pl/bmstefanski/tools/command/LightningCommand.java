@@ -38,7 +38,7 @@ import pl.bmstefanski.tools.impl.util.message.MessageBundle;
 
 public class LightningCommand implements CommandExecutor {
 
-  @Command(name = "lightning", usage = "[player]", max = 1, aliases = {"thorn"})
+  @Command(name = "lightning", usage = "[player]", max = 1, aliases = {"thor"})
   @Permission("tools.command.lightning")
   @GameOnly(false)
   @Override

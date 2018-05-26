@@ -34,12 +34,12 @@ public interface PluginConfig extends Config {
 
   @CustomKey("join-format")
   default String getJoinFormat() {
-    return "&e%player% &adolaczyl do gierki!";
+    return "&e%player% &adolaczyl do gry!";
   }
 
   @CustomKey("quit-format")
   default String getQuitFormat() {
-    return "&e%player% &cwyszedl z gierki!";
+    return "&e%player% &cwyszedl z gry!";
   }
 
   default int getDelay() {
