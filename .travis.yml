@@ -1,6 +1,6 @@
 language: java
 dist: trusty
-sudo: false
+sudo: required
 
 os:
 - linux
@@ -9,17 +9,16 @@ os:
 jdk:
 - openjdk9
 - openjdk10
-- openjdk11
-- openjdk-ea
-- oraclejdk-ea
 
 matrix:
   fast_finish: true
   include:
   - os: linux
     jdk: openjdk8
-  - os: osx
-    jdk: openjdk8
+  allow_failures:
+  - jdk: openjdk11
+  - jdk: openjdk-ea
+  - jdk: oraclejdk-ea
 
 before_install:
 - unset _JAVA_OPTIONS
