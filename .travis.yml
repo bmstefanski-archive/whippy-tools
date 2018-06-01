@@ -1,29 +1,32 @@
 language: java
 dist: trusty
-sudo: required
+sudo: false
 
-install: script/install.sh
+os:
+- linux
+- osx
+
+jdk:
+- openjdk9
+- openjdk10
+- openjdk11
+- openjdk-ea
+- oraclejdk-ea
 
 matrix:
-  fast_finish: false
-
+  fast_finish: true
   include:
-    - env: JDK='Oracle JDK 8'
-      jdk: oraclejdk8
-    - env: JDK='Oracle JDK 9'
-      jdk: oraclejdk9
-    - env: JDK='Oracle JDK 10'
-      install: script/build-script.sh F 10
-    - env: JDK='Oracle JDK 11'
-      install: script/build-script.sh F 11 -L BCL
-  allow_failures:
-    - env: JDK='Oracle JDK 9'
-    - env: JDK='Oracle JDK 11'
+  - os: linux
+    jdk: openjdk8
+  - os: osx
+    jdk: openjdk8
+
+before_install:
+- unset _JAVA_OPTIONS
+
+before_scipt:
+- echo JAVA_HOME = ${JAVA_HOME}
+- echo PATH = ${PATH}
 
 script:
-  - echo PATH = ${PATH}
-  - echo JAVA_HOME = ${JAVA_HOME}
-  - java -version
-
-notifications:
-  email: false 
+- java -version 
