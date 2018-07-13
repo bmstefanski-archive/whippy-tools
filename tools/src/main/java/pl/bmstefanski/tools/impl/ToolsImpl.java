@@ -26,6 +26,7 @@ package pl.bmstefanski.tools.impl;
 
 import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
+import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.event.Listener;
@@ -111,51 +112,51 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     Bukkit.getMessenger().registerIncomingPluginChannel(this, "MC|CPack", this.injector.getSingleton(BlazingPackMessageReceivedListener.class));
 
     this.registerListeners(
-      PlayerCommandPreprocessListener.class,
-      PlayerJoinListener.class,
-      PlayerQuitListener.class,
-      PlayerMoveListener.class,
-      EntityDamageListener.class,
-      PlayerDeathListener.class,
-      PlayerLoginListener.class,
-      PlayerInteractListener.class,
-      EntityPickupItemListener.class,
-      PlayerPreLoginListener.class
+        PlayerCommandPreprocessListener.class,
+        PlayerJoinListener.class,
+        PlayerQuitListener.class,
+        PlayerMoveListener.class,
+        EntityDamageListener.class,
+        PlayerDeathListener.class,
+        PlayerLoginListener.class,
+        PlayerInteractListener.class,
+        EntityPickupItemListener.class,
+        PlayerPreLoginListener.class
     );
 
     this.registerCommands(
-      AfkCommand.class,
-      BackCommand.class,
-      BroadcastCommand.class,
-      ClearCommand.class,
-      DayCommand.class,
-      DisableCommand.class,
-      EnderchestCommand.class,
-      FeedCommand.class,
-      FlyCommand.class,
-      GamemodeCommand.class,
-      GodCommand.class,
-      HatCommand.class,
-      HealCommand.class,
-      InvseeCommand.class,
-      KickAllCommand.class,
-      KickCommand.class,
-      LightningCommand.class,
-      ListCommand.class,
-      MarkCommand.class,
-      NicknameCommand.class,
-      NightCommand.class,
-      RealnameCommand.class,
-      ReloadCommand.class,
-      RepairCommand.class,
-      SkullCommand.class,
-      ToolsCommand.class,
-      TpAllCommand.class,
-      TpCommand.class,
-      TpHereCommand.class,
-      TpPosCommand.class,
-      WhoisCommand.class,
-      WorkbenchCommand.class
+        AfkCommand.class,
+        BackCommand.class,
+        BroadcastCommand.class,
+        ClearCommand.class,
+        DayCommand.class,
+        DisableCommand.class,
+        EnderchestCommand.class,
+        FeedCommand.class,
+        FlyCommand.class,
+        GamemodeCommand.class,
+        GodCommand.class,
+        HatCommand.class,
+        HealCommand.class,
+        InvseeCommand.class,
+        KickAllCommand.class,
+        KickCommand.class,
+        LightningCommand.class,
+        ListCommand.class,
+        MarkCommand.class,
+        NicknameCommand.class,
+        NightCommand.class,
+        RealnameCommand.class,
+        ReloadCommand.class,
+        RepairCommand.class,
+        SkullCommand.class,
+        ToolsCommand.class,
+        TpAllCommand.class,
+        TpCommand.class,
+        TpHereCommand.class,
+        TpPosCommand.class,
+        WhoisCommand.class,
+        WorkbenchCommand.class
     );
   }
 
@@ -163,6 +164,12 @@ public class ToolsImpl extends JavaPlugin implements Tools {
   public void onDisable() {
     this.pluginConfig.save();
     this.messages.save();
+    try {
+      this.database.closeConnection();
+    }
+    catch (SQLException exception) {
+      exception.printStackTrace();
+    }
   }
 
   @SafeVarargs
