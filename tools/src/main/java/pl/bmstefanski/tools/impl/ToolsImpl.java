@@ -167,7 +167,8 @@ public class ToolsImpl extends JavaPlugin implements Tools {
     try {
       this.database.closeConnection();
     }
-    catch (SQLException ignored) {
+    catch (SQLException exception) {
+      exception.printStackTrace();
     }
   }
 
